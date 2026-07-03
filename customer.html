@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>FundFusion - Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; color: #fff; padding: 20px; }
+        .card { background: #202024; padding: 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .balance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+        .balance-item { background: #29292e; padding: 15px; border-radius: 8px; text-align: center; }
+        .btn { background: #00b37e; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #00875f; }
+        .btn-mining { background: #00b37e; width: 100%; padding: 15px; font-size: 18px; }
+        .text-id { color: #00b37e; font-weight: bold; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- ส่วนที่ 1: หน้าโปรไฟล์แสดง ID 8 หลักและสลับค่าเงิน -->
+    <div class="card">
+        <h2>ยินดีต้อนรับ, <span id="username">กำลังโหลด...</span></h2>
+        <p>รหัสสมาชิกไอดี 8 หลักของคุณ: <span id="user-id" class="text-id">********</span></p>
+        <button class="btn" onclick="toggleCurrency()">🔄 สลับสกุลเงิน (USD / THB)</button>
+    </div>
+
+    <!-- ส่วนที่ 2: หน้าแสดงผลกระเป๋าเงิน 3 ช่องตามสูตรคำนวณ -->
+    <div class="card">
+        <h3>กระเป๋าเงินรวมระบบ FundFusion</h3>
+        <div class="balance-grid">
+            <div class="balance-item">
+                <h4>💰 ยอดเงินรวมทั้งหมด</h4>
+                <p id="total-bal">0.00</p>
+            </div>
+            <div class="balance-item">
+                <h4>📈 พอร์ตลงทุนเทรด (Leverage)</h4>
+                <p id="trading-bal">0.00</p>
+            </div>
+            <div class="balance-item">
+                <h4>🪙 พอร์ตสินทรัพย์สะสม (Spot)</h4>
+                <p id="asset-bal">0.00</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 3: แผงควบคุมระบบขุดและล็อกเหรียญ 24 ชม. -->
+    <div class="card">
+        <h3>ระบบขุดสินทรัพย์ดิจิทัล (24 ชั่วโมง)</h3>
+        <p>ระดับสมาชิกปัจจุบัน: <span id="member-level" style="font-weight:bold; color:#fba94c;">Level 0</span></p>
+        <p id="timer-text" style="font-size: 14px; color: #a8a8b3;">สถานะ: พร้อมขุด</p>
+        <button id="mining-btn" class="btn btn-mining" onclick="startMining()">⛏️ กดเริ่มขุดเพื่อรับโบนัสรายวัน</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
