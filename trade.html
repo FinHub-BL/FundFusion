@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>FundFusion - กระดานเทรด Leverage</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #121214; color: #fff; padding: 20px; }
+        .trade-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .card { background: #202024; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-action { width: 100%; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
+        .btn-buy { background: #00b37e; color: white; }
+        .btn-sell { background: #f75a68; color: white; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #a8a8b3; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; background: #121214; border: 1px solid #29292e; color: white; border-radius: 5px; box-sizing: border-box; }
+        .price-ticker { font-size: 24px; font-weight: bold; color: #fba94c; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h2>📈 ระบบเทรดอนุพันธ์ความเร็วสูง (Leverage Trading)</h2>
+    <p>บัญชีผู้ใช้: <span id="user-display-id" style="color:#00b37e; font-weight:bold;">กำลังโหลด...</span></p>
+
+    <div class="trade-container">
+        <!-- ฝั่งซ้าย: กราฟราคาจำลองและราคากลางจาก API -->
+        <div class="card">
+            <h3>ราคาสินทรัพย์เรียลไทม์ (CoinMarketCap API)</h3>
+            <div class="input-group">
+                <select id="asset-select" onchange="changeAsset()">
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="BNB">BNB (BNB)</option>
+                </select>
+            </div>
+            <div class="price-ticker" id="current-price">$62,500.00</div>
+            <div style="height: 300px; background: #121214; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #a8a8b3; border: 1px dashed #29292e;">
+                📊 [ ส่วนแสดงผลกราฟเทคนิคัล TradingView Widget ]
+            </div>
+        </div>
+
+        <!-- ฝั่งขวา: แผงควบคุมการออกออเดอร์ BUY / SELL -->
+        <div class="card">
+            <h3>ส่งคำสั่งซื้อขาย</h3>
+            
+            <div class="input-group">
+                <label>จำนวนเงินทุน (Margin USD)</label>
+                <input type="number" id="trade-amount" value="100" min="10">
+            </div>
+
+            <div class="input-group">
+                <label>เลือกอัตราทด (Leverage)</label>
+                <select id="leverage-select">
+                    <option value="10">10x</option>
+                    <option value="20">20x</option>
+                    <option value="50">50x</option>
+                    <option value="100">100x</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>ตั้งค่าขีดจำกัดขาดทุน (Stop Loss %)</label>
+                <input type="number" id="stop-loss" value="10" min="1" max="100">
+            </div>
+
+            <button class="btn-action btn-buy" onclick="placeOrder('BUY')">🟢 เปิดสัญญา Long (BUY)</button>
+            <button class="btn-action btn-sell" onclick="placeOrder('SELL')">🔴 เปิดสัญญา Short (SELL)</button>
+        </div>
+    </div>
+
+    <script src="trade.js"></script>
+</body>
+</html>
