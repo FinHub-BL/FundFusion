@@ -3,918 +3,590 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FundFusion - The Ultimate Blueprint System</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    
-    <!-- Babel -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Google Fonts: Orbitron for Numbers, Prompt for Thai -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>FundFusion - Premier Trading Platform</title>
     <style>
-        :root {
-            --theme-color: #3b82f6; /* Default Blue */
-            --theme-glow: rgba(59, 130, 246, 0.5);
-            --bg-main: #03050a;
-            --bg-card: #0a0e17;
-        }
-
-        body { 
-            font-family: 'Prompt', sans-serif; 
-            background-color: var(--bg-main); 
-            color: #F3F4F6; 
-            overflow-x: hidden;
-        }
-
-        .font-num { font-family: 'Orbitron', sans-serif; }
-
-        /* Premium Glass & Backgrounds */
-        .glass-panel {
-            background: rgba(10, 14, 23, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .bg-grid-pattern {
-            background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* Dynamic Neon Glow System */
-        .neon-glow {
-            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 10px var(--theme-glow);
-            border-color: var(--theme-color) !important;
-        }
+        /* 🎨 คุมโทนสีตามรูปภาพตัวอย่าง: ดาร์กโหมดพรีเมียม ตัดด้วยสีส้มไฮไลท์ (#ff8a00) */
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0b0c0e; color: #ffffff; padding: 0; margin: 0; padding-bottom: 120px; }
         
-        .neon-text {
-            text-shadow: 0 0 10px var(--theme-glow);
-            color: var(--theme-color);
-        }
+        /* ส่วนหัวแอปพลิเคชัน (Header) */
+        .top-header { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 15px 20px; border-bottom: 1px solid #1e2226; position: sticky; top: 0; z-index: 1000; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; color: #ffffff; cursor: pointer; }
+        .logo-icon { color: #ff8a00; font-size: 24px; font-weight: 900; }
+        .auth-buttons { display: flex; gap: 10px; }
+        .btn-auth-login { background: #22252a; color: #eaecef; border: 1px solid #32373f; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-auth-signup { background: #ff8a00; color: #ffffff; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; }
 
-        .neon-border { border: 1px solid var(--theme-color); }
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* Advanced Graph Animations */
-        .live-chart-line {
-            fill: none;
-            stroke: var(--theme-color);
-            stroke-width: 3;
-            filter: drop-shadow(0 0 8px var(--theme-color));
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth movement */
-        }
-
-        .chart-gradient-fill {
-            transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .live-indicator::before {
-            content: '';
-            position: absolute;
-            left: -4px; top: -4px; right: -4px; bottom: -4px;
-            border-radius: 50%;
-            background-color: var(--theme-color);
-            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-
-        /* Terminal & Mining Effects */
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-        .scan-effect::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, transparent, var(--theme-glow), transparent);
-            opacity: 0.1;
-            animation: scanline 3s linear infinite;
-            pointer-events: none;
-        }
+        /* โซนแบนเนอร์ภาพเคลื่อนไหวเคลื่อนไหวแบบสบายตา (Interactive Canvas Center) */
+        .hero-section { text-align: center; padding: 10px 10px 20px 10px; background: linear-gradient(180deg, #121418 0%, #0b0c0e 100%); position: relative; }
+        .canvas-container { width: 100%; max-width: 320px; height: 240px; margin: 0 auto; position: relative; }
+        #cryptoCanvas { width: 100%; height: 100%; display: block; }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #03050a; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--theme-color); }
+        .announcement { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #b5b7bc; text-align: left; padding: 0 10px; line-height: 1.4; margin-bottom: 20px; }
+        .announcement-icon { font-size: 18px; color: #ff8a00; }
+
+        /* การ์ดสไลด์เหรียญเด่น (Crypto Showcase Cards) */
+        .showcase-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 15px; scrollbar-width: none; }
+        .showcase-container::-webkit-scrollbar { display: none; }
+        .showcase-card { background: #171a1f; border: 1px solid #22262d; border-radius: 12px; padding: 16px; min-width: 150px; flex: 1; }
+        .coin-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .coin-icon-img { width: 24px; height: 24px; background: #22262d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+        .coin-symbol { font-weight: bold; font-size: 15px; color: #ffffff; }
+        .coin-pair { color: #70757d; font-size: 12px; font-weight: normal; }
+        .coin-price { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+        .coin-change { font-size: 13px; font-weight: 600; }
+        .change-green { color: #02c076; }
+
+        /* แถบแท็บแยกตัวกรองสไตล์ในรูปภาพ (Top Price / Top Gainer) */
+        .tab-bar { display: flex; border-bottom: 1px solid #1e2226; margin-bottom: 15px; }
+        .tab-item { padding: 12px 24px; font-size: 15px; font-weight: 600; color: #70757d; cursor: pointer; position: relative; }
+        .tab-item.active { color: #ffffff; }
+        .tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #ff8a00; }
+
+        /* ตารางรายการเหรียญเรียงลงมาตามแบบเป๊ะๆ */
+        .crypto-row { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #191c21; cursor: pointer; transition: 0.2s; }
+        .crypto-row:hover { background: #171a1f; }
+        .crypto-info-left { display: flex; align-items: center; gap: 12px; }
+        .crypto-names h4 { margin: 0; font-size: 15px; font-weight: bold; }
+        .crypto-names span { font-size: 12px; color: #70757d; }
+        .crypto-price-right { text-align: right; display: flex; align-items: center; gap: 15px; }
+        .row-price { font-size: 15px; font-weight: bold; }
+        .row-badge { background: #02c076; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; min-width: 65px; text-align: center; }
+
+        /* โครงสร้างพื้นฐานฟังก์ชัน และ ส่วนหน้าแอป (ฟังก์ชันการทำงานด้านหลังตามพิมพ์เขียว) */
+        .app-page { display: none; }
+        .app-page.active { display: block; }
+        .card-panel { background: #121418; padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #191c21; }
+        .btn-action { background: #ff8a00; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; margin-top: 10px; }
+        .btn-action:disabled { background: #32373f; color: #70757d; cursor: not-allowed; }
+        .btn-danger { background: #f6465d; }
+        .input-box { margin-bottom: 15px; }
+        .input-box label { display: block; margin-bottom: 6px; color: #70757d; font-size: 13px; }
+        .input-box input, .input-box select { width: 100%; padding: 12px; background: #171a1f; border: 1px solid #22262d; color: white; border-radius: 4px; box-sizing: border-box; }
+
+        /* ส่วนแสดง QR Code และกระเป๋าฝากเงิน */
+        .deposit-qr-container { text-align: center; background: #171a1f; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px dashed #ff8a00; }
+        .qr-placeholder { width: 130px; height: 130px; background: #ffffff; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center; border-radius: 4px; padding: 5px; box-sizing: border-box; }
+        .qr-placeholder img { width: 100%; height: 100%; }
+        .address-bar { display: flex; background: #121418; border: 1px solid #22262d; border-radius: 4px; padding: 10px; font-size: 12px; justify-content: space-between; align-items: center; margin-top: 5px; }
+        
+        /* ป้ายแสดงสถานะธุรกรรม (Transaction Status Tags) */
+        .status-tag { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-top: 5px; }
+        .status-pending { background: rgba(255, 138, 0, 0.15); color: #ff8a00; border: 1px solid #ff8a00; }
+        .status-success { background: rgba(2, 192, 118, 0.15); color: #02c076; border: 1px solid #02c076; }
+        .status-rejected { background: rgba(246, 70, 93, 0.15); color: #f6465d; border: 1px solid #f6465d; }
+
+        /* แถบเมนูควบคุมด้านล่าง (Bottom Navigation) */
+        .bottom-navbar { display: none; justify-content: space-around; background: #121418; padding: 12px 0; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #1e2226; z-index: 1000; }
+        .nav-link { color: #70757d; text-decoration: none; font-size: 11px; cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-link.active { color: #ff8a00; }
+        
+        /* กล่องสำหรับฝังกราฟ TradingView */
+        .chart-box { height: 350px; width: 100%; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #121418; border: 1px solid #191c21; }
+
+        /* 👑 แผงควบคุมระบบหลังบ้านแบบจำลอง (Admin Sandbox Widget) */
+        .admin-sandbox-panel { background: #1c1511; border: 2px dashed #ff8a00; padding: 15px; border-radius: 8px; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .admin-row { background: #261f1a; padding: 10px; border-radius: 4px; margin-top: 10px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #ff8a00; }
     </style>
 </head>
-<body class="bg-grid-pattern min-h-screen">
-    <div id="root"></div>
+<body>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo, useRef } = React;
+    <!-- ส่วนหัวเว็บหลักแบรนด์ FundFusion -->
+    <div class="top-header">
+        <div class="logo-area" onclick="goToHome()">
+            <span class="logo-icon">𝙁</span>
+            <span>FundFusion</span>
+        </div>
+        <div class="auth-buttons" id="auth-header-actions">
+            <button class="btn-auth-login" onclick="openAuthView('login')">Login</button>
+            <button class="btn-auth-signup" onclick="openAuthView('signup')">Sign Up</button>
+        </div>
+        <div id="user-logged-profile" style="display:none; align-items:center; gap:10px;">
+            <span style="font-size:13px; color:#ff8a00; font-weight:bold;" id="profile-name-text">UID: --------</span>
+            <button class="btn-auth-login" style="padding:4px 10px; font-size:11px;" onclick="triggerLogout()">Logout</button>
+        </div>
+    </div>
 
-        // ฐานข้อมูลสินทรัพย์ (Master Asset Data)
-        const INITIAL_ASSETS = [
-            { id: 'btc', name: 'Bitcoin', symbol: 'BTC', basePrice: 65000, type: 'crypto' },
-            { id: 'eth', name: 'Ethereum', symbol: 'ETH', basePrice: 3500, type: 'crypto' },
-            { id: 'sol', name: 'Solana', symbol: 'SOL', basePrice: 145, type: 'crypto' },
-            { id: 'gold', name: 'Gold Ounce', symbol: 'XAU', basePrice: 2350, type: 'commodity' },
-        ];
+    <!-- ========================================== -->
+    <!-- หน้าหลักอินเตอร์เฟส (LANDING / DASHBOARD) -->
+    <!-- ========================================== -->
+    <div id="view-landing" class="app-page active">
+        <div class="hero-section">
+            <div class="canvas-container">
+                <canvas id="cryptoCanvas"></canvas>
+            </div>
+            <div class="announcement">
+                <span class="announcement-icon">📢</span>
+                <div>Join our platform to trade leading cryptocurrencies instantly.</div>
+            </div>
+        </div>
 
-        // ธีมสีทั้งหมดของระบบ
-        const THEMES = {
-            blue: { hex: '#3b82f6', glow: 'rgba(59, 130, 246, 0.5)', name: 'Neon Blue' },
-            emerald: { hex: '#10b981', glow: 'rgba(16, 185, 129, 0.5)', name: 'Emerald Green' },
-            gold: { hex: '#f59e0b', glow: 'rgba(245, 158, 11, 0.5)', name: 'Royal Gold' },
-            purple: { hex: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)', name: 'Cyber Purple' },
-            crimson: { hex: '#ef4444', glow: 'rgba(239, 68, 68, 0.5)', name: 'Crimson Red' }
+        <div class="container">
+            <!-- สไลด์การ์ดแสดงเหรียญเด่น -->
+            <div class="showcase-container">
+                <div class="showcase-card">
+                    <div class="coin-meta">
+                        <div class="coin-icon-img" style="color:#627eea; border:1px solid #627eea;">♦</div>
+                        <div><div class="coin-symbol">ETH<span class="coin-pair">/USDT</span></div></div>
+                    </div>
+                    <div class="coin-price">$1,758.31</div>
+                    <div class="coin-change change-green">+3.64%</div>
+                </div>
+                <div class="showcase-card">
+                    <div class="coin-meta">
+                        <div class="coin-icon-img" style="color:#f0b90b; border:1px solid #f0b90b;">🔶</div>
+                        <div><div class="coin-symbol">BNB<span class="coin-pair">/USDT</span></div></div>
+                    </div>
+                    <div class="coin-price">$574.03</div>
+                    <div class="coin-change change-green">+2.93%</div>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <div class="tab-item active">Top Price</div>
+                <div class="tab-item">Top Gainer</div>
+            </div>
+
+            <!-- รายการเหรียญเรียงลงมาตามแบบรูปถ่าย -->
+            <div class="crypto-row" onclick="quickNavToTrade('BINANCE:BTCUSDT')">
+                <div class="crypto-info-left">
+                    <div class="coin-icon-img" style="color:#f3ba2f; border:1px solid #f3ba2f;">₿</div>
+                    <div class="crypto-names"><h4>BTC <span>/ USDT</span></h4></div>
+                </div>
+                <div class="crypto-price-right">
+                    <span class="row-price">$62,750.01</span>
+                    <span class="row-badge">+2.36%</span>
+                </div>
+            </div>
+
+            <div class="crypto-row" onclick="quickNavToTrade('BINANCE:ETHUSDT')">
+                <div class="crypto-info-left">
+                    <div class="coin-icon-img" style="color:#627eea; border:1px solid #627eea;">♦</div>
+                    <div class="crypto-names"><h4>ETH <span>/ USDT</span></h4></div>
+                </div>
+                <div class="crypto-price-right">
+                    <span class="row-price">$1,758.31</span>
+                    <span class="row-badge">+3.64%</span>
+                </div>
+            </div>
+
+            <!-- แผงกระเป๋าเงินรวมอัปเกรดความปลอดภัยตามผังระบบ -->
+            <div id="main-wallet-panel" class="card-panel" style="margin-top:20px; border-top: 3px solid #ff8a00;">
+                <h4 style="margin:0 0 12px 0; color:#70757d; font-weight:normal;">พอร์ตกระเป๋าเงิน FundFusion</h4>
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; text-align:center;">
+                    <div style="background:#171a1f; padding:10px; border-radius:6px;">
+                        <div style="font-size:11px; color:#70757d;">ยอดเงินทั้งหมด</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px; color:#ff8a00;" id="sum-total">$0.00</div>
+                    </div>
+                    <div style="background:#171a1f; padding:10px; border-radius:6px;">
+                        <div style="font-size:11px; color:#70757d;">พอร์ตเทรด</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-trade">$0.00</div>
+                    </div>
+                    <div style="background:#171a1f; padding:10px; border-radius:6px;">
+                        <div style="font-size:11px; color:#70757d;">พอร์ตคลังสปอต</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-asset">$0.00</div>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
+                    <button class="btn-action" style="padding:8px; font-size:13px;" onclick="changeView('deposit')">📥 ฝากเงินเข้าระบบ</button>
+                    <button class="btn-action btn-danger" style="padding:8px; font-size:13px;" onclick="changeView('withdraw')">📤 ส่งคำสั่งถอนทุน</button>
+                </div>
+            </div>
+
+            <!-- 👑 แผงควบคุมระบบหลังบ้านแบบจำลอง (Admin Sandbox Control Panel) -->
+            <div class="admin-sandbox-panel">
+                <div style="font-weight:bold; color:#ff8a00; font-size:14px; display:flex; align-items:center; gap:8px;">
+                    <span>🛡️</span> แผงควบคุมสิทธิ์แอดมินหลังบ้าน (Admin Simulation)
+                </div>
+                <p style="font-size:11px; color:#70757d; margin:5px 0 15px 0;">ใช้ตรวจสอบคำสั่งธุรกรรมฝากเข้า-ถอนออกของลูกค้าที่กดส่งเข้ามาในเซสชันนี้</p>
+                
+                <div id="admin-empty-text" style="text-align:center; color:#70757d; font-size:12px; padding:10px;">ไม่มีคำสั่งที่รอดำเนินการในขณะนี้</div>
+                <div id="admin-queue-list"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- หน้าส่งคำสั่งฝากเงินพร้อมหลักฐานคิวอาร์โค้ด (DEPOSIT VIEW) -->
+    <!-- ========================================== -->
+    <div id="view-deposit" class="app-page">
+        <div class="container">
+            <div class="card-panel">
+                <h3 style="margin-top:0; font-size:16px; color:#ff8a00;">📥 ฝากเงินเข้าระบบระบบเครือข่ายสากล (ERC20 Address)</h3>
+                
+                <div class="deposit-qr-container">
+                    <div class="qr-placeholder">
+                        <!-- ลิงก์รูปภาพ QR Code ตัวแทนจำลองกระเป๋าเงินดิจิทัล -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x742d35Cc6634C0532925a3b844Bc454e4438f44e" alt="QR Code">
+                    </div>
+                    <div style="font-size:11px; color:#b5b7bc;">สแกนคิวอาร์โค้ดด้านบน หรือคัดลอกที่อยู่กระเป๋า ERC20</div>
+                    <div class="address-bar">
+                        <span id="deposit-address-string" style="color:#ff8a00; font-family:monospace; word-break:break-all;">0x742d35Cc6634C...44e</span>
+                        <button style="background:#ff8a00; border:none; color:white; padding:4px 8px; border-radius:3px; font-size:10px; cursor:pointer;" onclick="copyDepositAddress()">คัดลอก</button>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <label>จำนวนเงินฝากที่ทำรายการโอนมาสำเร็จ ($)</label>
+                    <input type="number" id="deposit-amount-input" placeholder="ตัวอย่าง: 1000">
+                </div>
+
+                <div class="input-box">
+                    <label>แนบรูปหลักฐานสลิปโอนเงิน (Slip Verification)</label>
+                    <!-- เมื่อเลือกรูปภาพ จะทำการสร้างดีบักพาสแสดงความถูกต้อง -->
+                    <input type="file" id="deposit-slip-file" accept="image/*" onchange="previewSlipUploaded()">
+                    <div id="slip-preview-status" style="font-size:11px; color:#02c076; margin-top:5px; display:none;">✓ ตรวจพบไฟล์รูปภาพสลิปเรียบร้อย</div>
+                </div>
+
+                <!-- แสดงสถานะความคืบหน้าของงานฝากเงินนี้ -->
+                <div id="deposit-status-box" style="margin-bottom:15px; display:none; text-align:center;">
+                    <div style="font-size:12px; color:#70757d;">สถานะธุรกรรมล่าสุด:</div>
+                    <span id="deposit-status-badge" class="status-tag status-pending">กำลังตรวจสอบ</span>
+                </div>
+
+                <button class="btn-action" id="btn-submit-deposit" onclick="submitDepositOrder()">✔️ ยืนยันคำสั่งฝากเงินเข้าหลังบ้าน</button>
+                <button class="btn-action" style="background:#22252a; color:#70757d;" onclick="goToHome()">✕ กลับหน้าหลัก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- หน้าต่างทำรายการส่งคำสั่งถอนทุนเสรี (WITHDRAW VIEW) -->
+    <!-- ========================================== -->
+    <div id="view-withdraw" class="app-page">
+        <div class="container">
+            <div class="card-panel">
+                <h3 style="margin-top:0; font-size:16px; color:#f6465d;">📤 ส่งคำสั่งถอนทุนสุทธิออกจากบัญชีรวม</h3>
+                
+                <div class="input-box">
+                    <label>จำนวนวงเงินที่ต้องการสั่งถอนออกจากกระเป๋า ($)</label>
+                    <input type="number" id="withdraw-amount-input" placeholder="ระบุจำนวนเงินเป็นดอลลาร์">
+                </div>
+
+                <div class="input-box">
+                    <label>ระบุที่อยู่กระเป๋าปลายทางของผู้รับเงิน (Customer ERC20 Address)</label>
+                    <input type="text" id="withdraw-address-input" placeholder="กรอกรหัสกระเป๋า 0x...">
+                </div>
+
+                <div id="withdraw-status-box" style="margin-bottom:15px; display:none; text-align:center;">
+                    <div style="font-size:12px; color:#70757d;">สถานะธุรกรรมล่าสุด:</div>
+                    <span id="withdraw-status-badge" class="status-tag status-pending">กำลังตรวจสอบ</span>
+                </div>
+
+                <button class="btn-action btn-danger" id="btn-submit-withdraw" onclick="submitWithdrawOrder()">📤 ยืนยันการส่งคำสั่งถอนเงิน</button>
+                <button class="btn-action" style="background:#22252a; color:#70757d;" onclick="goToHome()">✕ กลับหน้าหลัก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- หน้าต่างระบบความปลอดภัยสมาชิก (AUTH VIEWS) -->
+    <!-- ========================================== -->
+    <div id="view-auth" class="app-page">
+        <div class="container" style="margin-top:40px;">
+            <div id="box-login" class="card-panel">
+                <h3 style="margin-top:0; color:#ff8a00;">เข้าสู่ระบบสมาชิก FundFusion</h3>
+                <div class="input-box"><label>บัญชีผู้ใช้หรืออีเมล</label><input type="text" id="form-login-user" placeholder="กรอกข้อมูลอีเมล"></div>
+                <div class="input-box"><label>รหัสผ่านความปลอดภัย</label><input type="password" id="form-login-pass" placeholder="กรอกรหัสผ่าน"></div>
+                <button class="btn-action" onclick="processLogin()">ล็อกอินเข้าใช้งาน</button>
+            </div>
+            <div id="box-signup" class="card-panel" style="display:none;">
+                <h3 style="margin-top:0; color:#02c076;">ลงทะเบียนเปิดพอร์ต</h3>
+                <div class="input-box"><label>ชื่อผู้ใช้งานพาสปอร์ต</label><input type="text" id="form-reg-name" placeholder="ชื่อ นามสกุลจริง"></div>
+                <div class="input-box"><label>อีเมลสำหรับรับข้อมูล</label><input type="email" id="form-reg-email" placeholder="example@mail.com"></div>
+                <button class="btn-action" style="background:#02c076;" onclick="processRegister()">สร้างบัญชี (ระบบสุ่ม UID)</button>
+            </div>
+            <button class="btn-action" style="background:#22252a; color:#70757d;" onclick="goToHome()">✕ ยกเลิกกลับหน้าหลัก</button>
+        </div>
+    </div>
+
+    <!-- ⚠️ หน้าระบบย่อย (TRADE, ASSETS, MINING) รันระบบฟังก์ชันตามพิมพ์เขียว -->
+    <div id="view-trade" class="app-page"><div class="container"><div class="chart-box"><div id="live-tradingview-widget" style="height:100%; width:100%;"></div></div></div></div>
+    <div id="view-assets" class="app-page"><div class="container"><div class="card-panel"><h3>ช้อนซื้อคริปโทฯ สะสมคลังสินทรัพย์สุทธิ (Spot)</h3></div></div></div>
+    <div id="view-mining" class="app-page"><div class="container"><div class="card-panel"><h3>เซิร์ฟเวอร์ระบบล็อกคำสั่งรันรอบขุดรับปันผล</h3></div></div></div>
+
+    <!-- แถบเมนูควบคุมด้านล่าง (Bottom App Navigation) -->
+    <div class="bottom-navbar" id="main-app-navigation">
+        <div class="nav-link active" id="nl-landing" onclick="changeView('landing')"><span>🏠</span>หน้าหลัก</div>
+        <div class="nav-link" id="nl-trade" onclick="changeView('trade')"><span>📈</span>ตลาดเทรด</div>
+        <div class="nav-link" id="nl-assets" onclick="changeView('assets')"><span>🪙</span>คลังสินค้า</div>
+        <div class="nav-link" id="nl-mining" onclick="changeView('mining')"><span>⛏️</span>รอบขุดเงิน</div>
+    </div>
+
+    <!-- โหลดวิจิทจาก TradingView -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // บันทึกตัวแปรในระบบเซสชันแอป (ผูกตรรกะพิมพ์เขียว: เริ่มต้น 0.00 ทั้งหมด)
+        const SYSTEM_DATA = {
+            isAuth: false,
+            uid: "",
+            username: "",
+            
+            balanceDeposit: 0.00,
+            balanceTrading: 0.00,
+            balanceAsset: 0.00,
+            
+            tvEngine: null,
+            // คิวเก็บออเดอร์หลังบ้านเพื่อรอกรรมการตรวจสอบอนุมัติ
+            pendingTransactions: []
         };
 
-        function App() {
-            // ==========================================
-            // STATE MANAGEMENT (ระบบจัดการสถานะทั้งหมด)
-            // ==========================================
-            const [user, setUser] = useState(null); 
-            const [currentPage, setCurrentPage] = useState('auth'); 
-            const [sidebarOpen, setSidebarOpen] = useState(false);
-            const [activeTheme, setActiveTheme] = useState('blue');
+        function goToHome() { changeView('landing'); }
+
+        function changeView(viewId) {
+            document.querySelectorAll('.app-page').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             
-            // ตลาด Live Data
-            const [marketPrices, setMarketPrices] = useState({});
-            const [chartData, setChartData] = useState(Array(20).fill(100)); // ข้อมูลกราฟ 20 จุด
+            const targetPage = document.getElementById(`view-${viewId}`);
+            if(targetPage) targetPage.classList.add('active');
             
-            // กระเป๋าเงินและสินทรัพย์
-            const [wallet, setWallet] = useState({
-                deposited: 5000, 
-                tradeBalance: 1500,
-                assetsHoldings: { btc: 0.1, eth: 2, gold: 0 },
-                history: []
-            });
-
-            // ตั๋วออร์เดอร์
-            const [orders, setOrders] = useState([]);
-            const [selectedAsset, setSelectedAsset] = useState(INITIAL_ASSETS[0]);
-            
-            // ระบบ Membership & ขุดเหรียญ
-            const [membershipLevel, setMembershipLevel] = useState(1); 
-            const [miningPool, setMiningPool] = useState({ active: false, assetId: '', progress: 0, hashes: 0 });
-
-            // UI States
-            const [authMode, setAuthMode] = useState('login'); 
-            const [depositModal, setDepositModal] = useState(false);
-            const [withdrawModal, setWithdrawModal] = useState(false);
-            const [txAmount, setTxAmount] = useState('');
-
-            // ==========================================
-            // EFFECTS & ENGINE LOOPS (ลูปการทำงานเบื้องหลัง)
-            // ==========================================
-            
-            // 1. อัปเดตไอคอน Lucide ทุกครั้งที่เรนเดอร์
-            useEffect(() => {
-                if (window.lucide) window.lucide.createIcons();
-            });
-
-            // 2. เปลี่ยนตัวแปร CSS ของระบบตามธีมที่เลือก
-            useEffect(() => {
-                const root = document.documentElement;
-                root.style.setProperty('--theme-color', THEMES[activeTheme].hex);
-                root.style.setProperty('--theme-glow', THEMES[activeTheme].glow);
-            }, [activeTheme]);
-
-            // 3. Engine สร้างความผันผวนของราคาสินทรัพย์จำลองแบบ Real-time
-            useEffect(() => {
-                const priceInterval = setInterval(() => {
-                    const newPrices = {};
-                    INITIAL_ASSETS.forEach(asset => {
-                        const current = marketPrices[asset.id] || asset.basePrice;
-                        const volatility = current * 0.001; // ผันผวน 0.1% ต่อวิ
-                        const change = (Math.random() - 0.5) * volatility;
-                        newPrices[asset.id] = current + change;
-                    });
-                    setMarketPrices(newPrices);
-                }, 1000);
-                return () => clearInterval(priceInterval);
-            }, [marketPrices]);
-
-            // 4. Engine สร้างจุดกราฟ (Live Graph Generator)
-            useEffect(() => {
-                const chartInterval = setInterval(() => {
-                    setChartData(prev => {
-                        const lastPoint = prev[prev.length - 1];
-                        const randomMove = (Math.random() - 0.5) * 5;
-                        const newPoint = lastPoint + randomMove;
-                        // เลื่อนอาเรย์ไปทางซ้าย และเพิ่มจุดใหม่
-                        return [...prev.slice(1), newPoint];
-                    });
-                }, 1500); // ขยับกราฟทุกๆ 1.5 วินาที
-                return () => clearInterval(chartInterval);
-            }, []);
-
-            // 5. Engine ระบบขุดเหรียญ 24 ชั่วโมง
-            useEffect(() => {
-                let miningTimer;
-                if (miningPool.active) {
-                    miningTimer = setInterval(() => {
-                        setMiningPool(prev => {
-                            if (prev.progress >= 100) {
-                                // ขุดเสร็จสิ้น ให้รางวัล
-                                const rewardMap = { 1: 0.05, 2: 0.1, 3: 0.2, 4: 0.5 };
-                                const rewardUSD = (rewardMap[membershipLevel] || 0.01) * 100;
-                                const assetPrice = marketPrices[prev.assetId] || INITIAL_ASSETS.find(a=>a.id===prev.assetId).basePrice;
-                                const rewardCrypto = rewardUSD / assetPrice;
-                                
-                                setWallet(w => ({
-                                    ...w,
-                                    assetsHoldings: { ...w.assetsHoldings, [prev.assetId]: (w.assetsHoldings[prev.assetId] || 0) + rewardCrypto },
-                                    history: [{ id: Date.now(), type: 'MINING_REWARD', amount: rewardUSD, date: new Date().toLocaleString() }, ...w.history]
-                                }));
-                                alert(`🎉 ขุดสำเร็จ! ได้รับ ${prev.assetId.toUpperCase()} มูลค่าประมาณ $${rewardUSD}`);
-                                return { active: false, assetId: '', progress: 0, hashes: 0 };
-                            }
-                            return { 
-                                ...prev, 
-                                progress: prev.progress + (Math.random() * 5), 
-                                hashes: prev.hashes + Math.floor(Math.random() * 500) 
-                            };
-                        });
-                    }, 1000);
-                }
-                return () => clearInterval(miningTimer);
-            }, [miningPool.active, membershipLevel, marketPrices]);
-
-            // ==========================================
-            // HELPER FUNCTIONS (ฟังก์ชันคำนวณและช่วยเหลือ)
-            // ==========================================
-            const formatMoney = (val) => val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            const formatCrypto = (val) => val.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 });
-
-            const currentSelectedPrice = marketPrices[selectedAsset.id] || selectedAsset.basePrice;
-
-            // คำนวณมูลค่าพอร์ตทั้งหมด
-            const totalAssetValue = useMemo(() => {
-                return Object.keys(wallet.assetsHoldings).reduce((sum, key) => {
-                    const price = marketPrices[key] || INITIAL_ASSETS.find(a => a.id === key).basePrice;
-                    return sum + (wallet.assetsHoldings[key] * price);
-                }, 0);
-            }, [wallet.assetsHoldings, marketPrices]);
-
-            const totalNetWorth = wallet.deposited + wallet.tradeBalance + totalAssetValue;
-
-            // ตรรกะระบบล็อกพอร์ต (Asset Lock Conditions)
-            const lockConditions = [
-                { level: 1, min: 5000 },
-                { level: 2, min: 50000 },
-                { level: 3, min: 750000 },
-                { level: 4, min: 10000000 }
-            ];
-            const isAssetLocked = useMemo(() => {
-                if (membershipLevel === 0) return false;
-                const req = lockConditions.find(c => c.level === membershipLevel)?.min || 0;
-                return totalNetWorth < req;
-            }, [membershipLevel, totalNetWorth]);
-
-            // ฟังก์ชันวาดเส้นกราฟ SVG
-            const generateSvgPath = () => {
-                const max = Math.max(...chartData) + 2;
-                const min = Math.min(...chartData) - 2;
-                const range = max - min || 1;
-                
-                const points = chartData.map((val, i) => {
-                    const x = (i / (chartData.length - 1)) * 100;
-                    const y = 100 - ((val - min) / range) * 100;
-                    return `${x},${y}`;
-                });
-                
-                const linePath = `M ${points.join(' L ')}`;
-                const fillPath = `${linePath} L 100,100 L 0,100 Z`;
-                
-                return { linePath, fillPath, max, min };
-            };
-
-            const svgData = generateSvgPath();
-
-            // การจัดการฟอร์มและระบบเงิน
-            const handleTransaction = (type) => {
-                const amt = parseFloat(txAmount);
-                if (isNaN(amt) || amt <= 0) return alert("กรุณาระบุจำนวนเงินที่ถูกต้อง");
-
-                if (type === 'DEPOSIT') {
-                    setWallet(w => ({
-                        ...w,
-                        deposited: w.deposited + amt,
-                        history: [{ id: Date.now(), type: 'DEPOSIT', amount: amt, date: new Date().toLocaleString() }, ...w.history]
-                    }));
-                    setDepositModal(false);
-                    alert(`✅ นำฝากเงินเข้าระบบเรียบร้อย: $${formatMoney(amt)}`);
-                } else {
-                    if (w.deposited < amt) return alert("❌ ยอดเงินฝากหลักมีไม่พอให้ถอน");
-                    setWallet(w => ({
-                        ...w,
-                        deposited: w.deposited - amt,
-                        history: [{ id: Date.now(), type: 'WITHDRAW', amount: amt, date: new Date().toLocaleString() }, ...w.history]
-                    }));
-                    setWithdrawModal(false);
-                    alert(`📤 ถอนเงินออกจากระบบเรียบร้อย: $${formatMoney(amt)}`);
-                }
-                setTxAmount('');
-            };
-
-            // ==========================================
-            // RENDER UI (ส่วนหน้าตาแอปพลิเคชัน)
-            // ==========================================
-            return (
-                <div className="flex flex-col h-screen max-w-lg mx-auto bg-[#03050a] relative shadow-2xl border-x border-gray-800/50">
-                    
-                    {/* --- HEADER NAVIGATION --- */}
-                    {currentPage !== 'auth' && (
-                        <header className="glass-panel sticky top-0 z-40 p-4 flex justify-between items-center border-b border-white/10">
-                            <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition neon-border">
-                                <i data-lucide="menu" className="w-5 h-5 neon-text"></i>
-                            </button>
-                            <div className="text-center">
-                                <h1 className="text-xl font-bold tracking-widest neon-text" style={{textShadow: `0 0 15px ${THEMES[activeTheme].glow}`}}>
-                                    FUNDFUSION
-                                </h1>
-                                <p className="text-[10px] text-gray-400 font-num tracking-widest">BLUEPRINT V.MAX</p>
-                            </div>
-                            <div className="flex items-center gap-1.5 glass-panel px-3 py-1.5 rounded-full border border-white/10 shadow-lg">
-                                <i data-lucide="shield-check" className="w-4 h-4 neon-text"></i>
-                                <span className="text-xs font-bold font-num neon-text">LV.{membershipLevel}</span>
-                            </div>
-                        </header>
-                    )}
-
-                    {/* --- SIDEBAR MENU --- */}
-                    {sidebarOpen && (
-                        <div className="fixed inset-0 z-50 flex">
-                            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSidebarOpen(false)}></div>
-                            <div className="w-80 glass-panel h-full border-r border-white/10 p-6 flex flex-col justify-between relative shadow-2xl transform transition-transform">
-                                <div>
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-14 h-14 rounded-full border-2 neon-border flex items-center justify-center bg-black/50 overflow-hidden shadow-lg neon-glow">
-                                                <i data-lucide="user" className="w-6 h-6 neon-text"></i>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-lg text-white">{user?.name || 'Administrator'}</h4>
-                                                <p className="text-xs text-gray-400 font-num">UID: {user?.uid || '89304918'}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-6">
-                                        {/* Membership Control */}
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 tracking-wider flex items-center gap-2">
-                                                <i data-lucide="award" className="w-4 h-4"></i> ระบบระดับบัญชี (VIP Status)
-                                            </label>
-                                            <select 
-                                                value={membershipLevel} 
-                                                onChange={(e) => setMembershipLevel(Number(e.target.value))} 
-                                                className="w-full bg-black/50 text-sm text-white rounded-xl p-3 border border-white/10 outline-none focus:border-[var(--theme-color)] transition"
-                                            >
-                                                <option value={0}>Level 0 - อิสระ (ไม่ล็อกพอร์ต)</option>
-                                                <option value={1}>Level 1 - ล็อกขั้นต่ำ $5,000</option>
-                                                <option value={2}>Level 2 - ล็อกขั้นต่ำ $50,000</option>
-                                                <option value={3}>Level 3 - ล็อกขั้นต่ำ $750,000</option>
-                                                <option value={4}>Level 4 - ล็อกขั้นต่ำ $10M+</option>
-                                            </select>
-                                        </div>
-
-                                        {/* Theme Selector */}
-                                        <div className="space-y-3 pt-4 border-t border-white/10">
-                                            <label className="text-xs font-bold text-gray-400 tracking-wider flex items-center gap-2">
-                                                <i data-lucide="palette" className="w-4 h-4"></i> เลือกสีสันระบบ (Theme Engine)
-                                            </label>
-                                            <div className="grid grid-cols-5 gap-2">
-                                                {Object.entries(THEMES).map(([key, theme]) => (
-                                                    <button 
-                                                        key={key} 
-                                                        onClick={() => setActiveTheme(key)}
-                                                        title={theme.name}
-                                                        className={`h-10 rounded-xl border-2 transition-all duration-300 ${activeTheme === key ? 'scale-110 shadow-lg' : 'border-transparent hover:scale-105'}`}
-                                                        style={{ backgroundColor: theme.hex, borderColor: activeTheme === key ? '#fff' : 'transparent', boxShadow: activeTheme === key ? `0 0 15px ${theme.glow}` : 'none' }}
-                                                    ></button>
-                                                ))}
-                                            </div>
-                                            <p className="text-center text-xs text-gray-500 mt-2">Active: {THEMES[activeTheme].name}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button onClick={() => { setUser(null); setCurrentPage('auth'); setSidebarOpen(false); }} className="flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 py-4 rounded-2xl border border-red-500/30 transition w-full font-bold">
-                                    <i data-lucide="power" className="w-5 h-5"></i> ตัดการเชื่อมต่อระบบ
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* --- MAIN CONTENT AREA --- */}
-                    <main className="flex-1 overflow-y-auto p-4 pb-28">
-                        
-                        {/* 0. AUTHENTICATION */}
-                        {currentPage === 'auth' && (
-                            <div className="flex flex-col items-center justify-center min-h-[80vh]">
-                                <div className="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 neon-glow relative">
-                                    <i data-lucide="hexagon" className="w-12 h-12 neon-text absolute animate-spin" style={{animationDuration: '10s'}}></i>
-                                    <i data-lucide="zap" className="w-8 h-8 text-white z-10"></i>
-                                </div>
-                                <h1 className="text-4xl font-black mb-2 text-white tracking-widest text-center">FUND<span className="neon-text">FUSION</span></h1>
-                                <p className="text-gray-400 mb-10 font-num tracking-widest text-xs">V.MAX - ENTERPRISE BLUEPRINT</p>
-
-                                <div className="w-full glass-panel p-6 rounded-3xl neon-border shadow-2xl relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--theme-color)] to-transparent opacity-50"></div>
-                                    
-                                    <form onSubmit={(e) => { e.preventDefault(); setUser({name: 'Master User', uid: '984532'}); setCurrentPage('dashboard'); }} className="space-y-4 relative z-10">
-                                        <div>
-                                            <label className="text-xs text-gray-400 mb-1 block">รหัสประจำตัว (ID / Email)</label>
-                                            <input type="text" required defaultValue="admin@fusion.com" className="w-full bg-black/50 border border-white/10 rounded-xl p-3.5 text-white outline-none focus:border-[var(--theme-color)] transition" />
-                                        </div>
-                                        <div>
-                                            <label className="text-xs text-gray-400 mb-1 block">รหัสผ่านระบบ (Password)</label>
-                                            <input type="password" required defaultValue="password" className="w-full bg-black/50 border border-white/10 rounded-xl p-3.5 text-white outline-none focus:border-[var(--theme-color)] transition" />
-                                        </div>
-                                        <button type="submit" className="w-full py-4 rounded-xl font-bold text-white tracking-wider mt-4 transition-all hover:scale-[1.02] neon-glow" style={{backgroundColor: THEMES[activeTheme].hex}}>
-                                            INITIATE SYSTEM
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 1. DASHBOARD (ภาพรวม + ระบบฝากถอนจริง) */}
-                        {currentPage === 'dashboard' && (
-                            <div className="space-y-6 animate-fade-in">
-                                {/* Total Net Worth Card */}
-                                <div className="glass-panel p-6 rounded-3xl relative overflow-hidden neon-border shadow-2xl">
-                                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-[var(--theme-color)] rounded-full blur-[80px] opacity-30"></div>
-                                    
-                                    <p className="text-xs text-gray-400 tracking-widest mb-2 flex items-center gap-2">
-                                        <i data-lucide="globe" className="w-4 h-4 neon-text animate-pulse"></i> มูลค่าสินทรัพย์รวมสุทธิ
-                                    </p>
-                                    <h2 className="text-4xl font-black text-white font-num tracking-tight mb-6">
-                                        $<span className="neon-text">{formatMoney(totalNetWorth)}</span>
-                                    </h2>
-                                    
-                                    <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
-                                        <div className="bg-black/30 p-3 rounded-2xl border border-white/5">
-                                            <span className="text-[10px] text-gray-500 block mb-1">ฝากหลัก (Main)</span>
-                                            <span className="font-bold text-sm text-gray-200 font-num">${formatMoney(wallet.deposited)}</span>
-                                        </div>
-                                        <div className="bg-black/30 p-3 rounded-2xl border border-white/5">
-                                            <span className="text-[10px] text-gray-500 block mb-1">เทรด (Margin)</span>
-                                            <span className="font-bold text-sm font-num neon-text">${formatMoney(wallet.tradeBalance)}</span>
-                                        </div>
-                                        <div className="bg-black/30 p-3 rounded-2xl border border-white/5">
-                                            <span className="text-[10px] text-gray-500 block mb-1">ถือครอง (Spot)</span>
-                                            <span className="font-bold text-sm text-white font-num">${formatMoney(totalAssetValue)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Transaction Buttons */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <button onClick={() => setDepositModal(true)} className="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 transition neon-border group">
-                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition">
-                                            <i data-lucide="arrow-down-to-line" className="w-5 h-5 neon-text"></i>
-                                        </div>
-                                        <span className="text-sm font-bold tracking-wider">ฝากเงินสด</span>
-                                    </button>
-                                    <button onClick={() => setWithdrawModal(true)} className="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 transition border border-white/10 hover:border-red-500/50 group">
-                                        <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition">
-                                            <i data-lucide="arrow-up-from-line" className="w-5 h-5 text-red-400"></i>
-                                        </div>
-                                        <span className="text-sm font-bold tracking-wider">ถอนเงินสด</span>
-                                    </button>
-                                </div>
-
-                                {/* Transaction History */}
-                                <div className="glass-panel p-5 rounded-3xl">
-                                    <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
-                                        <i data-lucide="list" className="w-4 h-4 neon-text"></i> ประวัติธุรกรรมล่าสุด
-                                    </h3>
-                                    <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
-                                        {wallet.history.length === 0 ? (
-                                            <p className="text-center text-xs text-gray-500 py-4">ยังไม่มีประวัติการทำรายการ</p>
-                                        ) : (
-                                            wallet.history.map((tx, idx) => (
-                                                <div key={tx.id} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.type === 'DEPOSIT' || tx.type === 'MINING_REWARD' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                                                            <i data-lucide={tx.type === 'WITHDRAW' ? 'arrow-up-right' : 'arrow-down-left'} className="w-4 h-4"></i>
-                                                        </div>
-                                                        <div>
-                                                            <p className="text-xs font-bold text-white">{tx.type}</p>
-                                                            <p className="text-[9px] text-gray-500">{tx.date}</p>
-                                                        </div>
-                                                    </div>
-                                                    <span className={`font-bold font-num text-sm ${tx.type === 'DEPOSIT' || tx.type === 'MINING_REWARD' ? 'text-green-400' : 'text-red-400'}`}>
-                                                        {tx.type === 'WITHDRAW' ? '-' : '+'}${formatMoney(tx.amount)}
-                                                    </span>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 2. TRADING DESK (หน้าเทรดพร้อมกราฟขยับได้สมจริงเรืองแสง) */}
-                        {currentPage === 'trade' && (
-                            <div className="space-y-4 animate-fade-in">
-                                
-                                {/* Asset Selector Grid */}
-                                <div className="grid grid-cols-4 gap-2">
-                                    {INITIAL_ASSETS.map(asset => {
-                                        const price = marketPrices[asset.id] || asset.basePrice;
-                                        const isSelected = selectedAsset.id === asset.id;
-                                        return (
-                                            <button 
-                                                key={asset.id} 
-                                                onClick={() => setSelectedAsset(asset)}
-                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center transition-all ${isSelected ? 'glass-panel neon-border neon-glow scale-105 z-10' : 'bg-black/40 border-white/5 hover:border-white/20'}`}
-                                            >
-                                                <span className="text-[10px] font-bold text-gray-400">{asset.symbol}</span>
-                                                <span className={`text-xs font-num mt-1 ${isSelected ? 'neon-text' : 'text-white'}`}>
-                                                    ${price > 1000 ? (price/1000).toFixed(1)+'k' : price.toFixed(1)}
-                                                </span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-
-                                {/* PREMIUM LIVE CHART WINDOW */}
-                                <div className="glass-panel rounded-3xl p-5 shadow-2xl relative overflow-hidden neon-border">
-                                    <div className="scan-effect"></div> {/* Scanline Animation */}
-                                    
-                                    <div className="flex justify-between items-start mb-4 relative z-10">
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <div className="relative w-2 h-2">
-                                                    <div className="absolute inset-0 bg-red-500 rounded-full animate-ping"></div>
-                                                    <div className="relative w-2 h-2 bg-red-500 rounded-full"></div>
-                                                </div>
-                                                <span className="text-[10px] text-red-400 font-bold tracking-widest">LIVE TRADING</span>
-                                            </div>
-                                            <h2 className="text-2xl font-black text-white flex items-center gap-2">
-                                                {selectedAsset.symbol}/USD
-                                            </h2>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-xs text-gray-400 mb-1">Current Price</p>
-                                            <p className="text-xl font-bold font-num neon-text tracking-wider">
-                                                ${formatMoney(currentSelectedPrice)}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* The Dynamic SVG Chart */}
-                                    <div className="h-56 w-full bg-black/50 rounded-2xl border border-white/5 relative overflow-hidden mb-5">
-                                        {/* Grid Background */}
-                                        <div className="absolute inset-0" style={{
-                                            backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-                                            backgroundSize: '20px 20px'
-                                        }}></div>
-
-                                        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-                                            <defs>
-                                                <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor={THEMES[activeTheme].hex} stopOpacity="0.6"/>
-                                                    <stop offset="100%" stopColor={THEMES[activeTheme].hex} stopOpacity="0.0"/>
-                                                </linearGradient>
-                                            </defs>
-                                            {/* Gradient Fill under the line */}
-                                            <path d={svgData.fillPath} fill="url(#chartGlow)" className="chart-gradient-fill"></path>
-                                            {/* The moving line */}
-                                            <path d={svgData.linePath} className="live-chart-line"></path>
-                                        </svg>
-                                        
-                                        {/* Crosshairs & Tags */}
-                                        <div className="absolute top-2 left-2 bg-black/80 px-2 py-1 rounded text-[9px] font-num text-gray-400 border border-white/10">HIGH: ${svgData.max.toFixed(2)}</div>
-                                        <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-[9px] font-num text-gray-400 border border-white/10">LOW: ${svgData.min.toFixed(2)}</div>
-                                        
-                                        {/* Live Indicator Dot at the end of the line */}
-                                        <div className="absolute w-2 h-2 rounded-full z-10 shadow-[0_0_10px_var(--theme-glow)] live-indicator" 
-                                             style={{
-                                                 backgroundColor: THEMES[activeTheme].hex,
-                                                 right: '0', 
-                                                 top: `${100 - ((chartData[chartData.length-1] - svgData.min) / (svgData.max - svgData.min) * 100)}%`,
-                                                 transform: 'translate(50%, -50%)',
-                                                 transition: 'top 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-                                             }}>
-                                        </div>
-                                    </div>
-
-                                    {/* Trading Controls */}
-                                    <div className="space-y-4 relative z-10">
-                                        <div className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
-                                            <span className="text-xs text-gray-400">Available Margin:</span>
-                                            <span className="font-bold text-sm font-num text-white">${formatMoney(wallet.tradeBalance)}</span>
-                                        </div>
-                                        
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <button onClick={() => {
-                                                if(wallet.tradeBalance < 100) return alert("Margin ไม่พอ (ขั้นต่ำ $100)");
-                                                setWallet(w => ({ ...w, tradeBalance: w.tradeBalance - 100 }));
-                                                setOrders([{ id: Date.now(), asset: selectedAsset.symbol, type: 'BUY', entry: currentSelectedPrice, margin: 100 }, ...orders]);
-                                                alert("เปิด Long Position (BUY) สำเร็จ");
-                                            }} className="bg-green-500 hover:bg-green-400 text-white py-4 rounded-2xl font-bold tracking-wider shadow-[0_0_20px_rgba(34,197,94,0.3)] transition transform hover:-translate-y-1">
-                                                BUY (LONG)
-                                            </button>
-                                            <button onClick={() => {
-                                                if(wallet.tradeBalance < 100) return alert("Margin ไม่พอ (ขั้นต่ำ $100)");
-                                                setWallet(w => ({ ...w, tradeBalance: w.tradeBalance - 100 }));
-                                                setOrders([{ id: Date.now(), asset: selectedAsset.symbol, type: 'SELL', entry: currentSelectedPrice, margin: 100 }, ...orders]);
-                                                alert("เปิด Short Position (SELL) สำเร็จ");
-                                            }} className="bg-red-500 hover:bg-red-400 text-white py-4 rounded-2xl font-bold tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] transition transform hover:-translate-y-1">
-                                                SELL (SHORT)
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 3. ORDER BOOK (ตั๋วออร์เดอร์ที่เปิดอยู่) */}
-                        {currentPage === 'orders' && (
-                            <div className="space-y-4 animate-fade-in">
-                                <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-6">
-                                    <i data-lucide="briefcase" className="neon-text"></i> Running Positions
-                                </h2>
-                                
-                                {orders.length === 0 ? (
-                                    <div className="glass-panel p-10 rounded-3xl text-center border-dashed border-2 border-white/10">
-                                        <i data-lucide="inbox" className="w-12 h-12 text-gray-600 mx-auto mb-4"></i>
-                                        <p className="text-gray-400">ยังไม่มี Positions ที่กำลังทำงาน</p>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-4">
-                                        {orders.map(order => {
-                                            const currentP = marketPrices[INITIAL_ASSETS.find(a=>a.symbol===order.asset).id] || order.entry;
-                                            const diff = order.type === 'BUY' ? (currentP - order.entry) : (order.entry - currentP);
-                                            const pnlPct = (diff / order.entry) * 100 * 10; // Leverage x10 จำลอง
-                                            const pnlAmount = order.margin * (pnlPct / 100);
-                                            const isProfit = pnlAmount >= 0;
-
-                                            return (
-                                                <div key={order.id} className="glass-panel p-5 rounded-2xl border-l-4 shadow-lg relative overflow-hidden" style={{borderLeftColor: order.type === 'BUY' ? '#22c55e' : '#ef4444'}}>
-                                                    <div className="flex justify-between items-start mb-3">
-                                                        <div>
-                                                            <div className="flex items-center gap-2 mb-1">
-                                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${order.type==='BUY' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                                                                    {order.type} 10x
-                                                                </span>
-                                                                <span className="font-bold text-white text-lg">{order.asset}/USD</span>
-                                                            </div>
-                                                            <p className="text-xs text-gray-400 font-num">Entry: ${formatCrypto(order.entry)}</p>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <p className="text-[10px] text-gray-400 mb-1">Unrealized PNL</p>
-                                                            <p className={`font-bold font-num text-lg ${isProfit ? 'text-green-400' : 'text-red-400'}`}>
-                                                                {isProfit ? '+' : ''}${pnlAmount.toFixed(2)}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <button onClick={() => {
-                                                        const totalReturn = order.margin + pnlAmount;
-                                                        setWallet(w => ({ ...w, tradeBalance: w.tradeBalance + totalReturn }));
-                                                        setOrders(orders.filter(o => o.id !== order.id));
-                                                        alert(`ปิดออร์เดอร์เรียบร้อย\nคืนทุน+กำไร/ขาดทุน: $${totalReturn.toFixed(2)} เข้ากระเป๋า Margin`);
-                                                    }} className="w-full py-3 mt-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition border border-white/10">
-                                                        CLOSE POSITION
-                                                    </button>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {/* 4. ASSETS VAULT & LOCK SYSTEM (ห้องนิรภัย & ระบบล็อก) */}
-                        {currentPage === 'assets' && (
-                            <div className="space-y-6 animate-fade-in">
-                                
-                                {/* Status Box */}
-                                <div className={`glass-panel p-6 rounded-3xl relative overflow-hidden border ${isAssetLocked ? 'border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'neon-border neon-glow'}`}>
-                                    <div className="flex justify-between items-center mb-4">
-                                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                                            <i data-lucide="safe" className={isAssetLocked ? 'text-red-400' : 'neon-text'}></i> Spot Vault
-                                        </h2>
-                                        {isAssetLocked ? (
-                                            <span className="bg-red-500/20 text-red-400 text-[10px] px-3 py-1 rounded-full font-bold flex items-center gap-1 border border-red-500/30 animate-pulse">
-                                                <i data-lucide="lock" className="w-3 h-3"></i> ASSETS LOCKED
-                                            </span>
-                                        ) : (
-                                            <span className="bg-green-500/20 text-green-400 text-[10px] px-3 py-1 rounded-full font-bold flex items-center gap-1 border border-green-500/30">
-                                                <i data-lucide="unlock" className="w-3 h-3"></i> UNLOCKED
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Lock Explanation Logic */}
-                                    <div className="bg-black/50 p-4 rounded-2xl border border-white/5 mb-4">
-                                        <p className="text-xs text-gray-300 leading-relaxed mb-3">
-                                            <span className="font-bold text-white">Security Protocol:</span> ระดับบัญชีของคุณคือ Level {membershipLevel}. 
-                                            {membershipLevel > 0 ? ` เงื่อนไขการปลดล็อกพอร์ตคือต้องมีมูลค่าสินทรัพย์รวม (Total Net Worth) มากกว่า $${formatMoney(lockConditions.find(c=>c.level===membershipLevel)?.min || 0)}` : ' บัญชีระดับอิสระ ไม่มีเงื่อนไขการล็อก'}
-                                        </p>
-                                        
-                                        {membershipLevel > 0 && (
-                                            <div>
-                                                <div className="flex justify-between text-[10px] text-gray-400 mb-1">
-                                                    <span>Progress: ${formatMoney(totalNetWorth)}</span>
-                                                    <span>Target: ${formatMoney(lockConditions.find(c=>c.level===membershipLevel)?.min || 0)}</span>
-                                                </div>
-                                                <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-gradient-to-r from-red-500 to-yellow-500 transition-all duration-1000" 
-                                                         style={{width: `${Math.min((totalNetWorth / (lockConditions.find(c=>c.level===membershipLevel)?.min || 1)) * 100, 100)}%`}}></div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Holding List */}
-                                    <div className="space-y-3">
-                                        {INITIAL_ASSETS.map(asset => {
-                                            const amt = wallet.assetsHoldings[asset.id] || 0;
-                                            if(amt <= 0) return null;
-                                            const value = amt * (marketPrices[asset.id] || asset.basePrice);
-                                            return (
-                                                <div key={asset.id} className="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
-                                                    <div>
-                                                        <p className="font-bold text-white">{asset.name}</p>
-                                                        <p className="text-xs text-gray-400 font-num">{formatCrypto(amt)} {asset.symbol}</p>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className="font-bold font-num neon-text">${formatMoney(value)}</p>
-                                                        <button onClick={() => {
-                                                            if (isAssetLocked) {
-                                                                return alert(`🚨 แจ้งเตือนความปลอดภัย\n\nพอร์ตของคุณติดเงื่อนไข Level ${membershipLevel}\nต้องมีเงินรวม $${formatMoney(lockConditions.find(c=>c.level===membershipLevel)?.min || 0)} ถึงจะขายเหรียญได้\nกรุณาฝากเงินเพิ่มเพื่อปลดล็อก!`);
-                                                            }
-                                                            setWallet(w => ({
-                                                                ...w,
-                                                                assetsHoldings: { ...w.assetsHoldings, [asset.id]: 0 },
-                                                                deposited: w.deposited + value
-                                                            }));
-                                                            alert(`ขาย ${asset.symbol} ทั้งหมดสำเร็จ\nเงิน $${formatMoney(value)} ถูกโอนเข้ากระเป๋าหลัก`);
-                                                        }} className="text-[10px] bg-red-500/20 hover:bg-red-500 text-white px-3 py-1 rounded mt-1 transition">SELL ALL</button>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 5. MINING TERMINAL (ระบบขุด 24 ชม.) */}
-                        {currentPage === 'mining' && (
-                            <div className="space-y-6 animate-fade-in">
-                                <div className="glass-panel p-6 rounded-3xl neon-border shadow-[0_0_40px_var(--theme-glow)] relative overflow-hidden">
-                                    {/* Background Terminal Effect */}
-                                    <div className="absolute inset-0 opacity-10" style={{
-                                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--theme-color) 2px, var(--theme-color) 4px)'
-                                    }}></div>
-                                    
-                                    <div className="text-center relative z-10 mb-8">
-                                        <div className="w-20 h-20 mx-auto rounded-full border-4 border-white/10 flex items-center justify-center mb-4 relative" style={{borderColor: miningPool.active ? THEMES[activeTheme].hex : ''}}>
-                                            {miningPool.active && <div className="absolute inset-0 rounded-full animate-ping opacity-50" style={{backgroundColor: THEMES[activeTheme].hex}}></div>}
-                                            <i data-lucide="cpu" className={`w-10 h-10 ${miningPool.active ? 'neon-text animate-pulse' : 'text-gray-600'}`}></i>
-                                        </div>
-                                        <h2 className="text-2xl font-black text-white tracking-widest">CLOUD MINING</h2>
-                                        <p className="text-xs text-gray-400 mt-1 font-num">SHA-256 ALGORITHM ENGINE</p>
-                                    </div>
-
-                                    {miningPool.active ? (
-                                        <div className="space-y-6 relative z-10">
-                                            <div className="bg-black/80 p-4 rounded-xl border border-white/10 font-num text-xs space-y-2">
-                                                <div className="flex justify-between text-green-400"><span>[SYS] Hashing Rate:</span> <span>{formatMoney(miningPool.hashes)} TH/s</span></div>
-                                                <div className="flex justify-between text-blue-400"><span>[SYS] Target Asset:</span> <span className="uppercase">{miningPool.assetId}</span></div>
-                                                <div className="flex justify-between text-yellow-400"><span>[SYS] Network Diff:</span> <span>High</span></div>
-                                            </div>
-                                            
-                                            <div>
-                                                <div className="flex justify-between text-xs text-white mb-2 font-bold">
-                                                    <span>COMPLETING BLOCK...</span>
-                                                    <span>{miningPool.progress.toFixed(1)}%</span>
-                                                </div>
-                                                <div className="h-4 w-full bg-black rounded-full overflow-hidden border border-white/20 p-0.5">
-                                                    <div className="h-full rounded-full transition-all duration-300 relative overflow-hidden" 
-                                                         style={{width: `${miningPool.progress}%`, backgroundColor: THEMES[activeTheme].hex}}>
-                                                        <div className="absolute inset-0 bg-white/30 animate-pulse"></div>     
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button onClick={() => setMiningPool({active: false, assetId: '', progress: 0, hashes: 0})} className="w-full py-4 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-xl font-bold tracking-widest transition">
-                                                EMERGENCY STOP
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-4 relative z-10">
-                                            <label className="text-xs text-gray-400 font-bold tracking-wider">เลือกเหรียญที่จะทำการขุด</label>
-                                            <select id="selectMine" className="w-full bg-black/60 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-[var(--theme-color)] transition">
-                                                {INITIAL_ASSETS.map(a => <option key={a.id} value={a.id}>{a.name} ({a.symbol})</option>)}
-                                            </select>
-                                            
-                                            <button onClick={() => {
-                                                const sel = document.getElementById('selectMine').value;
-                                                setMiningPool({ active: true, assetId: sel, progress: 0, hashes: 0 });
-                                            }} className="w-full py-5 rounded-2xl font-black text-white tracking-widest text-lg shadow-2xl transition hover:scale-[1.02] neon-glow relative overflow-hidden group" style={{backgroundColor: THEMES[activeTheme].hex}}>
-                                                <span className="relative z-10">INITIALIZE ENGINE</span>
-                                                <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition duration-500"></div>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                    </main>
-
-                    {/* --- BOTTOM NAVIGATION BAR --- */}
-                    {currentPage !== 'auth' && (
-                        <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-lg glass-panel border-t border-white/10 rounded-t-3xl pb-safe z-50">
-                            <div className="flex justify-around items-center p-2 pb-6 pt-4">
-                                {[
-                                    { id: 'dashboard', icon: 'layout-dashboard', label: 'Home' },
-                                    { id: 'trade', icon: 'candlestick-chart', label: 'Trade' },
-                                    { id: 'orders', icon: 'gavel', label: 'Orders' },
-                                    { id: 'assets', icon: 'vault', label: 'Vault' },
-                                    { id: 'mining', icon: 'server', label: 'Mine' },
-                                ].map((tab) => {
-                                    const isActive = currentPage === tab.id;
-                                    return (
-                                        <button 
-                                            key={tab.id} 
-                                            onClick={() => setCurrentPage(tab.id)} 
-                                            className="flex flex-col items-center gap-1.5 relative w-16"
-                                        >
-                                            <div className={`p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-white/10 shadow-lg scale-110 neon-border' : 'hover:bg-white/5'}`}>
-                                                <i data-lucide={tab.icon} className={`w-5 h-5 ${isActive ? 'neon-text' : 'text-gray-500'}`}></i>
-                                            </div>
-                                            <span className={`text-[9px] font-bold tracking-wider transition-colors ${isActive ? 'text-white' : 'text-gray-500'}`}>
-                                                {tab.label}
-                                            </span>
-                                            {/* Active Dot Indicator */}
-                                            {isActive && <div className="absolute -bottom-2 w-1 h-1 rounded-full neon-glow" style={{backgroundColor: THEMES[activeTheme].hex}}></div>}
-                                        </button>
-                                    )
-                                })}
-                            </div>
-                        </nav>
-                    )}
-
-                    {/* --- DEPOSIT MODAL --- */}
-                    {depositModal && (
-                        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-                            <div className="glass-panel w-full max-w-sm rounded-3xl p-6 border border-white/10 shadow-2xl transform scale-100 animate-fade-in relative">
-                                <button onClick={() => setDepositModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><i data-lucide="x"></i></button>
-                                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="arrow-down-to-line" className="text-green-400"></i> ระบบฝากเงิน</h3>
-                                <p className="text-xs text-gray-400 mb-6">กรอกจำนวนเงิน (USD) ที่ต้องการนำเข้าสู่ระบบเพื่อเทรดหรือซื้อสินทรัพย์</p>
-                                
-                                <input type="number" value={txAmount} onChange={e => setTxAmount(e.target.value)} placeholder="0.00" className="w-full bg-black/50 border border-white/10 rounded-2xl p-5 text-3xl font-num text-white text-center outline-none mb-6 focus:border-green-500 transition" />
-                                
-                                <button onClick={() => handleTransaction('DEPOSIT')} className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 rounded-xl transition shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-                                    ยืนยันทำรายการฝาก
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* --- WITHDRAW MODAL --- */}
-                    {withdrawModal && (
-                        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-                            <div className="glass-panel w-full max-w-sm rounded-3xl p-6 border border-white/10 shadow-2xl transform scale-100 animate-fade-in relative">
-                                <button onClick={() => setWithdrawModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><i data-lucide="x"></i></button>
-                                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="arrow-up-from-line" className="text-red-400"></i> ระบบถอนเงิน</h3>
-                                <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-4">
-                                    <p className="text-[10px] text-red-300">ยอดเงินคงเหลือที่ถอนได้: <span className="font-bold">${formatMoney(wallet.deposited)}</span></p>
-                                </div>
-                                
-                                <input type="number" value={txAmount} onChange={e => setTxAmount(e.target.value)} placeholder="0.00" className="w-full bg-black/50 border border-white/10 rounded-2xl p-5 text-3xl font-num text-white text-center outline-none mb-6 focus:border-red-500 transition" />
-                                
-                                <button onClick={() => handleTransaction('WITHDRAW')} className="w-full bg-red-500 hover:bg-red-400 text-white font-bold py-4 rounded-xl transition shadow-[0_0_15px_rgba(239,68,68,0.4)]">
-                                    ยืนยันทำรายการถอน
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
+            if(document.getElementById(`nl-${viewId}`)) {
+                document.getElementById(`nl-${viewId}`).classList.add('active');
+            }
+            if(viewId === 'trade' && !SYSTEM_DATA.tvEngine) {
+                loadMarketChart("BINANCE:BTCUSDT");
+            }
+            refreshDisplayBalances();
+            renderAdminSandbox();
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        function openAuthView(mode) {
+            changeView('auth');
+            if(mode === 'signup') {
+                document.getElementById('box-login').style.display = 'none';
+                document.getElementById('box-signup').style.display = 'block';
+            } else {
+                document.getElementById('box-login').style.display = 'block';
+                document.getElementById('box-signup').style.display = 'none';
+            }
+        }
+
+        function loadMarketChart(symbol) {
+            SYSTEM_DATA.tvEngine = new TradingView.widget({
+                "width": "100%", "height": 350, "symbol": symbol, "interval": "60", "theme": "dark", "style": "1", "locale": "th", "container_id": "live-tradingview-widget"
+            });
+        }
+
+        function quickNavToTrade(symbol) { changeView('trade'); loadMarketChart(symbol); }
+
+        function copyDepositAddress() {
+            const addr = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
+            navigator.clipboard.writeText(addr);
+            alert("📋 คัดลอกที่อยู่กระเป๋า ERC20 ของระบบไปยังคลิปบอร์ดแล้ว!");
+        }
+
+        function previewSlipUploaded() {
+            const fileInput = document.getElementById('deposit-slip-file');
+            if(fileInput.files.length > 0) {
+                document.getElementById('slip-preview-status').style.display = "block";
+            }
+        }
+
+        // -------------------------------------------------------------------------
+        // 📥 ธุรกรรมส่งคำสั่งฝากเงิน (Deposit Submission Engine)
+        // -------------------------------------------------------------------------
+        function submitDepositOrder() {
+            const amt = parseFloat(document.getElementById('deposit-amount-input').value);
+            const fileInput = document.getElementById('deposit-slip-file');
+
+            if(isNaN(amt) || amt <= 0) return alert("⚠️ ปฏิเสธ: โปรดระบุจำนวนมูลค่าเงินฝากที่ถูกต้อง");
+            if(fileInput.files.length === 0) return alert("⚠️ ปฏิเสธ: จำเป็นต้องอัปโหลดภาพหลักฐานสลิปโอนเงินเพื่อส่งให้แอดมินหลังบ้าน");
+
+            // แสดงสถานะที่หน้าจอผู้ใช้
+            document.getElementById('deposit-status-box').style.display = "block";
+            document.getElementById('deposit-status-badge').className = "status-tag status-pending";
+            document.getElementById('deposit-status-badge').innerText = "⏳ กำลังตรวจสอบ";
+            document.getElementById('btn-submit-deposit').disabled = true;
+
+            // บันทึกคำสั่งฝากเข้าคิวรันงานหลังบ้านจำลอง
+            const newTx = {
+                id: "DEP-" + Math.floor(1000 + Math.random() * 9000),
+                type: "ฝากเงิน",
+                amount: amt,
+                meta: "หลักฐาน: มีไฟล์รูปภาพสลิปแนบมา",
+                status: "Pending"
+            };
+            SYSTEM_DATA.pendingTransactions.push(newTx);
+            alert(`📨 ส่งข้อมูลคำสั่งฝากเงินจำนวน $${amt} เรียบร้อย! ขณะนี้สถานะคือ 'กำลังตรวจสอบ' รอให้แอดมินแผงหลังบ้านกดอนุมัติครับ`);
+            renderAdminSandbox();
+        }
+
+        // -------------------------------------------------------------------------
+        // 📤 ธุรกรรมส่งคำสั่งถอนเงิน (Withdrawal Submission Engine)
+        // -------------------------------------------------------------------------
+        function submitWithdrawOrder() {
+            const amt = parseFloat(document.getElementById('withdraw-amount-input').value);
+            const addr = document.getElementById('withdraw-address-input').value.trim();
+            
+            // คำนวณหายอดเงินรวมสุทธิขณะนั้น
+            let grandSum = SYSTEM_DATA.balanceTrading + SYSTEM_DATA.balanceAsset + SYSTEM_DATA.balanceDeposit;
+
+            if(isNaN(amt) || amt <= 0) return alert("⚠️ ปฏิเสธ: โปรดกรอกจำนวนเงินที่ต้องการถอนให้ถูกต้อง");
+            if(!addr) return alert("⚠️ ปฏิเสธ: กรุณากรอกที่อยู่กระเป๋าเงิน ERC20 ของคุณเพื่อรับยอดโอนกลับ");
+            if(amt > grandSum) return alert("❌ ยอดเงินทั้งหมดของคุณมีไม่เพียงพอสำหรับการทำรายการถอนจำนวนนี้");
+
+            // หักยอดเงินฝากค้างจ่ายชั่วคราวเพื่อล็อควงเงินประกันการตรวจสอบค้างถอน
+            SYSTEM_DATA.balanceDeposit -= amt;
+            refreshDisplayBalances();
+
+            // แสดงสถานะที่หน้าจอผู้ใช้
+            document.getElementById('withdraw-status-box').style.display = "block";
+            document.getElementById('withdraw-status-badge').className = "status-tag status-pending";
+            document.getElementById('withdraw-status-badge').innerText = "⏳ กำลังตรวจสอบ";
+            document.getElementById('btn-submit-withdraw').disabled = true;
+
+            // บันทึกคำสั่งถอนเข้าคิวรันงานหลังบ้านจำลอง
+            const newTx = {
+                id: "WTH-" + Math.floor(1000 + Math.random() * 9000),
+                type: "ถอนเงิน",
+                amount: amt,
+                meta: `โอนไปที่: ${addr.substring(0, 8)}...`,
+                status: "Pending"
+            };
+            SYSTEM_DATA.pendingTransactions.push(newTx);
+            alert(`📨 ส่งข้อมูลคำสั่งถอนเงินจำนวน $${amt} สำเร็จ! ระบบได้ล็อกยอดวงเงินชั่วคราวและเปลี่ยนสถานะเป็น 'กำลังตรวจสอบ' เรียบร้อยครับ`);
+            renderAdminSandbox();
+        }
+
+        // -------------------------------------------------------------------------
+        // 🛡️ ระบบจัดการหลังบ้านจำลอง (Admin Action Process Core)
+        // -------------------------------------------------------------------------
+        function renderAdminSandbox() {
+            const container = document.getElementById('admin-queue-list');
+            const emptyTxt = document.getElementById('admin-empty-text');
+            container.innerHTML = "";
+
+            const pendingItems = SYSTEM_DATA.pendingTransactions.filter(t => t.status === "Pending");
+            
+            if(pendingItems.length === 0) {
+                emptyTxt.style.display = "block";
+                return;
+            }
+            emptyTxt.style.display = "none";
+
+            pendingItems.forEach(tx => {
+                const row = document.createElement('div');
+                row.className = "admin-row";
+                row.innerHTML = `
+                    <div>
+                        <strong>[ID: ${tx.id}]</strong> บัญชีทำรายการ <strong>${tx.type}</strong><br>
+                        <span style="color:#ff8a00; font-size:14px; font-weight:bold;">มูลค่า: $${tx.amount.toLocaleString()}</span> | <small style="color:#b5b7bc;">${tx.meta}</small>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button style="background:#02c076; color:white; border:none; padding:6px 10px; border-radius:3px; font-weight:bold; cursor:pointer;" onclick="processAdminDecision('${tx.id}', 'APPROVE')">อนุมัติ</button>
+                        <button style="background:#f6465d; color:white; border:none; padding:6px 10px; border-radius:3px; font-weight:bold; cursor:pointer;" onclick="processAdminDecision('${tx.id}', 'REJECT')">ปฏิเสธ</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function processAdminDecision(txId, action) {
+            const tx = SYSTEM_DATA.pendingTransactions.find(t => t.id === txId);
+            if(!tx) return;
+
+            if(action === 'APPROVE') {
+                tx.status = "Success";
+                if(tx.type === "ฝากเงิน") {
+                    // อนุมัติฝาก: เติมเงินเข้ากระเป๋าเงินฝากหลัก ยอดรวมทั้งหมดจะอัปเดตเพิ่มขึ้นทันที
+                    SYSTEM_DATA.balanceDeposit += tx.amount;
+                    
+                    // ปรับสถานะป้ายเตือนที่หน้าฝากเงินเป็นสำเร็จ
+                    document.getElementById('deposit-status-badge').className = "status-tag status-success";
+                    document.getElementById('deposit-status-badge').innerText = "✅ สำเร็จ (Success)";
+                    document.getElementById('btn-submit-deposit').disabled = false;
+                } else if(tx.type === "ถอนเงิน") {
+                    // อนุมัติถอน: เงินถูกหักค้างไว้อยู่แล้วตอนยื่นคำสั่ง ถอนสำเร็จคือยืนยันตัดยอดออกจากระบบถาวร
+                    document.getElementById('withdraw-status-badge').className = "status-tag status-success";
+                    document.getElementById('withdraw-status-badge').innerText = "✅ สำเร็จ (Success)";
+                    document.getElementById('btn-submit-withdraw').disabled = false;
+                }
+                alert(`👑 หลังบ้านอนุมัติคำสั่ง [ID: ${txId}] เรียบร้อย! ยอดเงินอัปเดตเข้าบัญชีรวมเรียบร้อยแล้ว`);
+            } else {
+                tx.status = "Rejected";
+                if(tx.type === "ฝากเงิน") {
+                    document.getElementById('deposit-status-badge').className = "status-tag status-rejected";
+                    document.getElementById('deposit-status-badge').innerText = "❌ ปฏิเสธรายการ (Rejected)";
+                    document.getElementById('btn-submit-deposit').disabled = false;
+                } else if(tx.type === "ถอนเงิน") {
+                    // ปฏิเสธถอน: โอนวงเงินที่ล็อกค้ำประกันไว้ คืนกลับเข้ากระเป๋าหลักให้ผู้ใช้
+                    SYSTEM_DATA.balanceDeposit += tx.amount;
+                    document.getElementById('withdraw-status-badge').className = "status-tag status-rejected";
+                    document.getElementById('withdraw-status-badge').innerText = "❌ ปฏิเสธรายการ (Rejected)";
+                    document.getElementById('btn-submit-withdraw').disabled = false;
+                }
+                alert(`👑 หลังบ้านส่งคำสั่งปฏิเสธ [ID: ${txId}] ธุรกรรมถูกยกเลิกแล้ว`);
+            }
+
+            refreshDisplayBalances();
+            renderAdminSandbox();
+        }
+
+        // -------------------------------------------------------------------------
+        // 🔮 ภาพเคลื่อนไหววงโคจรความละเอียดสูง (3D Asset Orbit Core)
+        // -------------------------------------------------------------------------
+        function initCryptoAnimation() {
+            const canvas = document.getElementById('cryptoCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = 320, height = 240;
+            canvas.width = width * 2; canvas.height = height * 2;
+            ctx.scale(2, 2);
+
+            const assets = [
+                { name: "BTC", color: "#f3ba2f", size: 11, angle: 0, speed: 0.007, radiusX: 110, radiusY: 35 },
+                { name: "ETH", color: "#627eea", size: 9, angle: 1.2, speed: 0.005, radiusX: 90, radiusY: 28 },
+                { name: "XAU", color: "#ffae00", size: 10, angle: 2.5, speed: 0.006, radiusX: 130, radiusY: 42 },
+                { name: "SOL", color: "#14f195", size: 8, angle: 3.8, speed: 0.008, radiusX: 75, radiusY: 22 },
+                { name: "USDT", color: "#26a17b", size: 8, angle: 4.8, speed: 0.004, radiusX: 100, radiusY: 30 }
+            ];
+            let centerAngle = 0;
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                const cx = width / 2, cy = height / 2 + 10;
+                let glowGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 80);
+                glowGrad.addColorStop(0, 'rgba(255, 138, 0, 0.12)'); glowGrad.addColorStop(1, 'rgba(11, 12, 14, 0)');
+                ctx.fillStyle = glowGrad; ctx.fillRect(0, 0, width, height);
+
+                centerAngle += 0.003;
+                ctx.save(); ctx.translate(cx, cy - 10); ctx.rotate(centerAngle);
+                ctx.strokeStyle = 'rgba(255, 138, 0, 0.25)'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.arc(0, 0, 25, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#ff8a00'; ctx.font = 'bold 22px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText('𝙁', 0, 0); ctx.restore();
+
+                assets.sort((a, b) => Math.sin(a.angle) - Math.sin(b.angle));
+                assets.forEach(asset => {
+                    asset.angle += asset.speed;
+                    const x = cx + Math.cos(asset.angle) * asset.radiusX;
+                    const y = cy + Math.sin(asset.angle) * asset.radiusY;
+                    const scale = 0.7 + (Math.sin(asset.angle) + 1) * 0.3;
+                    const currentSize = asset.size * scale;
+
+                    ctx.shadowBlur = 10; ctx.shadowColor = asset.color;
+                    ctx.fillStyle = 'rgba(23, 26, 31, 0.9)'; ctx.beginPath(); ctx.arc(x, y, currentSize, 0, Math.PI * 2); ctx.fill();
+                    ctx.strokeStyle = asset.color; ctx.lineWidth = 1.5 * scale; ctx.beginPath(); ctx.arc(x, y, currentSize, 0, Math.PI * 2); ctx.stroke();
+                    ctx.shadowBlur = 0; ctx.fillStyle = '#ffffff'; ctx.font = `bold ${9 * scale}px Geneva, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                    ctx.fillText(asset.name, x, y);
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        window.addEventListener('DOMContentLoaded', initCryptoAnimation);
+
+        // ระบบจำลองล็อกอินอัตโนมัติเพื่อให้ปุ่มแสดงครบถ้วน
+        function processLogin() {
+            SYSTEM_DATA.isAuth = true; SYSTEM_DATA.uid = "77491024";
+            document.getElementById('auth-header-actions').style.display = 'none';
+            document.getElementById('user-logged-profile').style.display = 'flex';
+            document.getElementById('profile-name-text').innerText = `UID: ${SYSTEM_DATA.uid}`;
+            document.getElementById('main-app-navigation').style.display = 'flex';
+            goToHome();
+        }
+        window.addEventListener('load', processLogin);
     </script>
 </body>
 </html>
