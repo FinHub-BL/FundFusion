@@ -5,335 +5,263 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FundFusion - Premier Trading Platform</title>
     <style>
-        /* 🎨 คุมโทนสีตามรูปภาพตัวอย่าง: ดาร์กโหมดพรีเมียม ตัดด้วยสีส้มไฮไลท์ (#ff8a00) */
+        /* 🎨 คุมโทนสีและปรับดีไซน์ขอบโค้งมนละมุน สบายตาตามสั่ง */
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0b0c0e; color: #ffffff; padding: 0; margin: 0; padding-bottom: 120px; }
         
-        /* ส่วนหัวแอปพลิเคชัน (Header) */
         .top-header { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 15px 20px; border-bottom: 1px solid #1e2226; position: sticky; top: 0; z-index: 1000; }
         .logo-area { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; color: #ffffff; cursor: pointer; }
         .logo-icon { color: #ff8a00; font-size: 24px; font-weight: 900; }
         .auth-buttons { display: flex; gap: 10px; }
-        .btn-auth-login { background: #22252a; color: #eaecef; border: 1px solid #32373f; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .btn-auth-signup { background: #ff8a00; color: #ffffff; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-auth-login { background: #22252a; color: #eaecef; border: 1px solid #32373f; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-auth-signup { background: #ff8a00; color: #ffffff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px; }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* โซนแบนเนอร์ภาพเคลื่อนไหวเคลื่อนไหวแบบสบายตา (Interactive Canvas Center) */
+        /* ภาพเคลื่อนไหว Orbit หัวมุมมน */
         .hero-section { text-align: center; padding: 10px 10px 20px 10px; background: linear-gradient(180deg, #121418 0%, #0b0c0e 100%); position: relative; }
         .canvas-container { width: 100%; max-width: 320px; height: 240px; margin: 0 auto; position: relative; }
         #cryptoCanvas { width: 100%; height: 100%; display: block; }
         
-        .announcement { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #b5b7bc; text-align: left; padding: 0 10px; line-height: 1.4; margin-bottom: 20px; }
+        .announcement { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #b5b7bc; text-align: left; padding: 12px; line-height: 1.4; margin-bottom: 20px; background: #121418; border-radius: 12px; }
         .announcement-icon { font-size: 18px; color: #ff8a00; }
 
-        /* การ์ดสไลด์เหรียญเด่น (Crypto Showcase Cards) */
+        /* การ์ดสไลด์เหรียญเด่นขอบมน */
         .showcase-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 15px; scrollbar-width: none; }
         .showcase-container::-webkit-scrollbar { display: none; }
-        .showcase-card { background: #171a1f; border: 1px solid #22262d; border-radius: 12px; padding: 16px; min-width: 150px; flex: 1; }
+        .showcase-card { background: #171a1f; border: 1px solid #22262d; border-radius: 18px; padding: 16px; min-width: 150px; flex: 1; }
         .coin-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
         .coin-icon-img { width: 24px; height: 24px; background: #22262d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
         .coin-symbol { font-weight: bold; font-size: 15px; color: #ffffff; }
-        .coin-pair { color: #70757d; font-size: 12px; font-weight: normal; }
+        .coin-pair { color: #70757d; font-size: 12px; }
         .coin-price { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
         .coin-change { font-size: 13px; font-weight: 600; }
         .change-green { color: #02c076; }
 
-        /* แถบแท็บแยกตัวกรองสไตล์ในรูปภาพ (Top Price / Top Gainer) */
         .tab-bar { display: flex; border-bottom: 1px solid #1e2226; margin-bottom: 15px; }
         .tab-item { padding: 12px 24px; font-size: 15px; font-weight: 600; color: #70757d; cursor: pointer; position: relative; }
         .tab-item.active { color: #ffffff; }
-        .tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #ff8a00; }
+        .tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #ff8a00; border-radius: 3px 3px 0 0; }
 
-        /* ตารางรายการเหรียญเรียงลงมาตามแบบเป๊ะๆ */
-        .crypto-row { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #191c21; cursor: pointer; transition: 0.2s; }
-        .crypto-row:hover { background: #171a1f; }
+        /* แถวรายการเหรียญแบบโค้งมนสวยงาม */
+        .crypto-row { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 14px 16px; border-radius: 16px; margin-bottom: 12px; border: 1px solid #191c21; cursor: pointer; transition: 0.2s; }
+        .crypto-row:hover { background: #171a1f; border-color: #ff8a00; }
         .crypto-info-left { display: flex; align-items: center; gap: 12px; }
         .crypto-names h4 { margin: 0; font-size: 15px; font-weight: bold; }
         .crypto-names span { font-size: 12px; color: #70757d; }
         .crypto-price-right { text-align: right; display: flex; align-items: center; gap: 15px; }
         .row-price { font-size: 15px; font-weight: bold; }
-        .row-badge { background: #02c076; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; min-width: 65px; text-align: center; }
+        .row-badge { background: #02c076; color: white; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; min-width: 65px; text-align: center; }
 
-        /* โครงสร้างพื้นฐานฟังก์ชัน และ ส่วนหน้าแอป (ฟังก์ชันการทำงานด้านหลังตามพิมพ์เขียว) */
+        /* พาเนลหลักขอบมนพิเศษโค้งกระชับ */
         .app-page { display: none; }
         .app-page.active { display: block; }
-        .card-panel { background: #121418; padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #191c21; }
-        .btn-action { background: #ff8a00; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; margin-top: 10px; }
-        .btn-action:disabled { background: #32373f; color: #70757d; cursor: not-allowed; }
+        .card-panel { background: #121418; padding: 20px; border-radius: 24px; margin-bottom: 15px; border: 1px solid #191c21; }
+        .btn-action { background: #ff8a00; color: white; border: none; padding: 14px; border-radius: 20px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; margin-top: 10px; transition: 0.2s; }
+        .btn-action:active { transform: scale(0.98); }
         .btn-danger { background: #f6465d; }
         .input-box { margin-bottom: 15px; }
         .input-box label { display: block; margin-bottom: 6px; color: #70757d; font-size: 13px; }
-        .input-box input, .input-box select { width: 100%; padding: 12px; background: #171a1f; border: 1px solid #22262d; color: white; border-radius: 4px; box-sizing: border-box; }
+        .input-box input, .input-box select { width: 100%; padding: 12px 16px; background: #171a1f; border: 1px solid #22262d; color: white; border-radius: 12px; box-sizing: border-box; font-size: 15px; }
 
-        /* ส่วนแสดง QR Code และกระเป๋าฝากเงิน */
-        .deposit-qr-container { text-align: center; background: #171a1f; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px dashed #ff8a00; }
-        .qr-placeholder { width: 130px; height: 130px; background: #ffffff; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center; border-radius: 4px; padding: 5px; box-sizing: border-box; }
-        .qr-placeholder img { width: 100%; height: 100%; }
-        .address-bar { display: flex; background: #121418; border: 1px solid #22262d; border-radius: 4px; padding: 10px; font-size: 12px; justify-content: space-between; align-items: center; margin-top: 5px; }
-        
-        /* ป้ายแสดงสถานะธุรกรรม (Transaction Status Tags) */
-        .status-tag { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-top: 5px; }
-        .status-pending { background: rgba(255, 138, 0, 0.15); color: #ff8a00; border: 1px solid #ff8a00; }
-        .status-success { background: rgba(2, 192, 118, 0.15); color: #02c076; border: 1px solid #02c076; }
-        .status-rejected { background: rgba(246, 70, 93, 0.15); color: #f6465d; border: 1px solid #f6465d; }
-
-        /* แถบเมนูควบคุมด้านล่าง (Bottom Navigation) */
+        /* บาร์นำทางด้านล่าง */
         .bottom-navbar { display: none; justify-content: space-around; background: #121418; padding: 12px 0; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #1e2226; z-index: 1000; }
         .nav-link { color: #70757d; text-decoration: none; font-size: 11px; cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .nav-link.active { color: #ff8a00; }
         
-        /* กล่องสำหรับฝังกราฟ TradingView */
-        .chart-box { height: 350px; width: 100%; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #121418; border: 1px solid #191c21; }
+        .chart-box { height: 280px; width: 100%; border-radius: 18px; overflow: hidden; margin-bottom: 15px; background: #121418; border: 1px solid #191c21; }
 
-        /* 👑 แผงควบคุมระบบหลังบ้านแบบจำลอง (Admin Sandbox Widget) */
-        .admin-sandbox-panel { background: #1c1511; border: 2px dashed #ff8a00; padding: 15px; border-radius: 8px; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .admin-row { background: #261f1a; padding: 10px; border-radius: 4px; margin-top: 10px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #ff8a00; }
+        /* สไตล์กล่องรายการออร์เดอร์ในหน้าประวัติ */
+        .order-card { background: #171a1f; border-radius: 16px; padding: 14px; margin-bottom: 10px; border: 1px solid #22262d; cursor: pointer; }
+        .order-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .order-tag-buy { color: #02c076; font-weight: bold; }
+        .order-tag-sell { color: #f6465d; font-weight: bold; }
+        
+        /* สไตล์หน้าต่างป็อปอัพโมดอลขอบมน */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: #121418; width: 100%; max-width: 400px; border-radius: 24px; padding: 25px; border: 1px solid #22262d; }
     </style>
 </head>
 <body>
 
-    <!-- ส่วนหัวเว็บหลักแบรนด์ FundFusion -->
+    <!-- หัวเว็บบริหารแบรนด์ -->
     <div class="top-header">
         <div class="logo-area" onclick="goToHome()">
             <span class="logo-icon">𝙁</span>
             <span>FundFusion</span>
         </div>
-        <div class="auth-buttons" id="auth-header-actions">
-            <button class="btn-auth-login" onclick="openAuthView('login')">Login</button>
-            <button class="btn-auth-signup" onclick="openAuthView('signup')">Sign Up</button>
-        </div>
-        <div id="user-logged-profile" style="display:none; align-items:center; gap:10px;">
-            <span style="font-size:13px; color:#ff8a00; font-weight:bold;" id="profile-name-text">UID: --------</span>
-            <button class="btn-auth-login" style="padding:4px 10px; font-size:11px;" onclick="triggerLogout()">Logout</button>
+        <div id="user-logged-profile" style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:13px; color:#ff8a00; font-weight:bold;" id="profile-name-text">UID: 77491024</span>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- หน้าหลักอินเตอร์เฟส (LANDING / DASHBOARD) -->
+    <!-- 1. หน้าหลัก (DASHBOARD) -->
     <!-- ========================================== -->
     <div id="view-landing" class="app-page active">
         <div class="hero-section">
-            <div class="canvas-container">
-                <canvas id="cryptoCanvas"></canvas>
-            </div>
-            <div class="announcement">
-                <span class="announcement-icon">📢</span>
-                <div>Join our platform to trade leading cryptocurrencies instantly.</div>
-            </div>
+            <div class="canvas-container"><canvas id="cryptoCanvas"></canvas></div>
         </div>
 
         <div class="container">
-            <!-- สไลด์การ์ดแสดงเหรียญเด่น -->
-            <div class="showcase-container">
-                <div class="showcase-card">
-                    <div class="coin-meta">
-                        <div class="coin-icon-img" style="color:#627eea; border:1px solid #627eea;">♦</div>
-                        <div><div class="coin-symbol">ETH<span class="coin-pair">/USDT</span></div></div>
+            <div id="main-wallet-panel" class="card-panel" style="border-top: 3px solid #ff8a00;">
+                <h4 style="margin:0 0 12px 0; color:#70757d; font-weight:normal;">พอร์ตกระเป๋าเงิน FundFusion</h4>
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; text-align:center;">
+                    <div style="background:#171a1f; padding:10px; border-radius:12px;">
+                        <div style="font-size:11px; color:#70757d;">ยอดเงินทั้งหมด</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px; color:#ff8a00;" id="sum-total">$10,000.00</div>
                     </div>
-                    <div class="coin-price">$1,758.31</div>
-                    <div class="coin-change change-green">+3.64%</div>
-                </div>
-                <div class="showcase-card">
-                    <div class="coin-meta">
-                        <div class="coin-icon-img" style="color:#f0b90b; border:1px solid #f0b90b;">🔶</div>
-                        <div><div class="coin-symbol">BNB<span class="coin-pair">/USDT</span></div></div>
+                    <div style="background:#171a1f; padding:10px; border-radius:12px;">
+                        <div style="font-size:11px; color:#70757d;">ยอดเงินเทรด</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-trade">$10,000.00</div>
                     </div>
-                    <div class="coin-price">$574.03</div>
-                    <div class="coin-change change-green">+2.93%</div>
+                    <div style="background:#171a1f; padding:10px; border-radius:12px;">
+                        <div style="font-size:11px; color:#70757d;">พอร์ตสปอต</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-asset">$0.00</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="tab-bar">
-                <div class="tab-item active">Top Price</div>
-                <div class="tab-item">Top Gainer</div>
-            </div>
-
-            <!-- รายการเหรียญเรียงลงมาตามแบบรูปถ่าย -->
-            <div class="crypto-row" onclick="quickNavToTrade('BINANCE:BTCUSDT')">
+            <div class="tab-bar"><div class="tab-item active">สินทรัพย์ยอดนิยม</div></div>
+            <div class="crypto-row" onclick="quickNavToTrade('BINANCE:BTCUSDT', 'Bitcoin (BTC)')">
                 <div class="crypto-info-left">
                     <div class="coin-icon-img" style="color:#f3ba2f; border:1px solid #f3ba2f;">₿</div>
                     <div class="crypto-names"><h4>BTC <span>/ USDT</span></h4></div>
                 </div>
-                <div class="crypto-price-right">
-                    <span class="row-price">$62,750.01</span>
-                    <span class="row-badge">+2.36%</span>
-                </div>
+                <div class="crypto-price-right"><span class="row-price">$62,750.00</span><span class="row-badge">+2.3%</span></div>
             </div>
-
-            <div class="crypto-row" onclick="quickNavToTrade('BINANCE:ETHUSDT')">
+            <div class="crypto-row" onclick="quickNavToTrade('FX_IDC:XAUUSD', 'Gold Spot (XAU)')">
                 <div class="crypto-info-left">
-                    <div class="coin-icon-img" style="color:#627eea; border:1px solid #627eea;">♦</div>
-                    <div class="crypto-names"><h4>ETH <span>/ USDT</span></h4></div>
+                    <div class="coin-icon-img" style="color:#ffae00; border:1px solid #ffae00;">⚜️</div>
+                    <div class="crypto-names"><h4>XAU <span>/ USD (ทองคำ)</span></h4></div>
                 </div>
-                <div class="crypto-price-right">
-                    <span class="row-price">$1,758.31</span>
-                    <span class="row-badge">+3.64%</span>
-                </div>
+                <div class="crypto-price-right"><span class="row-price">$2,345.50</span><span class="row-badge">+1.1%</span></div>
             </div>
-
-            <!-- แผงกระเป๋าเงินรวมอัปเกรดความปลอดภัยตามผังระบบ -->
-            <div id="main-wallet-panel" class="card-panel" style="margin-top:20px; border-top: 3px solid #ff8a00;">
-                <h4 style="margin:0 0 12px 0; color:#70757d; font-weight:normal;">พอร์ตกระเป๋าเงิน FundFusion</h4>
-                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; text-align:center;">
-                    <div style="background:#171a1f; padding:10px; border-radius:6px;">
-                        <div style="font-size:11px; color:#70757d;">ยอดเงินทั้งหมด</div>
-                        <div style="font-weight:bold; font-size:14px; margin-top:5px; color:#ff8a00;" id="sum-total">$0.00</div>
-                    </div>
-                    <div style="background:#171a1f; padding:10px; border-radius:6px;">
-                        <div style="font-size:11px; color:#70757d;">พอร์ตเทรด</div>
-                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-trade">$0.00</div>
-                    </div>
-                    <div style="background:#171a1f; padding:10px; border-radius:6px;">
-                        <div style="font-size:11px; color:#70757d;">พอร์ตคลังสปอต</div>
-                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-asset">$0.00</div>
-                    </div>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
-                    <button class="btn-action" style="padding:8px; font-size:13px;" onclick="changeView('deposit')">📥 ฝากเงินเข้าระบบ</button>
-                    <button class="btn-action btn-danger" style="padding:8px; font-size:13px;" onclick="changeView('withdraw')">📤 ส่งคำสั่งถอนทุน</button>
-                </div>
-            </div>
-
-            <!-- 👑 แผงควบคุมระบบหลังบ้านแบบจำลอง (Admin Sandbox Control Panel) -->
-            <div class="admin-sandbox-panel">
-                <div style="font-weight:bold; color:#ff8a00; font-size:14px; display:flex; align-items:center; gap:8px;">
-                    <span>🛡️</span> แผงควบคุมสิทธิ์แอดมินหลังบ้าน (Admin Simulation)
-                </div>
-                <p style="font-size:11px; color:#70757d; margin:5px 0 15px 0;">ใช้ตรวจสอบคำสั่งธุรกรรมฝากเข้า-ถอนออกของลูกค้าที่กดส่งเข้ามาในเซสชันนี้</p>
-                
-                <div id="admin-empty-text" style="text-align:center; color:#70757d; font-size:12px; padding:10px;">ไม่มีคำสั่งที่รอดำเนินการในขณะนี้</div>
-                <div id="admin-queue-list"></div>
-            </div>
-
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- หน้าส่งคำสั่งฝากเงินพร้อมหลักฐานคิวอาร์โค้ด (DEPOSIT VIEW) -->
+    <!-- 2. ผังงานระบบ "เทรด" (TRADING VIEW) -->
     <!-- ========================================== -->
-    <div id="view-deposit" class="app-page">
+    <div id="view-trade" class="app-page">
         <div class="container">
+            <h3 style="margin: 5px 0 15px 0; font-size: 16px; color: #ff8a00;">📈 ส่งคำสั่งเก็งกำไรความเสี่ยงสูง</h3>
+            
+            <!-- ส่วนแสดงรายการสินทรัพย์ทั้งหมดให้ผู้ใช้กดเลือก -->
+            <div class="input-box">
+                <label>เลือกสินทรัพย์ที่จะเข้าเทรด</label>
+                <select id="trade-asset-selector" onchange="onAssetSelectorChange()">
+                    <option value="BINANCE:BTCUSDT" data-name="Bitcoin (BTC)">Bitcoin (BTC / USDT)</option>
+                    <option value="BINANCE:ETHUSDT" data-name="Ethereum (ETH / USDT)">Ethereum (ETH / USDT)</option>
+                    <option value="FX_IDC:XAUUSD" data-name="Gold Spot (XAU)">Gold Spot (XAU / USD - ทองคำ)</option>
+                </select>
+            </div>
+
+            <!-- แสดงหน้ากราฟราคารีลไทม์ -->
+            <div class="chart-box">
+                <div id="live-tradingview-widget" style="height:100%; width:100%;"></div>
+            </div>
+
+            <!-- ช่องตั้งข้อมูลสัญญา -->
             <div class="card-panel">
-                <h3 style="margin-top:0; font-size:16px; color:#ff8a00;">📥 ฝากเงินเข้าระบบระบบเครือข่ายสากล (ERC20 Address)</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div class="input-box">
+                        <label>Volume (จำนวน)</label>
+                        <input type="number" id="trade-volume" value="0.1" step="0.01">
+                    </div>
+                    <div class="input-box">
+                        <label>Stop Loss (SL)</label>
+                        <input type="number" id="trade-sl" placeholder="ไม่ตั้ง">
+                    </div>
+                    <div class="input-box">
+                        <label>Take Profit (TP)</label>
+                        <input type="number" id="trade-tp" placeholder="ไม่ตั้ง">
+                    </div>
+                </div>
                 
-                <div class="deposit-qr-container">
-                    <div class="qr-placeholder">
-                        <!-- ลิงก์รูปภาพ QR Code ตัวแทนจำลองกระเป๋าเงินดิจิทัล -->
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x742d35Cc6634C0532925a3b844Bc454e4438f44e" alt="QR Code">
-                    </div>
-                    <div style="font-size:11px; color:#b5b7bc;">สแกนคิวอาร์โค้ดด้านบน หรือคัดลอกที่อยู่กระเป๋า ERC20</div>
-                    <div class="address-bar">
-                        <span id="deposit-address-string" style="color:#ff8a00; font-family:monospace; word-break:break-all;">0x742d35Cc6634C...44e</span>
-                        <button style="background:#ff8a00; border:none; color:white; padding:4px 8px; border-radius:3px; font-size:10px; cursor:pointer;" onclick="copyDepositAddress()">คัดลอก</button>
-                    </div>
+                <!-- ปุ่มคำสั่งคู่ BUY / SELL -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:5px;">
+                    <button class="btn-action" style="background:#02c076; margin-top:0;" onclick="executeOpenOrder('BUY')">เปิดสัญญา BUY</button>
+                    <button class="btn-action btn-danger" style="margin-top:0;" onclick="executeOpenOrder('SELL')">เปิดสัญญา SELL</button>
                 </div>
-
-                <div class="input-box">
-                    <label>จำนวนเงินฝากที่ทำรายการโอนมาสำเร็จ ($)</label>
-                    <input type="number" id="deposit-amount-input" placeholder="ตัวอย่าง: 1000">
-                </div>
-
-                <div class="input-box">
-                    <label>แนบรูปหลักฐานสลิปโอนเงิน (Slip Verification)</label>
-                    <!-- เมื่อเลือกรูปภาพ จะทำการสร้างดีบักพาสแสดงความถูกต้อง -->
-                    <input type="file" id="deposit-slip-file" accept="image/*" onchange="previewSlipUploaded()">
-                    <div id="slip-preview-status" style="font-size:11px; color:#02c076; margin-top:5px; display:none;">✓ ตรวจพบไฟล์รูปภาพสลิปเรียบร้อย</div>
-                </div>
-
-                <!-- แสดงสถานะความคืบหน้าของงานฝากเงินนี้ -->
-                <div id="deposit-status-box" style="margin-bottom:15px; display:none; text-align:center;">
-                    <div style="font-size:12px; color:#70757d;">สถานะธุรกรรมล่าสุด:</div>
-                    <span id="deposit-status-badge" class="status-tag status-pending">กำลังตรวจสอบ</span>
-                </div>
-
-                <button class="btn-action" id="btn-submit-deposit" onclick="submitDepositOrder()">✔️ ยืนยันคำสั่งฝากเงินเข้าหลังบ้าน</button>
-                <button class="btn-action" style="background:#22252a; color:#70757d;" onclick="goToHome()">✕ กลับหน้าหลัก</button>
             </div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- หน้าต่างทำรายการส่งคำสั่งถอนทุนเสรี (WITHDRAW VIEW) -->
+    <!-- 3. ผังงานระบบ "ประวัติการเทรด" (ORDER MANAGEMENT) -->
     <!-- ========================================== -->
-    <div id="view-withdraw" class="app-page">
+    <div id="view-history" class="app-page">
         <div class="container">
-            <div class="card-panel">
-                <h3 style="margin-top:0; font-size:16px; color:#f6465d;">📤 ส่งคำสั่งถอนทุนสุทธิออกจากบัญชีรวม</h3>
-                
-                <div class="input-box">
-                    <label>จำนวนวงเงินที่ต้องการสั่งถอนออกจากกระเป๋า ($)</label>
-                    <input type="number" id="withdraw-amount-input" placeholder="ระบุจำนวนเงินเป็นดอลลาร์">
-                </div>
-
-                <div class="input-box">
-                    <label>ระบุที่อยู่กระเป๋าปลายทางของผู้รับเงิน (Customer ERC20 Address)</label>
-                    <input type="text" id="withdraw-address-input" placeholder="กรอกรหัสกระเป๋า 0x...">
-                </div>
-
-                <div id="withdraw-status-box" style="margin-bottom:15px; display:none; text-align:center;">
-                    <div style="font-size:12px; color:#70757d;">สถานะธุรกรรมล่าสุด:</div>
-                    <span id="withdraw-status-badge" class="status-tag status-pending">กำลังตรวจสอบ</span>
-                </div>
-
-                <button class="btn-action btn-danger" id="btn-submit-withdraw" onclick="submitWithdrawOrder()">📤 ยืนยันการส่งคำสั่งถอนเงิน</button>
-                <button class="btn-action" style="background:#22252a; color:#70757d;" onclick="goToHome()">✕ กลับหน้าหลัก</button>
+            <!-- แสดงยอดเงินเทรดปัจจุบันเด่นชัด -->
+            <div class="card-panel" style="background: linear-gradient(135deg, #171a1f 0%, #121418 100%); text-align: center; border-left: 4px solid #ff8a00;">
+                <div style="font-size: 13px; color: #70757d;">ยอดเงินเทรดที่พร้อมใช้งานในพอร์ตปัจจุบัน</div>
+                <div style="font-size: 28px; font-weight: bold; color: #ffffff; margin-top: 5px;" id="history-page-balance">$10,000.00</div>
             </div>
+
+            <!-- แสดงออร์เดอร์ที่กำลังวิ่งอยู่ -->
+            <h4 style="margin: 20px 0 10px 5px; font-size: 15px; color: #ff8a00;">🔥 ออร์เดอร์ที่กำลังวิ่งอยู่ปัจจุบัน (Active Orders)</h4>
+            <div id="active-orders-list"></div>
+
+            <!-- แสดงประวัติการเทรดทั้งหมดที่ปิดไปแล้ว -->
+            <h4 style="margin: 25px 0 10px 5px; font-size: 15px; color: #70757d;">📜 ประวัติการปิดออร์เดอร์ย้อนหลังทั้งหมด</h4>
+            <div id="closed-orders-list" class="card-panel" style="padding: 10px;"></div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- หน้าต่างระบบความปลอดภัยสมาชิก (AUTH VIEWS) -->
+    <!-- 🎴 WINDOWS MODAL หน้าต่างจัดการออร์เดอร์ขอบมน -->
     <!-- ========================================== -->
-    <div id="view-auth" class="app-page">
-        <div class="container" style="margin-top:40px;">
-            <div id="box-login" class="card-panel">
-                <h3 style="margin-top:0; color:#ff8a00;">เข้าสู่ระบบสมาชิก FundFusion</h3>
-                <div class="input-box"><label>บัญชีผู้ใช้หรืออีเมล</label><input type="text" id="form-login-user" placeholder="กรอกข้อมูลอีเมล"></div>
-                <div class="input-box"><label>รหัสผ่านความปลอดภัย</label><input type="password" id="form-login-pass" placeholder="กรอกรหัสผ่าน"></div>
-                <button class="btn-action" onclick="processLogin()">ล็อกอินเข้าใช้งาน</button>
+    <div class="modal-overlay" id="order-manage-modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; font-size:18px;" id="modal-order-title">จัดการออร์เดอร์</h3>
+            <hr style="border: 0; border-top: 1px solid #22262d; margin-bottom: 15px;">
+            
+            <div class="input-box">
+                <label>แก้ไขราคา Stop Loss (SL)</label>
+                <input type="number" id="modal-input-sl">
             </div>
-            <div id="box-signup" class="card-panel" style="display:none;">
-                <h3 style="margin-top:0; color:#02c076;">ลงทะเบียนเปิดพอร์ต</h3>
-                <div class="input-box"><label>ชื่อผู้ใช้งานพาสปอร์ต</label><input type="text" id="form-reg-name" placeholder="ชื่อ นามสกุลจริง"></div>
-                <div class="input-box"><label>อีเมลสำหรับรับข้อมูล</label><input type="email" id="form-reg-email" placeholder="example@mail.com"></div>
-                <button class="btn-action" style="background:#02c076;" onclick="processRegister()">สร้างบัญชี (ระบบสุ่ม UID)</button>
+            <div class="input-box">
+                <label>แก้ไขราคา Take Profit (TP)</label>
+                <input type="number" id="modal-input-tp">
             </div>
-            <button class="btn-action" style="background:#22252a; color:#70757d;" onclick="goToHome()">✕ ยกเลิกกลับหน้าหลัก</button>
+
+            <button class="btn-action" style="background: #22252a; color:#ffffff;" onclick="saveModalSettings()">💾 บันทึกการแก้ไข SL/TP</button>
+            <button class="btn-action btn-danger" style="margin-top:10px;" onclick="promptCloseConfirmation()">❌ ปิดออร์เดอร์นี้ทันที</button>
+            <button class="btn-action" style="background:transparent; color:#70757d; margin-top:5px;" onclick="closeOrderModal()">ยกเลิก</button>
         </div>
     </div>
 
-    <!-- ⚠️ หน้าระบบย่อย (TRADE, ASSETS, MINING) รันระบบฟังก์ชันตามพิมพ์เขียว -->
-    <div id="view-trade" class="app-page"><div class="container"><div class="chart-box"><div id="live-tradingview-widget" style="height:100%; width:100%;"></div></div></div></div>
-    <div id="view-assets" class="app-page"><div class="container"><div class="card-panel"><h3>ช้อนซื้อคริปโทฯ สะสมคลังสินทรัพย์สุทธิ (Spot)</h3></div></div></div>
-    <div id="view-mining" class="app-page"><div class="container"><div class="card-panel"><h3>เซิร์ฟเวอร์ระบบล็อกคำสั่งรันรอบขุดรับปันผล</h3></div></div></div>
+    <!-- 🎴 WINDOWS MODAL ยืนยันคำสั่งปิดออร์เดอร์ชัวร์ๆ -->
+    <div class="modal-overlay" id="order-confirm-modal" style="background: rgba(0,0,0,0.85);">
+        <div class="modal-content" style="text-align: center; border: 1px solid #f6465d;">
+            <span style="font-size: 40px;">⚠️</span>
+            <h3 style="margin-top:10px; color: #f6465d;">ยืนยันคำสั่งปิดออร์เดอร์?</h3>
+            <p style="font-size: 13px; color: #b5b7bc;" id="confirm-modal-pnl-text">ระบบจะทำการคำนวณยอดกำไร/ขาดทุนสุทธิและโอนเงินกลับคืนเข้ากระเป๋าเทรดของคุณทันที</p>
+            
+            <button class="btn-action btn-danger" onclick="executeFinalOrderClose()">✨ ยืนยันปิดสถานะ</button>
+            <button class="btn-action" style="background: #22252a; margin-top:10px;" onclick="document.getElementById('order-confirm-modal').style.display='none'">กลับไปคิดดูใหม่</button>
+        </div>
+    </div>
 
     <!-- แถบเมนูควบคุมด้านล่าง (Bottom App Navigation) -->
-    <div class="bottom-navbar" id="main-app-navigation">
+    <div class="bottom-navbar" id="main-app-navigation" style="display: flex;">
         <div class="nav-link active" id="nl-landing" onclick="changeView('landing')"><span>🏠</span>หน้าหลัก</div>
         <div class="nav-link" id="nl-trade" onclick="changeView('trade')"><span>📈</span>ตลาดเทรด</div>
-        <div class="nav-link" id="nl-assets" onclick="changeView('assets')"><span>🪙</span>คลังสินค้า</div>
-        <div class="nav-link" id="nl-mining" onclick="changeView('mining')"><span>⛏️</span>รอบขุดเงิน</div>
+        <div class="nav-link" id="nl-history" onclick="changeView('history')"><span>📜</span>ประวัติการเทรด</div>
     </div>
 
-    <!-- โหลดวิจิทจาก TradingView -->
+    <!-- สคริปต์สถาปัตยกรรมระบบภายใน -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
-        // บันทึกตัวแปรในระบบเซสชันแอป (ผูกตรรกะพิมพ์เขียว: เริ่มต้น 0.00 ทั้งหมด)
         const SYSTEM_DATA = {
-            isAuth: false,
-            uid: "",
-            username: "",
-            
-            balanceDeposit: 0.00,
-            balanceTrading: 0.00,
+            balanceTrading: 10000.00,
             balanceAsset: 0.00,
-            
             tvEngine: null,
-            // คิวเก็บออเดอร์หลังบ้านเพื่อรอกรรมการตรวจสอบอนุมัติ
-            pendingTransactions: []
+            
+            activeOrders: [],   // ออร์เดอร์ที่กำลังวิ่ง
+            closedOrders: [],   // ประวัติที่ปิดไปแล้ว
+            selectedOrderId: null // ออร์เดอร์ที่กำลังกดเปิดหน้าต่างจัดการอยู่
         };
-
-        function goToHome() { changeView('landing'); }
 
         function changeView(viewId) {
             document.querySelectorAll('.app-page').forEach(v => v.classList.remove('active'));
@@ -341,192 +269,213 @@
             
             const targetPage = document.getElementById(`view-${viewId}`);
             if(targetPage) targetPage.classList.add('active');
-            
-            if(document.getElementById(`nl-${viewId}`)) {
-                document.getElementById(`nl-${viewId}`).classList.add('active');
-            }
+            if(document.getElementById(`nl-${viewId}`)) document.getElementById(`nl-${viewId}`).classList.add('active');
+
             if(viewId === 'trade' && !SYSTEM_DATA.tvEngine) {
-                loadMarketChart("BINANCE:BTCUSDT");
+                onAssetSelectorChange();
             }
             refreshDisplayBalances();
-            renderAdminSandbox();
         }
 
-        function openAuthView(mode) {
-            changeView('auth');
-            if(mode === 'signup') {
-                document.getElementById('box-login').style.display = 'none';
-                document.getElementById('box-signup').style.display = 'block';
-            } else {
-                document.getElementById('box-login').style.display = 'block';
-                document.getElementById('box-signup').style.display = 'none';
-            }
+        function refreshDisplayBalances() {
+            let total = SYSTEM_DATA.balanceTrading + SYSTEM_DATA.balanceAsset;
+            document.getElementById('sum-total').innerText = `$${total.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('sum-trade').innerText = `$${SYSTEM_DATA.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('sum-asset').innerText = `$${SYSTEM_DATA.balanceAsset.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('history-page-balance').innerText = `$${SYSTEM_DATA.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            
+            renderOrdersLists();
+        }
+
+        function quickNavToTrade(symbol, name) {
+            changeView('trade');
+            document.getElementById('trade-asset-selector').value = symbol;
+            loadMarketChart(symbol);
+        }
+
+        function onAssetSelectorChange() {
+            const symbol = document.getElementById('trade-asset-selector').value;
+            loadMarketChart(symbol);
         }
 
         function loadMarketChart(symbol) {
             SYSTEM_DATA.tvEngine = new TradingView.widget({
-                "width": "100%", "height": 350, "symbol": symbol, "interval": "60", "theme": "dark", "style": "1", "locale": "th", "container_id": "live-tradingview-widget"
+                "width": "100%", "height": 280, "symbol": symbol, "interval": "15", "theme": "dark", "style": "1", "locale": "th", "container_id": "live-tradingview-widget", "hide_side_toolbar": true
             });
         }
 
-        function quickNavToTrade(symbol) { changeView('trade'); loadMarketChart(symbol); }
+        function goToHome() { changeView('landing'); }
 
-        function copyDepositAddress() {
-            const addr = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
-            navigator.clipboard.writeText(addr);
-            alert("📋 คัดลอกที่อยู่กระเป๋า ERC20 ของระบบไปยังคลิปบอร์ดแล้ว!");
-        }
+        // =========================================================================
+        // 📈 ENGINE ผังงานระบบ "เทรด" (Trading Workflow Core)
+        // =========================================================================
+        function executeOpenOrder(type) {
+            const selector = document.getElementById('trade-asset-selector');
+            const assetName = selector.options[selector.selectedIndex].getAttribute('data-name');
+            const vol = parseFloat(document.getElementById('trade-volume').value);
+            const sl = document.getElementById('trade-sl').value;
+            const tp = document.getElementById('trade-tp').value;
 
-        function previewSlipUploaded() {
-            const fileInput = document.getElementById('deposit-slip-file');
-            if(fileInput.files.length > 0) {
-                document.getElementById('slip-preview-status').style.display = "block";
+            // สูตรคำนวณหักยอดค้ำประกันชั่วคราว
+            const requiredMargin = vol * 1000; 
+
+            // ตรวจสอบ "ยอดเงินเทรด" ที่มี
+            if(SYSTEM_DATA.balanceTrading < requiredMargin || requiredMargin <= 0) {
+                // (ไม่พอ) ──► แจ้งเตือนเงินไม่พอ
+                return alert(`❌ แจ้งเตือน: ยอดเงินเทรดของคุณมีไม่เพียงพอสำหรับการเปิดสัญญานี้!\nต้องการค้ำประกันขั้นต่ำ: $${requiredMargin.toLocaleString()}`);
             }
-        }
 
-        // -------------------------------------------------------------------------
-        // 📥 ธุรกรรมส่งคำสั่งฝากเงิน (Deposit Submission Engine)
-        // -------------------------------------------------------------------------
-        function submitDepositOrder() {
-            const amt = parseFloat(document.getElementById('deposit-amount-input').value);
-            const fileInput = document.getElementById('deposit-slip-file');
-
-            if(isNaN(amt) || amt <= 0) return alert("⚠️ ปฏิเสธ: โปรดระบุจำนวนมูลค่าเงินฝากที่ถูกต้อง");
-            if(fileInput.files.length === 0) return alert("⚠️ ปฏิเสธ: จำเป็นต้องอัปโหลดภาพหลักฐานสลิปโอนเงินเพื่อส่งให้แอดมินหลังบ้าน");
-
-            // แสดงสถานะที่หน้าจอผู้ใช้
-            document.getElementById('deposit-status-box').style.display = "block";
-            document.getElementById('deposit-status-badge').className = "status-tag status-pending";
-            document.getElementById('deposit-status-badge').innerText = "⏳ กำลังตรวจสอบ";
-            document.getElementById('btn-submit-deposit').disabled = true;
-
-            // บันทึกคำสั่งฝากเข้าคิวรันงานหลังบ้านจำลอง
-            const newTx = {
-                id: "DEP-" + Math.floor(1000 + Math.random() * 9000),
-                type: "ฝากเงิน",
-                amount: amt,
-                meta: "หลักฐาน: มีไฟล์รูปภาพสลิปแนบมา",
-                status: "Pending"
-            };
-            SYSTEM_DATA.pendingTransactions.push(newTx);
-            alert(`📨 ส่งข้อมูลคำสั่งฝากเงินจำนวน $${amt} เรียบร้อย! ขณะนี้สถานะคือ 'กำลังตรวจสอบ' รอให้แอดมินแผงหลังบ้านกดอนุมัติครับ`);
-            renderAdminSandbox();
-        }
-
-        // -------------------------------------------------------------------------
-        // 📤 ธุรกรรมส่งคำสั่งถอนเงิน (Withdrawal Submission Engine)
-        // -------------------------------------------------------------------------
-        function submitWithdrawOrder() {
-            const amt = parseFloat(document.getElementById('withdraw-amount-input').value);
-            const addr = document.getElementById('withdraw-address-input').value.trim();
+            // (พอ) ──► หักเงินจาก "ยอดเงินเทรด" ──► เปิดออร์เดอร์สำเร็จ
+            SYSTEM_DATA.balanceTrading -= requiredMargin;
             
-            // คำนวณหายอดเงินรวมสุทธิขณะนั้น
-            let grandSum = SYSTEM_DATA.balanceTrading + SYSTEM_DATA.balanceAsset + SYSTEM_DATA.balanceDeposit;
+            const newOrder = {
+                id: "ORD-" + Math.floor(100000 + Math.random() * 900000),
+                asset: assetName,
+                type: type,
+                volume: vol,
+                margin: requiredMargin,
+                sl: sl ? sl : "ไม่ตั้ง",
+                tp: tp ? tp : "ไม่ตั้ง",
+                pnl: Math.floor(-50 + Math.random() * 150) // จำลองกำไรติดลบสเปรดตอนเปิดออร์เดอร์ครั้งแรก
+            };
 
-            if(isNaN(amt) || amt <= 0) return alert("⚠️ ปฏิเสธ: โปรดกรอกจำนวนเงินที่ต้องการถอนให้ถูกต้อง");
-            if(!addr) return alert("⚠️ ปฏิเสธ: กรุณากรอกที่อยู่กระเป๋าเงิน ERC20 ของคุณเพื่อรับยอดโอนกลับ");
-            if(amt > grandSum) return alert("❌ ยอดเงินทั้งหมดของคุณมีไม่เพียงพอสำหรับการทำรายการถอนจำนวนนี้");
-
-            // หักยอดเงินฝากค้างจ่ายชั่วคราวเพื่อล็อควงเงินประกันการตรวจสอบค้างถอน
-            SYSTEM_DATA.balanceDeposit -= amt;
+            SYSTEM_DATA.activeOrders.push(newOrder);
+            alert(`✅ เปิดสถานะออร์เดอร์ ${type} สำเร็จ!\nสินทรัพย์: ${assetName}\nระบบหักเงินประกันออกชั่วคราว: $${requiredMargin}`);
+            
+            // ล้างข้อมูลช่องกรอก
+            document.getElementById('trade-sl').value = "";
+            document.getElementById('trade-tp').value = "";
+            
             refreshDisplayBalances();
-
-            // แสดงสถานะที่หน้าจอผู้ใช้
-            document.getElementById('withdraw-status-box').style.display = "block";
-            document.getElementById('withdraw-status-badge').className = "status-tag status-pending";
-            document.getElementById('withdraw-status-badge').innerText = "⏳ กำลังตรวจสอบ";
-            document.getElementById('btn-submit-withdraw').disabled = true;
-
-            // บันทึกคำสั่งถอนเข้าคิวรันงานหลังบ้านจำลอง
-            const newTx = {
-                id: "WTH-" + Math.floor(1000 + Math.random() * 9000),
-                type: "ถอนเงิน",
-                amount: amt,
-                meta: `โอนไปที่: ${addr.substring(0, 8)}...`,
-                status: "Pending"
-            };
-            SYSTEM_DATA.pendingTransactions.push(newTx);
-            alert(`📨 ส่งข้อมูลคำสั่งถอนเงินจำนวน $${amt} สำเร็จ! ระบบได้ล็อกยอดวงเงินชั่วคราวและเปลี่ยนสถานะเป็น 'กำลังตรวจสอบ' เรียบร้อยครับ`);
-            renderAdminSandbox();
         }
 
-        // -------------------------------------------------------------------------
-        // 🛡️ ระบบจัดการหลังบ้านจำลอง (Admin Action Process Core)
-        // -------------------------------------------------------------------------
-        function renderAdminSandbox() {
-            const container = document.getElementById('admin-queue-list');
-            const emptyTxt = document.getElementById('admin-empty-text');
-            container.innerHTML = "";
+        // =========================================================================
+        // 📜 ENGINE ประวัติการเทรด (Order Management Logic)
+        // =========================================================================
+        function renderOrdersLists() {
+            const activeContainer = document.getElementById('active-orders-list');
+            activeContainer.innerHTML = "";
 
-            const pendingItems = SYSTEM_DATA.pendingTransactions.filter(t => t.status === "Pending");
-            
-            if(pendingItems.length === 0) {
-                emptyTxt.style.display = "block";
-                return;
-            }
-            emptyTxt.style.display = "none";
-
-            pendingItems.forEach(tx => {
-                const row = document.createElement('div');
-                row.className = "admin-row";
-                row.innerHTML = `
-                    <div>
-                        <strong>[ID: ${tx.id}]</strong> บัญชีทำรายการ <strong>${tx.type}</strong><br>
-                        <span style="color:#ff8a00; font-size:14px; font-weight:bold;">มูลค่า: $${tx.amount.toLocaleString()}</span> | <small style="color:#b5b7bc;">${tx.meta}</small>
-                    </div>
-                    <div style="display:flex; gap:6px;">
-                        <button style="background:#02c076; color:white; border:none; padding:6px 10px; border-radius:3px; font-weight:bold; cursor:pointer;" onclick="processAdminDecision('${tx.id}', 'APPROVE')">อนุมัติ</button>
-                        <button style="background:#f6465d; color:white; border:none; padding:6px 10px; border-radius:3px; font-weight:bold; cursor:pointer;" onclick="processAdminDecision('${tx.id}', 'REJECT')">ปฏิเสธ</button>
-                    </div>
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        function processAdminDecision(txId, action) {
-            const tx = SYSTEM_DATA.pendingTransactions.find(t => t.id === txId);
-            if(!tx) return;
-
-            if(action === 'APPROVE') {
-                tx.status = "Success";
-                if(tx.type === "ฝากเงิน") {
-                    // อนุมัติฝาก: เติมเงินเข้ากระเป๋าเงินฝากหลัก ยอดรวมทั้งหมดจะอัปเดตเพิ่มขึ้นทันที
-                    SYSTEM_DATA.balanceDeposit += tx.amount;
-                    
-                    // ปรับสถานะป้ายเตือนที่หน้าฝากเงินเป็นสำเร็จ
-                    document.getElementById('deposit-status-badge').className = "status-tag status-success";
-                    document.getElementById('deposit-status-badge').innerText = "✅ สำเร็จ (Success)";
-                    document.getElementById('btn-submit-deposit').disabled = false;
-                } else if(tx.type === "ถอนเงิน") {
-                    // อนุมัติถอน: เงินถูกหักค้างไว้อยู่แล้วตอนยื่นคำสั่ง ถอนสำเร็จคือยืนยันตัดยอดออกจากระบบถาวร
-                    document.getElementById('withdraw-status-badge').className = "status-tag status-success";
-                    document.getElementById('withdraw-status-badge').innerText = "✅ สำเร็จ (Success)";
-                    document.getElementById('btn-submit-withdraw').disabled = false;
-                }
-                alert(`👑 หลังบ้านอนุมัติคำสั่ง [ID: ${txId}] เรียบร้อย! ยอดเงินอัปเดตเข้าบัญชีรวมเรียบร้อยแล้ว`);
+            if(SYSTEM_DATA.activeOrders.length === 0) {
+                activeContainer.innerHTML = `<div style="text-align:center; color:#70757d; font-size:12px; padding:15px;">ไม่มีออร์เดอร์ที่กำลังเปิดวิ่งอยู่ในปัจจุบัน</div>`;
             } else {
-                tx.status = "Rejected";
-                if(tx.type === "ฝากเงิน") {
-                    document.getElementById('deposit-status-badge').className = "status-tag status-rejected";
-                    document.getElementById('deposit-status-badge').innerText = "❌ ปฏิเสธรายการ (Rejected)";
-                    document.getElementById('btn-submit-deposit').disabled = false;
-                } else if(tx.type === "ถอนเงิน") {
-                    // ปฏิเสธถอน: โอนวงเงินที่ล็อกค้ำประกันไว้ คืนกลับเข้ากระเป๋าหลักให้ผู้ใช้
-                    SYSTEM_DATA.balanceDeposit += tx.amount;
-                    document.getElementById('withdraw-status-badge').className = "status-tag status-rejected";
-                    document.getElementById('withdraw-status-badge').innerText = "❌ ปฏิเสธรายการ (Rejected)";
-                    document.getElementById('btn-submit-withdraw').disabled = false;
-                }
-                alert(`👑 หลังบ้านส่งคำสั่งปฏิเสธ [ID: ${txId}] ธุรกรรมถูกยกเลิกแล้ว`);
+                SYSTEM_DATA.activeOrders.forEach(order => {
+                    const div = document.createElement('div');
+                    div.className = "order-card";
+                    div.onclick = () => openOrderModal(order.id);
+                    
+                    const pnlClass = order.pnl >= 0 ? "change-green" : "order-tag-sell";
+                    const pnlSign = order.pnl >= 0 ? "+" : "";
+
+                    div.innerHTML = `
+                        <div class="order-header">
+                            <div><strong>${order.asset}</strong> <span class="${order.type === 'BUY' ? 'order-tag-buy' : 'order-tag-sell'}">(${order.type})</span></div>
+                            <div class="${pnlClass}" style="font-weight:bold;">${pnlSign}$${order.pnl.toFixed(2)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#b5b7bc;">
+                            <span>Vol: ${order.volume} | Margin: $${order.margin}</span>
+                            <span>SL: ${order.sl} | TP: ${order.tp}</span>
+                        </div>
+                    `;
+                    activeContainer.appendChild(div);
+                });
             }
 
-            refreshDisplayBalances();
-            renderAdminSandbox();
+            // แสดงรายการประวัติที่ปิดไปแล้วทั้งหมด
+            const closedContainer = document.getElementById('closed-orders-list');
+            closedContainer.innerHTML = "";
+            if(SYSTEM_DATA.closedOrders.length === 0) {
+                closedContainer.innerHTML = `<div style="text-align:center; color:#70757d; font-size:12px; padding:10px;">ไม่มีประวัติการปิดธุรกรรมย้อนหลัง</div>`;
+            } else {
+                SYSTEM_DATA.closedOrders.forEach(order => {
+                    const div = document.createElement('div');
+                    div.style.display = "flex";
+                    div.style.justifyContent = "space-between";
+                    div.style.fontSize = "13px";
+                    div.style.padding = "8px 5px";
+                    div.style.borderBottom = "1px solid #1c1f24";
+                    
+                    const pnlClass = order.finalPnl >= 0 ? "change-green" : "order-tag-sell";
+                    const pnlSign = order.finalPnl >= 0 ? "+" : "";
+
+                    div.innerHTML = `
+                        <div>⚙️ ${order.asset} <span style="font-size:11px; color:#70757d;">(${order.type} Vol:${order.volume})</span></div>
+                        <div class="${pnlClass}">${pnlSign}$${order.finalPnl.toFixed(2)}</div>
+                    `;
+                    closedContainer.appendChild(div);
+                });
+            }
         }
 
-        // -------------------------------------------------------------------------
-        // 🔮 ภาพเคลื่อนไหววงโคจรความละเอียดสูง (3D Asset Orbit Core)
-        // -------------------------------------------------------------------------
+        function openOrderModal(orderId) {
+            const order = SYSTEM_DATA.activeOrders.find(o => o.id === orderId);
+            if(!order) return;
+
+            SYSTEM_DATA.selectedOrderId = orderId;
+            document.getElementById('modal-order-title').innerText = `⚙️ จัดการออร์เดอร์ [ID: ${order.id}]`;
+            document.getElementById('modal-input-sl').value = order.sl === "ไม่ตั้ง" ? "" : order.sl;
+            document.getElementById('modal-input-tp').value = order.tp === "ไม่ตั้ง" ? "" : order.tp;
+            
+            document.getElementById('order-manage-modal').style.display = 'flex';
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-manage-modal').style.display = 'none';
+        }
+
+        function saveModalSettings() {
+            const order = SYSTEM_DATA.activeOrders.find(o => o.id === SYSTEM_DATA.selectedOrderId);
+            if(!order) return;
+
+            const sl = document.getElementById('modal-input-sl').value;
+            const tp = document.getElementById('modal-input-tp').value;
+            
+            order.sl = sl ? sl : "ไม่ตั้ง";
+            order.tp = tp ? tp : "ไม่ตั้ง";
+            
+            alert("💾 บันทึกและอัปเดตข้อมูล Stop Loss / Take Profit เรียบร้อย!");
+            closeOrderModal();
+            refreshDisplayBalances();
+        }
+
+        function promptCloseConfirmation() {
+            closeOrderModal();
+            const order = SYSTEM_DATA.activeOrders.find(o => o.id === SYSTEM_DATA.selectedOrderId);
+            if(!order) return;
+            
+            document.getElementById('confirm-modal-pnl-text').innerText = `ออร์เดอร์นี้มีเงินประกันค้ำไว้ $${order.margin} และผลกำไรขณะปิดคือ $${order.pnl.toFixed(2)}`;
+            document.getElementById('order-confirm-modal').style.display = 'flex';
+        }
+
+        function executeFinalOrderClose() {
+            const index = SYSTEM_DATA.activeOrders.findIndex(o => o.id === SYSTEM_DATA.selectedOrderId);
+            if(index === -1) return;
+
+            const order = SYSTEM_DATA.activeOrders[index];
+            
+            // คำนวณกำไร/ขาดทุนคืนเข้ากระเป๋าเทรดหลัก: ทุนคืน + กำไร (หรือหักขาดทุน)
+            const settlementAmount = order.margin + order.pnl;
+            SYSTEM_DATA.balanceTrading += settlementAmount;
+
+            // บันทึกย้ายเข้าอารายประวัติการเทรดทั้งหมด
+            SYSTEM_DATA.closedOrders.push({
+                asset: order.asset,
+                type: order.type,
+                volume: order.volume,
+                finalPnl: order.pnl
+            });
+
+            // ลบออกจากออร์เดอร์ที่กำลังเปิดอยู่
+            SYSTEM_DATA.activeOrders.splice(index, 1);
+            
+            document.getElementById('order-confirm-modal').style.display = 'none';
+            alert(`✨ ปิดสถานะเสร็จสิ้น!\nระบบคำนวณเงินคืนรวมกำไร/ขาดทุนสุทธิ: $${settlementAmount.toLocaleString()} กลับเข้าสู่ยอดเงินเทรดแล้ว`);
+            refreshDisplayBalances();
+        }
+
+        // =========================================================================
+        // 🔮 ภาพเคลื่อนไหว Orbit ละมุนตาด้วย Canvas 3D
+        // =========================================================================
         function initCryptoAnimation() {
             const canvas = document.getElementById('cryptoCanvas');
             const ctx = canvas.getContext('2d');
@@ -538,7 +487,6 @@
                 { name: "BTC", color: "#f3ba2f", size: 11, angle: 0, speed: 0.007, radiusX: 110, radiusY: 35 },
                 { name: "ETH", color: "#627eea", size: 9, angle: 1.2, speed: 0.005, radiusX: 90, radiusY: 28 },
                 { name: "XAU", color: "#ffae00", size: 10, angle: 2.5, speed: 0.006, radiusX: 130, radiusY: 42 },
-                { name: "SOL", color: "#14f195", size: 8, angle: 3.8, speed: 0.008, radiusX: 75, radiusY: 22 },
                 { name: "USDT", color: "#26a17b", size: 8, angle: 4.8, speed: 0.004, radiusX: 100, radiusY: 30 }
             ];
             let centerAngle = 0;
@@ -547,12 +495,12 @@
                 ctx.clearRect(0, 0, width, height);
                 const cx = width / 2, cy = height / 2 + 10;
                 let glowGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 80);
-                glowGrad.addColorStop(0, 'rgba(255, 138, 0, 0.12)'); glowGrad.addColorStop(1, 'rgba(11, 12, 14, 0)');
+                glowGrad.addColorStop(0, 'rgba(255, 138, 0, 0.1)'); glowGrad.addColorStop(1, 'rgba(11, 12, 14, 0)');
                 ctx.fillStyle = glowGrad; ctx.fillRect(0, 0, width, height);
 
                 centerAngle += 0.003;
                 ctx.save(); ctx.translate(cx, cy - 10); ctx.rotate(centerAngle);
-                ctx.strokeStyle = 'rgba(255, 138, 0, 0.25)'; ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(255, 138, 0, 0.2)'; ctx.lineWidth = 1.5;
                 ctx.beginPath(); ctx.arc(0, 0, 25, 0, Math.PI * 2); ctx.stroke();
                 ctx.fillStyle = '#ff8a00'; ctx.font = 'bold 22px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText('𝙁', 0, 0); ctx.restore();
@@ -576,17 +524,7 @@
             animate();
         }
         window.addEventListener('DOMContentLoaded', initCryptoAnimation);
-
-        // ระบบจำลองล็อกอินอัตโนมัติเพื่อให้ปุ่มแสดงครบถ้วน
-        function processLogin() {
-            SYSTEM_DATA.isAuth = true; SYSTEM_DATA.uid = "77491024";
-            document.getElementById('auth-header-actions').style.display = 'none';
-            document.getElementById('user-logged-profile').style.display = 'flex';
-            document.getElementById('profile-name-text').innerText = `UID: ${SYSTEM_DATA.uid}`;
-            document.getElementById('main-app-navigation').style.display = 'flex';
-            goToHome();
-        }
-        window.addEventListener('load', processLogin);
+        window.addEventListener('load', refreshDisplayBalances);
     </script>
 </body>
 </html>
