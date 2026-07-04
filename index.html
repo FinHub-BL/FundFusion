@@ -8,9 +8,9 @@
         /* 🎨 คุมโทนสีตามรูปภาพตัวอย่าง: ดาร์กโหมดพรีเมียม ตัดด้วยสีส้มไฮไลท์ (#ff8a00) */
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0b0c0e; color: #ffffff; padding: 0; margin: 0; padding-bottom: 80px; }
         
-        /* ส่วนหัวแอปพลิเคชัน (Header สไตล์ภาพตัวอย่าง) */
+        /* ส่วนหัวแอปพลิเคชัน (Header สไตล์ภาพตัวอย่าง เปลี่ยนชื่อเป็น FundFusion) */
         .top-header { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 15px 20px; border-bottom: 1px solid #1e2226; position: sticky; top: 0; z-index: 1000; }
-        .logo-area { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; color: #ffffff; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; color: #ffffff; cursor: pointer; }
         .logo-icon { color: #ff8a00; font-size: 24px; font-weight: 900; }
         .auth-buttons { display: flex; gap: 10px; }
         .btn-auth-login { background: #22252a; color: #eaecef; border: 1px solid #32373f; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; }
@@ -18,9 +18,11 @@
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* ฮีโร่แบนเนอร์และภาพประกอบ 3D สไตล์ภาพตัวอย่าง */
-        .hero-section { text-align: center; padding: 20px 10px; background: linear-gradient(180deg, #121418 0%, #0b0c0e 100%); }
-        .hero-vector { width: 180px; height: auto; margin: 0 auto 15px auto; display: block; opacity: 0.9; }
+        /* โซนแบนเนอร์ภาพเคลื่อนไหวเคลื่อนไหวแบบสบายตา (Interactive Canvas Center) */
+        .hero-section { text-align: center; padding: 10px 10px 20px 10px; background: linear-gradient(180deg, #121418 0%, #0b0c0e 100%); position: relative; }
+        .canvas-container { width: 100%; max-width: 320px; height: 240px; margin: 0 auto; position: relative; }
+        #cryptoCanvas { width: 100%; height: 100%; display: block; }
+        
         .announcement { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #b5b7bc; text-align: left; padding: 0 10px; line-height: 1.4; margin-bottom: 20px; }
         .announcement-icon { font-size: 18px; color: #ff8a00; }
 
@@ -43,14 +45,14 @@
         .tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #ff8a00; }
 
         /* ตารางรายการเหรียญเรียงลงมาตามแบบเป๊ะๆ */
-        .crypto-row { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #191c21; }
+        .crypto-row { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #191c21; cursor: pointer; transition: 0.2s; }
+        .crypto-row:hover { background: #171a1f; }
         .crypto-info-left { display: flex; align-items: center; gap: 12px; }
         .crypto-names h4 { margin: 0; font-size: 15px; font-weight: bold; }
         .crypto-names span { font-size: 12px; color: #70757d; }
         .crypto-price-right { text-align: right; display: flex; align-items: center; gap: 15px; }
         .row-price { font-size: 15px; font-weight: bold; }
         .row-badge { background: #02c076; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; min-width: 65px; text-align: center; }
-        .row-badge.red { background: #f6465d; }
 
         /* โครงสร้างพื้นฐานฟังก์ชัน และ ส่วนหน้าแอป (ฟังก์ชันการทำงานด้านหลังตามพิมพ์เขียว) */
         .app-page { display: none; }
@@ -73,11 +75,11 @@
 </head>
 <body>
 
-    <!-- 1. ส่วนหัวเว็บหลักตามภาพตัวอย่าง (Top Header Area) -->
+    <!-- 1. ส่วนหัวเว็บหลักตามภาพตัวอย่าง (เปลี่ยนชื่อแบรนด์เป็น FundFusion) -->
     <div class="top-header">
         <div class="logo-area" onclick="goToHome()">
-            <span class="logo-icon">𝙓</span>
-            <span>XR Trade</span>
+            <span class="logo-icon">𝙁</span>
+            <span>FundFusion</span>
         </div>
         <div class="auth-buttons" id="auth-header-actions">
             <button class="btn-auth-login" onclick="openAuthView('login')">Login</button>
@@ -95,17 +97,12 @@
     <!-- ========================================== -->
     <div id="view-landing" class="app-page active">
         
-        <!-- ส่วนโปรโมตและกราฟิกฮีโร่ตามแบบ -->
+        <!-- ส่วนโปรโมตและภาพเคลื่อนไหวแบบสบายตาสไตล์โมเดิร์นโบรกเกอร์ -->
         <div class="hero-section">
-            <!-- ใช้เวกเตอร์รูปโล่และเหรียญจำลองล้อมรอบสไตล์แพลตฟอร์มคริปโทฯ -->
-            <svg class="hero-vector" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 20L40 50V110C40 150 100 180 100 180C100 180 160 150 160 110V50L100 20Z" fill="#171a1f" stroke="#ff8a00" stroke-width="4"/>
-                <circle cx="100" cy="95" r="30" fill="#ff8a00" fill-opacity="0.2"/>
-                <path d="M90 85L115 110M115 85L90 110" stroke="#ff8a00" stroke-width="5" stroke-linecap="round"/>
-                <circle cx="35" cy="70" r="10" fill="#f0b90b"/>
-                <circle cx="165" cy="85" r="8" fill="#627eea"/>
-                <circle cx="145" cy="140" r="9" fill="#00b37e"/>
-            </svg>
+            <div class="canvas-container">
+                <!-- ใช้ HTML5 Canvas เพื่อรันภาพเคลื่อนไหว 3D Asset Orbit ที่นุ่มนวลและสบายตา -->
+                <canvas id="cryptoCanvas"></canvas>
+            </div>
             
             <div class="announcement">
                 <span class="announcement-icon">📢</span>
@@ -203,7 +200,7 @@
     <div id="view-auth" class="app-page">
         <div class="container" style="margin-top:40px;">
             <div id="box-login" class="card-panel">
-                <h3 style="margin-top:0; color:#ff8a00;">เข้าสู่ระบบสมาชิก</h3>
+                <h3 style="margin-top:0; color:#ff8a00;">เข้าสู่ระบบสมาชิก FundFusion</h3>
                 <div class="input-box">
                     <label>บัญชีผู้ใช้หรืออีเมล</label>
                     <input type="text" id="form-login-user" placeholder="กรอกข้อมูลอีเมล">
@@ -364,6 +361,124 @@
         }
 
         // -------------------------------------------------------------------------
+        // 🔮 ฟังก์ชันสร้างภาพเคลื่อนไหว 3D Asset Orbit สบายตาด้วย HTML5 Canvas
+        // -------------------------------------------------------------------------
+        function initCryptoAnimation() {
+            const canvas = document.getElementById('cryptoCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // ตั้งค่าความละเอียดให้คมชัดสไตล์ Retina
+            const width = 320;
+            const height = 240;
+            canvas.width = width * 2;
+            canvas.height = height * 2;
+            ctx.scale(2, 2);
+
+            // รายการสินทรัพย์ที่หลากหลายเพื่อแสดงผลในวงโคจร
+            const assets = [
+                { name: "BTC", color: "#f3ba2f", size: 11, angle: 0, speed: 0.007, radiusX: 110, radiusY: 35 },
+                { name: "ETH", color: "#627eea", size: 9, angle: 1.2, speed: 0.005, radiusX: 90, radiusY: 28 },
+                { name: "XAU", color: "#ffae00", size: 10, angle: 2.5, speed: 0.006, radiusX: 130, radiusY: 42 },
+                { name: "SOL", color: "#14f195", size: 8, angle: 3.8, speed: 0.008, radiusX: 75, radiusY: 22 },
+                { name: "USDT", color: "#26a17b", size: 8, angle: 4.8, speed: 0.004, radiusX: 100, radiusY: 30 }
+            ];
+
+            let centerAngle = 0;
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                const cx = width / 2;
+                const cy = height / 2 + 10;
+
+                // 1. วาดแสงออร่าเรืองแสง (Glow Background) หลังบ้านแบบนุ่มนวล สบายตา
+                let glowGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 80);
+                glowGrad.addColorStop(0, 'rgba(255, 138, 0, 0.12)');
+                glowGrad.addColorStop(1, 'rgba(11, 12, 14, 0)');
+                ctx.fillStyle = glowGrad;
+                ctx.fillRect(0, 0, width, height);
+
+                // 2. วาดแกนกลางโล่/เซิร์ฟเวอร์หลักของ FundFusion หมุนช้าๆ 
+                centerAngle += 0.003;
+                ctx.save();
+                ctx.translate(cx, cy - 10);
+                ctx.rotate(centerAngle);
+                
+                // วาดฐานนิวเคลียสวงแหวนคู่
+                ctx.strokeStyle = 'rgba(255, 138, 0, 0.25)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.arc(0, 0, 25, 0, Math.PI * 2); ctx.stroke();
+                
+                // วาดโลโก้แกนกลาง
+                ctx.fillStyle = '#ff8a00';
+                ctx.font = 'bold 22px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('𝙁', 0, 0);
+                ctx.restore();
+
+                // วาดเส้นวงโคจรบางๆ สบายตาเพื่อให้ดูมีมิติความลึก (Orbit Paths)
+                ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                ctx.lineWidth = 1;
+                assets.forEach(asset => {
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.scale(1, asset.radiusY / asset.radiusX);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, asset.radiusX, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.restore();
+                });
+
+                // 3. วาดและคำนวณตำแหน่งวัตถุสินทรัพย์ต่างๆ ตามลูปเวลา
+                // เรียงลำดับมุมเพื่อสร้างมิติหน้าหลัง (3D Illusion)
+                assets.sort((a, b) => Math.sin(a.angle) - Math.sin(b.angle));
+
+                assets.forEach(asset => {
+                    asset.angle += asset.speed;
+                    
+                    // คำนวณพิกัด Ellipse Orbit
+                    const x = cx + Math.cos(asset.angle) * asset.radiusX;
+                    const y = cy + Math.sin(asset.angle) * asset.radiusY;
+                    
+                    // คำนวณขนาดตามมิติใกล้-ไกล (Scale Depth)
+                    const scale = 0.7 + (Math.sin(asset.angle) + 1) * 0.3; 
+                    const currentSize = asset.size * scale;
+
+                    // เติมเงาละมุนรอบเหรียญ
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = asset.color;
+
+                    // วาดเม็ดทรงกลมพื้นหลังของเหรียญ
+                    ctx.fillStyle = 'rgba(23, 26, 31, 0.9)';
+                    ctx.beginPath();
+                    ctx.arc(x, y, currentSize, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // วาดขอบสีประจำสินทรัพย์
+                    ctx.strokeStyle = asset.color;
+                    ctx.lineWidth = 1.5 * scale;
+                    ctx.beginPath();
+                    ctx.arc(x, y, currentSize, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    // ใส่ชื่อย่อสินทรัพย์ลงกลางวงกลม
+                    ctx.shadowBlur = 0; // ปิดเงาสำหรับตัวอักษรเพื่อความคมชัด
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = `bold ${9 * scale}px Geneva, sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(asset.name, x, y);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // รันระบบภาพเคลื่อนไหวทันทีเมื่อโหลดหน้ากระดานเสร็จสิ้น
+        window.addEventListener('DOMContentLoaded', initCryptoAnimation);
+
+        // -------------------------------------------------------------------------
         // ระบบประมวลผลล็อกอินสมาชิก (Authentication Mechanics)
         // -------------------------------------------------------------------------
         function processRegister() {
@@ -403,9 +518,7 @@
         // ตรรกะสูตรคำนวณและประมวลผลกระเป๋าเงิน (Wallet Core Mathematical Logic)
         // -------------------------------------------------------------------------
         function refreshDisplayBalances() {
-            // สูตรประมวลเงินรวม: ยอดรวมทั้งหมด = กระเป๋าเทรด + กระเป๋าสินทรัพย์ + ยอดเงินฝากคงค้างหลัก
             let grandSum = SYSTEM_DATA.balanceTrading + SYSTEM_DATA.balanceAsset + SYSTEM_DATA.balanceDeposit;
-            
             document.getElementById('sum-total').innerText = `$${grandSum.toLocaleString(undefined,{minimumFractionDigits:2})}`;
             document.getElementById('sum-trade').innerText = `$${SYSTEM_DATA.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
             document.getElementById('sum-asset').innerText = `$${SYSTEM_DATA.balanceAsset.toLocaleString(undefined,{minimumFractionDigits:2})}`;
@@ -430,7 +543,7 @@
             const fee = parseFloat(document.getElementById('trade-margin-val').value);
             if(SYSTEM_DATA.balanceTrading < fee || fee <= 0) return alert("❌ วงเงินค้ำประกันในกระเป๋าลงทุนเทรดของคุณมีไม่เพียงพอสำหรับการเปิดสัญญานี้");
             SYSTEM_DATA.balanceTrading -= fee;
-            document.getElementById('order-status').innerHTML = `<div style="color:#02c076; font-weight:bold;">🟢 สัญญา ${type} ในตลาดโลกกำลังรันค้างอยู่ในตารางคำสั่งเดสก์ท็อป</div>`;
+            alert("🟢 ส่งคำสั่งเปิดสัญญาเข้าตารางเทรดเรียบร้อย");
             refreshDisplayBalances();
         }
 
@@ -445,7 +558,7 @@
                 if(SYSTEM_DATA.isAssetLocked) return alert("🔒 ล็อกห้ามขาย: สินทรัพย์กำลังค้ำประกันติดสัญญาลูปขุดรับปันผลโบนัสของแอป");
                 if(SYSTEM_DATA.balanceAsset < targetCash || targetCash <= 0) return alert("❌ ยอดเงินคลังสะสมสปอตของคุณมีไม่พอจ่ายคำสั่งขายนี้");
                 SYSTEM_DATA.balanceAsset -= targetCash;
-                SYSTEM_DATA.balanceTrading += targetCash; // ขายสปอตแล้ววงเงินย้ายไปสแตนด์บายที่กระเป๋าเทรดตามผังงาน
+                SYSTEM_DATA.balanceTrading += targetCash;
             }
             refreshDisplayBalances();
             alert("✨ ประมวลสถานะแลกเปลี่ยนพอร์ตคลังเสร็จสิ้น");
@@ -455,18 +568,18 @@
             const stake = parseFloat(document.getElementById('mining-stake').value);
             if(SYSTEM_DATA.balanceAsset < stake || stake <= 0) return alert("❌ ปฏิเสธ: วงเงินค้ำสิทธิ์เกินกว่ามูลค่าพอร์ตคลังสปอตที่คุณถือครองอยู่");
             
-            SYSTEM_DATA.isAssetLocked = true; // ล็อกทันทีเพื่อป้องกันธุรกรรมรั่วไหล
+            SYSTEM_DATA.isAssetLocked = true;
             const btn = document.getElementById('btn-mining-trigger');
             const txt = document.getElementById('mining-status-text');
             btn.disabled = true;
             
-            let count = 10; // ย่อเวลาเหลือ 10 วินาทีเพื่อให้แอดมินและผู้ตรวจทดสอบระบบผ่านมือถือได้ทันที
+            let count = 10;
             const loop = setInterval(() => {
                 count--;
                 txt.innerText = `⏳ ลูปขุดอัจฉริยะกำลังปันผลโบนัส: อีก ${count} วินาที...`;
                 if(count <= 0) {
                     clearInterval(loop);
-                    SYSTEM_DATA.balanceAsset += (stake * 0.05); // บันทึกปันผลโบนัส 5% คืนพอร์ตสปอตคลัง
+                    SYSTEM_DATA.balanceAsset += (stake * 0.05);
                     txt.innerText = "สถานะ: สิ้นสุดรอบการขุดประจำวัน ปล่อยสิทธิ์เรียบร้อย";
                     btn.disabled = false;
                     refreshDisplayBalances();
