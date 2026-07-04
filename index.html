@@ -3,99 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FundFusion - Premier Trading Platform</title>
+    <title>FundFusion - Elite Unified Trading Platform</title>
     <style>
-        /* 🎨 คุมโทนสีและปรับดีไซน์ขอบโค้งมนละมุน สบายตาตามสั่ง */
+        /* 🎨 คุมโทนสี ส้ม-ดำ และดีไซน์ขอบโค้งมนรอบตัว 16px - 24px สบายตา */
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0b0c0e; color: #ffffff; padding: 0; margin: 0; padding-bottom: 120px; }
         
         .top-header { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 15px 20px; border-bottom: 1px solid #1e2226; position: sticky; top: 0; z-index: 1000; }
         .logo-area { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; color: #ffffff; cursor: pointer; }
         .logo-icon { color: #ff8a00; font-size: 24px; font-weight: 900; }
-        .auth-buttons { display: flex; gap: 10px; }
-        .btn-auth-login { background: #22252a; color: #eaecef; border: 1px solid #32373f; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .btn-auth-signup { background: #ff8a00; color: #ffffff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px; }
-
+        
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* ภาพเคลื่อนไหว Orbit หัวมุมมน */
-        .hero-section { text-align: center; padding: 10px 10px 20px 10px; background: linear-gradient(180deg, #121418 0%, #0b0c0e 100%); position: relative; }
-        .canvas-container { width: 100%; max-width: 320px; height: 240px; margin: 0 auto; position: relative; }
+        /* แอนิเมชัน Orbit หัวมุมมนพรีเมียม */
+        .hero-section { text-align: center; padding: 10px; background: linear-gradient(180deg, #121418 0%, #0b0c0e 100%); }
+        .canvas-container { width: 100%; max-width: 320px; height: 200px; margin: 0 auto; }
         #cryptoCanvas { width: 100%; height: 100%; display: block; }
         
-        .announcement { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #b5b7bc; text-align: left; padding: 12px; line-height: 1.4; margin-bottom: 20px; background: #121418; border-radius: 12px; }
-        .announcement-icon { font-size: 18px; color: #ff8a00; }
-
-        /* การ์ดสไลด์เหรียญเด่นขอบมน */
-        .showcase-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 15px; scrollbar-width: none; }
-        .showcase-container::-webkit-scrollbar { display: none; }
-        .showcase-card { background: #171a1f; border: 1px solid #22262d; border-radius: 18px; padding: 16px; min-width: 150px; flex: 1; }
-        .coin-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-        .coin-icon-img { width: 24px; height: 24px; background: #22262d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
-        .coin-symbol { font-weight: bold; font-size: 15px; color: #ffffff; }
-        .coin-pair { color: #70757d; font-size: 12px; }
-        .coin-price { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-        .coin-change { font-size: 13px; font-weight: 600; }
-        .change-green { color: #02c076; }
-
-        .tab-bar { display: flex; border-bottom: 1px solid #1e2226; margin-bottom: 15px; }
-        .tab-item { padding: 12px 24px; font-size: 15px; font-weight: 600; color: #70757d; cursor: pointer; position: relative; }
+        /* พอร์ตกระเป๋าเงินขอบมน */
+        .card-panel { background: #121418; padding: 20px; border-radius: 24px; margin-bottom: 15px; border: 1px solid #191c21; }
+        .tab-bar { display: flex; border-bottom: 1px solid #1e2226; margin-bottom: 15px; gap: 5px; overflow-x: auto; scrollbar-width: none; }
+        .tab-bar::-webkit-scrollbar { display: none; }
+        .tab-item { padding: 12px 16px; font-size: 14px; font-weight: 600; color: #70757d; cursor: pointer; position: relative; white-space: nowrap; }
         .tab-item.active { color: #ffffff; }
         .tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #ff8a00; border-radius: 3px 3px 0 0; }
 
-        /* แถวรายการเหรียญแบบโค้งมนสวยงาม */
+        /* แถวรายการเหรียญขอบมนมนสบายตา */
         .crypto-row { display: flex; justify-content: space-between; align-items: center; background: #121418; padding: 14px 16px; border-radius: 16px; margin-bottom: 12px; border: 1px solid #191c21; cursor: pointer; transition: 0.2s; }
-        .crypto-row:hover { background: #171a1f; border-color: #ff8a00; }
+        .crypto-row:hover { border-color: #ff8a00; background: #171a1f; }
         .crypto-info-left { display: flex; align-items: center; gap: 12px; }
+        .coin-icon-img { width: 28px; height: 28px; background: #171a1f; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
         .crypto-names h4 { margin: 0; font-size: 15px; font-weight: bold; }
         .crypto-names span { font-size: 12px; color: #70757d; }
-        .crypto-price-right { text-align: right; display: flex; align-items: center; gap: 15px; }
-        .row-price { font-size: 15px; font-weight: bold; }
-        .row-badge { background: #02c076; color: white; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; min-width: 65px; text-align: center; }
+        .crypto-price-right { text-align: right; }
+        .row-price { font-size: 15px; font-weight: bold; display: block; }
+        .row-badge { background: #02c076; color: white; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; margin-top: 4px; }
 
-        /* พาเนลหลักขอบมนพิเศษโค้งกระชับ */
+        /* ฟอร์มและอินพุตขอบมนพรีเมียม */
         .app-page { display: none; }
         .app-page.active { display: block; }
-        .card-panel { background: #121418; padding: 20px; border-radius: 24px; margin-bottom: 15px; border: 1px solid #191c21; }
         .btn-action { background: #ff8a00; color: white; border: none; padding: 14px; border-radius: 20px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; margin-top: 10px; transition: 0.2s; }
         .btn-action:active { transform: scale(0.98); }
         .btn-danger { background: #f6465d; }
+        .btn-success { background: #02c076; }
         .input-box { margin-bottom: 15px; }
-        .input-box label { display: block; margin-bottom: 6px; color: #70757d; font-size: 13px; }
+        .input-box label { display: block; margin-bottom: 6px; color: #b5b7bc; font-size: 13px; }
         .input-box input, .input-box select { width: 100%; padding: 12px 16px; background: #171a1f; border: 1px solid #22262d; color: white; border-radius: 12px; box-sizing: border-box; font-size: 15px; }
 
-        /* บาร์นำทางด้านล่าง */
-        .bottom-navbar { display: none; justify-content: space-around; background: #121418; padding: 12px 0; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #1e2226; z-index: 1000; }
-        .nav-link { color: #70757d; text-decoration: none; font-size: 11px; cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .bottom-navbar { display: flex; justify-content: space-around; background: #121418; padding: 12px 0; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #1e2226; z-index: 1000; }
+        .nav-link { color: #70757d; text-decoration: none; font-size: 10px; cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .nav-link.active { color: #ff8a00; }
         
-        .chart-box { height: 280px; width: 100%; border-radius: 18px; overflow: hidden; margin-bottom: 15px; background: #121418; border: 1px solid #191c21; }
-
-        /* สไตล์กล่องรายการออร์เดอร์ในหน้าประวัติ */
-        .order-card { background: #171a1f; border-radius: 16px; padding: 14px; margin-bottom: 10px; border: 1px solid #22262d; cursor: pointer; }
-        .order-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-        .order-tag-buy { color: #02c076; font-weight: bold; }
-        .order-tag-sell { color: #f6465d; font-weight: bold; }
-        
-        /* สไตล์หน้าต่างป็อปอัพโมดอลขอบมน */
+        .chart-box { height: 220px; width: 100%; border-radius: 18px; overflow: hidden; margin-bottom: 15px; background: #121418; border: 1px solid #191c21; }
+        .order-card { background: #171a1f; border-radius: 16px; padding: 14px; margin-bottom: 10px; border: 1px solid #22262d; }
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
         .modal-content { background: #121418; width: 100%; max-width: 400px; border-radius: 24px; padding: 25px; border: 1px solid #22262d; }
+        .change-green { color: #02c076; } .order-tag-sell { color: #f6465d; }
     </style>
 </head>
 <body>
 
-    <!-- หัวเว็บบริหารแบรนด์ -->
+    <!-- ส่วนหัวแบรนด์ -->
     <div class="top-header">
-        <div class="logo-area" onclick="goToHome()">
+        <div class="logo-area" onclick="changeView('landing')">
             <span class="logo-icon">𝙁</span>
             <span>FundFusion</span>
         </div>
-        <div id="user-logged-profile" style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:13px; color:#ff8a00; font-weight:bold;" id="profile-name-text">UID: 77491024</span>
+        <div>
+            <span style="font-size:12px; background:#1c1f24; padding:6px 12px; border-radius:20px; color:#ff8a00; font-weight:bold;" id="member-badge-top">Member: LV 0 (Normal)</span>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 1. หน้าหลัก (DASHBOARD) -->
+    <!-- 1. หน้าหลัก (DASHBOARD) & ฝาก-ถอนเงิน -->
     <!-- ========================================== -->
     <div id="view-landing" class="app-page active">
         <div class="hero-section">
@@ -103,428 +82,737 @@
         </div>
 
         <div class="container">
-            <div id="main-wallet-panel" class="card-panel" style="border-top: 3px solid #ff8a00;">
-                <h4 style="margin:0 0 12px 0; color:#70757d; font-weight:normal;">พอร์ตกระเป๋าเงิน FundFusion</h4>
-                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; text-align:center;">
-                    <div style="background:#171a1f; padding:10px; border-radius:12px;">
+            <!-- แผงกระเป๋าเงินรวม -->
+            <div class="card-panel" style="border-top: 3px solid #ff8a00; background: linear-gradient(180deg, #171a1f 0%, #121418 100%);">
+                <h4 style="margin:0 0 12px 0; color:#70757d; font-weight:normal;">พอร์ตสินทรัพย์รวมของท่าน</h4>
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; text-align:center; margin-bottom: 15px;">
+                    <div style="background:#121418; padding:10px; border-radius:12px; border:1px solid #1c1f24;">
                         <div style="font-size:11px; color:#70757d;">ยอดเงินทั้งหมด</div>
                         <div style="font-weight:bold; font-size:14px; margin-top:5px; color:#ff8a00;" id="sum-total">$10,000.00</div>
                     </div>
-                    <div style="background:#171a1f; padding:10px; border-radius:12px;">
+                    <div style="background:#121418; padding:10px; border-radius:12px; border:1px solid #1c1f24;">
                         <div style="font-size:11px; color:#70757d;">ยอดเงินเทรด</div>
-                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-trade">$10,000.00</div>
+                        <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-trade">$0.00</div>
                     </div>
-                    <div style="background:#171a1f; padding:10px; border-radius:12px;">
+                    <div style="background:#121418; padding:10px; border-radius:12px; border:1px solid #1c1f24;">
                         <div style="font-size:11px; color:#70757d;">พอร์ตสปอต</div>
                         <div style="font-weight:bold; font-size:14px; margin-top:5px;" id="sum-asset">$0.00</div>
                     </div>
                 </div>
+
+                <!-- 💳 ปุ่มทำธุรกรรม ฝากเงิน / ถอนเงิน (เอากลับมาตามสั่ง) -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button class="btn-action btn-success" style="margin-top:0; padding:10px; font-size:13px;" onclick="openTxModal('DEPOSIT')">📥 ฝากเงินเข้าพอร์ต</button>
+                    <button class="btn-action" style="margin-top:0; background:#22252a; padding:10px; font-size:13px;" onclick="openTxModal('WITHDRAW')">📤 ถอนเงินออก</button>
+                </div>
             </div>
 
-            <div class="tab-bar"><div class="tab-item active">สินทรัพย์ยอดนิยม</div></div>
-            <div class="crypto-row" onclick="quickNavToTrade('BINANCE:BTCUSDT', 'Bitcoin (BTC)')">
-                <div class="crypto-info-left">
-                    <div class="coin-icon-img" style="color:#f3ba2f; border:1px solid #f3ba2f;">₿</div>
-                    <div class="crypto-names"><h4>BTC <span>/ USDT</span></h4></div>
-                </div>
-                <div class="crypto-price-right"><span class="row-price">$62,750.00</span><span class="row-badge">+2.3%</span></div>
-            </div>
-            <div class="crypto-row" onclick="quickNavToTrade('FX_IDC:XAUUSD', 'Gold Spot (XAU)')">
-                <div class="crypto-info-left">
-                    <div class="coin-icon-img" style="color:#ffae00; border:1px solid #ffae00;">⚜️</div>
-                    <div class="crypto-names"><h4>XAU <span>/ USD (ทองคำ)</span></h4></div>
-                </div>
-                <div class="crypto-price-right"><span class="row-price">$2,345.50</span><span class="row-badge">+1.1%</span></div>
-            </div>
+            <!-- รายการแสดงผลพอร์ตสปอตปัจจุบันของผู้ใช้ -->
+            <h4 style="margin:15px 0 10px 5px; font-size:14px; color:#70757d;">📦 สินทรัพย์ที่มีในพอร์ตสปอตปัจจุบัน (Spot Wallet)</h4>
+            <div id="spot-holdings-list"></div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. ผังงานระบบ "เทรด" (TRADING VIEW) -->
+    <!-- 2. หน้าสินทรัพย์ (SPOT BUYING / HOLDER MODE) -->
     <!-- ========================================== -->
-    <div id="view-trade" class="app-page">
+    <div id="view-spot" class="app-page">
         <div class="container">
-            <h3 style="margin: 5px 0 15px 0; font-size: 16px; color: #ff8a00;">📈 ส่งคำสั่งเก็งกำไรความเสี่ยงสูง</h3>
+            <h3 style="margin: 5px 0 15px 0; font-size: 16px; color: #ff8a00;">📦 ตลาดซื้อ-ขายสปอตสะสมสินทรัพย์ (Spot Mode)</h3>
             
-            <!-- ส่วนแสดงรายการสินทรัพย์ทั้งหมดให้ผู้ใช้กดเลือก -->
             <div class="input-box">
-                <label>เลือกสินทรัพย์ที่จะเข้าเทรด</label>
-                <select id="trade-asset-selector" onchange="onAssetSelectorChange()">
-                    <option value="BINANCE:BTCUSDT" data-name="Bitcoin (BTC)">Bitcoin (BTC / USDT)</option>
-                    <option value="BINANCE:ETHUSDT" data-name="Ethereum (ETH / USDT)">Ethereum (ETH / USDT)</option>
-                    <option value="FX_IDC:XAUUSD" data-name="Gold Spot (XAU)">Gold Spot (XAU / USD - ทองคำ)</option>
+                <label>เลือกสินทรัพย์สปอต</label>
+                <select id="spot-asset-selector" onchange="onSpotAssetChange()">
+                    <option value="BINANCE:BTCUSDT" data-id="BTC" data-name="Bitcoin" data-price="60000">Bitcoin (BTC)</option>
+                    <option value="BINANCE:ETHUSDT" data-id="ETH" data-name="Ethereum" data-price="30000">Ethereum (ETH)</option>
+                    <option value="FX_IDC:XAUUSD" data-id="XAU" data-name="Gold" data-price="2500">Gold Spot (XAU - ทองคำ)</option>
                 </select>
             </div>
 
-            <!-- แสดงหน้ากราฟราคารีลไทม์ -->
-            <div class="chart-box">
-                <div id="live-tradingview-widget" style="height:100%; width:100%;"></div>
-            </div>
+            <div class="chart-box"><div id="spot-tradingview-widget" style="height:100%; width:100%;"></div></div>
 
-            <!-- ช่องตั้งข้อมูลสัญญา -->
+            <!-- ระบบการสั่งซื้อและขายแบบสปอตแยกแท็บ -->
             <div class="card-panel">
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                    <div class="input-box">
-                        <label>Volume (จำนวน)</label>
-                        <input type="number" id="trade-volume" value="0.1" step="0.01">
-                    </div>
-                    <div class="input-box">
-                        <label>Stop Loss (SL)</label>
-                        <input type="number" id="trade-sl" placeholder="ไม่ตั้ง">
-                    </div>
-                    <div class="input-box">
-                        <label>Take Profit (TP)</label>
-                        <input type="number" id="trade-tp" placeholder="ไม่ตั้ง">
-                    </div>
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="btn-spot-tab-buy" class="btn-action btn-success" style="margin-top:0; flex:1;" onclick="setSpotMode('BUY')">โหมดซื้อ (BUY)</button>
+                    <button id="btn-spot-tab-sell" class="btn-action" style="margin-top:0; background:#22252a; flex:1;" onclick="setSpotMode('SELL')">โหมดขาย (SELL)</button>
                 </div>
-                
-                <!-- ปุ่มคำสั่งคู่ BUY / SELL -->
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:5px;">
-                    <button class="btn-action" style="background:#02c076; margin-top:0;" onclick="executeOpenOrder('BUY')">เปิดสัญญา BUY</button>
-                    <button class="btn-action btn-danger" style="margin-top:0;" onclick="executeOpenOrder('SELL')">เปิดสัญญา SELL</button>
+
+                <!-- ฟอร์มฝั่งซื้อ (BUY) -->
+                <div id="spot-form-buy">
+                    <div class="input-box">
+                        <label>ช่องกรอกจำนวนเงินที่ต้องการซื้อ ($)</label>
+                        <input type="number" id="spot-buy-amount" placeholder="กรอกจำนวนเงินดอลลาร์" oninput="calculateSpotConversion('BUY')">
+                    </div>
+                    <div style="font-size:13px; color:#b5b7bc; margin-bottom:15px;">
+                        🔹 แสดงจำนวนสินทรัพย์ที่แปลงจากเงิน: <span id="spot-buy-converted" style="color:#02c076; font-weight:bold;">0.0000</span>
+                    </div>
+                    <button class="btn-action btn-success" onclick="executeSpotBuy()">ยืนยันสั่งซื้อสะสมเหรียญ</button>
+                </div>
+
+                <!-- ฟอร์มฝั่งขาย (SELL) -->
+                <div id="spot-form-sell" style="display:none;">
+                    <div class="input-box">
+                        <label>ช่องกรอกจำนวนสินทรัพย์ที่ต้องการขาย</label>
+                        <input type="number" id="spot-sell-quantity" placeholder="กรอกจำนวนหน่วยเหรียญ/ทองคำ" oninput="calculateSpotConversion('SELL')">
+                    </div>
+                    <div style="font-size:13px; color:#b5b7bc; margin-bottom:15px;">
+                        🔸 แสดงจำนวนเงินที่แปลงจากสินทรัพย์: <span id="spot-sell-converted" style="color:#ff8a00; font-weight:bold;">$0.00</span>
+                    </div>
+                    <button class="btn-action btn-danger" onclick="executeSpotSell()">ยืนยันสั่งขายเข้ากระเป๋าเทรด</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 3. ผังงานระบบ "ประวัติการเทรด" (ORDER MANAGEMENT) -->
+    <!-- 3. หน้าเทรดฟิวเจอร์ส (TRADING MODE) -->
+    <!-- ========================================== -->
+    <div id="view-trade" class="app-page">
+        <div class="container">
+            <h3 style="margin: 5px 0 15px 0; font-size: 16px; color: #ff8a00;">🔥 ตลาดเทรดอนุพันธ์เก็งกำไรความเสี่ยงสูง (Trading Mode)</h3>
+            <div class="input-box">
+                <label>เลือกสินทรัพย์สัญญาล่วงหน้า</label>
+                <select id="trade-asset-selector" onchange="onTradeAssetChange()">
+                    <option value="BINANCE:BTCUSDT" data-name="Bitcoin (BTC)">Bitcoin (BTC / USDT)</option>
+                    <option value="BINANCE:ETHUSDT" data-name="Ethereum (ETH / USDT)">Ethereum (ETH / USDT)</option>
+                    <option value="FX_IDC:XAUUSD" data-name="Gold Spot (XAU)">Gold Spot (XAU / USD)</option>
+                </select>
+            </div>
+            <div class="chart-box"><div id="live-tradingview-widget" style="height:100%; width:100%;"></div></div>
+            <div class="card-panel">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div class="input-box"><label>Volume</label><input type="number" id="trade-volume" value="0.1" step="0.01"></div>
+                    <div class="input-box"><label>Stop Loss (SL)</label><input type="number" id="trade-sl" placeholder="ไม่ตั้ง"></div>
+                    <div class="input-box"><label>Take Profit (TP)</label><input type="number" id="trade-tp" placeholder="ไม่ตั้ง"></div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:5px;">
+                    <button class="btn-action btn-success" style="margin-top:0;" onclick="executeOpenOrder('BUY')">เปิดสถานะ BUY</button>
+                    <button class="btn-action btn-danger" style="margin-top:0;" onclick="executeOpenOrder('SELL')">เปิดสถานะ SELL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 4. หน้าประวัติการเทรด (ORDER MANAGEMENT) -->
     <!-- ========================================== -->
     <div id="view-history" class="app-page">
         <div class="container">
-            <!-- แสดงยอดเงินเทรดปัจจุบันเด่นชัด -->
-            <div class="card-panel" style="background: linear-gradient(135deg, #171a1f 0%, #121418 100%); text-align: center; border-left: 4px solid #ff8a00;">
-                <div style="font-size: 13px; color: #70757d;">ยอดเงินเทรดที่พร้อมใช้งานในพอร์ตปัจจุบัน</div>
-                <div style="font-size: 28px; font-weight: bold; color: #ffffff; margin-top: 5px;" id="history-page-balance">$10,000.00</div>
+            <div class="card-panel" style="text-align: center; border-left: 4px solid #ff8a00; background:#171a1f;">
+                <div style="font-size: 13px; color: #70757d;">ยอดเงินเทรดหมุนเวียนหลักในปัจจุบัน</div>
+                <div style="font-size: 26px; font-weight: bold; color: #ffffff; margin-top: 5px;" id="history-page-balance">$0.00</div>
             </div>
-
-            <!-- แสดงออร์เดอร์ที่กำลังวิ่งอยู่ -->
-            <h4 style="margin: 20px 0 10px 5px; font-size: 15px; color: #ff8a00;">🔥 ออร์เดอร์ที่กำลังวิ่งอยู่ปัจจุบัน (Active Orders)</h4>
+            <h4 style="margin: 20px 0 10px 5px; font-size: 14px; color: #ff8a00;">🔥 ออร์เดอร์สัญญาที่กำลังวิ่งอยู่ (Active Orders)</h4>
             <div id="active-orders-list"></div>
-
-            <!-- แสดงประวัติการเทรดทั้งหมดที่ปิดไปแล้ว -->
-            <h4 style="margin: 25px 0 10px 5px; font-size: 15px; color: #70757d;">📜 ประวัติการปิดออร์เดอร์ย้อนหลังทั้งหมด</h4>
+            <h4 style="margin: 25px 0 10px 5px; font-size: 14px; color: #70757d;">📜 ประวัติการเปิด-ปิดออร์เดอร์สำเร็จย้อนหลัง</h4>
             <div id="closed-orders-list" class="card-panel" style="padding: 10px;"></div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- 🎴 WINDOWS MODAL หน้าต่างจัดการออร์เดอร์ขอบมน -->
+    <!-- 5. หน้าขุดสินทรัพย์ & สมาชิก (MINING & MEMBERSHIP) -->
     <!-- ========================================== -->
+    <div id="view-mining" class="app-page">
+        <div class="container">
+            <!-- สิทธิ์ VIP สมาชิก -->
+            <h3 style="margin: 5px 0 15px 0; font-size: 16px; color: #ff8a00;">👑 อัปเกรดระดับสมาชิกเลเวล (Membership System)</h3>
+            <div class="card-panel" style="border-top:3px solid #ff8a00;">
+                <div style="font-size:12px; color:#70757d; margin-bottom:8px;">ระดับเลเวลปัจจุบันของคุณ:</div>
+                <div style="font-size:18px; font-weight:bold; color:#ffffff; margin-bottom:15px;" id="mining-status-lv-text">Level 0 (รางวัลเริ่มขุด 1% ต่อวัน)</div>
+                
+                <div class="input-box">
+                    <label>เลือกเปลี่ยนระดับ Level สมัครสมาชิก</label>
+                    <select id="membership-level-select">
+                        <option value="1">Level 1 (รับปันผล 5%) - เงื่อนไขมูลค่าพอร์ตสปอต > $1,000</option>
+                        <option value="2">Level 2 (รับปันผล 7%) - เงื่อนไขมูลค่าพอร์ตสปอต > $5,000</option>
+                        <option value="3">Level 3 (รับปันผล 10%) - เงื่อนไขมูลค่าพอร์ตสปอต > $50,000</option>
+                        <option value="4">Level 4 (รับปันผล 15%) - เงื่อนไขมูลค่าพอร์ตสปอต > $750,000</option>
+                    </select>
+                </div>
+                <button class="btn-action" onclick="executeUpgradeMembership()">ส่งข้อมูลขออนุมัติปรับระดับสมาชิก</button>
+                <div id="lock-status-alert" style="margin-top:12px; font-size:12px; color:#ffae00; line-height:1.4;"></div>
+            </div>
+
+            <!-- ระบบลูปการขุดสินทรัพย์ประจำวัน -->
+            <h3 style="margin: 25px 0 15px 0; font-size: 16px; color: #ff8a00;">⛏️ บริการรันลูปขุดสินทรัพย์ประจำวัน (Daily Mining Loop)</h3>
+            <div class="card-panel" style="background:#171a1f;">
+                <div class="input-box">
+                    <label>เลือกรายการเหรียญที่เคย BUY เก็บไว้เพื่อเริ่มขุด</label>
+                    <select id="mining-asset-select" onchange="onMiningAssetChange()"></select>
+                </div>
+                <div class="input-box">
+                    <label>จำนวนเงินค้ำประกันเพื่อใช้ขุด ($)</label>
+                    <input type="number" id="mining-input-amount" placeholder="ระบุจำนวนเงิน">
+                    <small style="color:#70757d; font-size:11px; display:block; margin-top:4px;" id="mining-max-hint">สูงสุดที่มีในเหรียญนี้: $0.00</small>
+                </div>
+                
+                <div style="background:#121418; padding:12px; border-radius:12px; margin-bottom:15px; font-size:13px;">
+                    💰 อัตรา % รางวัลปันผลที่คุณจะได้รับในรอบนี้: <span id="mining-reward-percent" style="color:#02c076; font-weight:bold;">1% ต่อรอบ</span>
+                </div>
+
+                <!-- บล็อกความคืบหน้าการขุด -->
+                <div id="mining-progress-box" style="display:none; background:#0b0c0e; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center; border:1px solid #ff8a00;">
+                    <div style="font-size:13px; color:#ff8a00; font-weight:bold; margin-bottom:8px;" id="mining-timer-text">⏳ กำลังประมวลผลการขุด (24 ชม. จำลอง)... 10s</div>
+                    <div style="width:100%; background:#22262d; height:6px; border-radius:3px; overflow:hidden;">
+                        <div id="mining-progress-bar" style="background:#ff8a00; width:0%; height:100%; transition:0.2s;"></div>
+                    </div>
+                </div>
+
+                <button class="btn-action btn-success" id="btn-start-mining" onclick="executeStartMiningLoop()">เริ่มขุดสินทรัพย์ประจำวัน</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 🎴 MODAL WINDOWS - ป๊อปอัพหน้าต่างจัดการต่างๆ -->
+    <!-- ========================================== -->
+    <!-- หน้าต่าง ฝากเงิน / ถอนเงิน -->
+    <div class="modal-overlay" id="tx-modal">
+        <div class="modal-content">
+            <h3 id="tx-modal-title" style="margin-top:0;">ธุรกรรมกระเป๋า</h3>
+            <div class="input-box">
+                <label id="tx-modal-label">ระบุจำนวนเงินที่ต้องการ ($)</label>
+                <input type="number" id="tx-modal-input" placeholder="0.00">
+            </div>
+            <button class="btn-action btn-success" id="tx-modal-btn" onclick="executeTransaction()">ยืนยันตกลง</button>
+            <button class="btn-action" style="background:transparent; color:#70757d;" onclick="closeTxModal()">ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <!-- หน้าต่างจัดการออร์เดอร์เทรดฟิวเจอร์ส -->
     <div class="modal-overlay" id="order-manage-modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:18px;" id="modal-order-title">จัดการออร์เดอร์</h3>
-            <hr style="border: 0; border-top: 1px solid #22262d; margin-bottom: 15px;">
-            
-            <div class="input-box">
-                <label>แก้ไขราคา Stop Loss (SL)</label>
-                <input type="number" id="modal-input-sl">
-            </div>
-            <div class="input-box">
-                <label>แก้ไขราคา Take Profit (TP)</label>
-                <input type="number" id="modal-input-tp">
-            </div>
-
-            <button class="btn-action" style="background: #22252a; color:#ffffff;" onclick="saveModalSettings()">💾 บันทึกการแก้ไข SL/TP</button>
-            <button class="btn-action btn-danger" style="margin-top:10px;" onclick="promptCloseConfirmation()">❌ ปิดออร์เดอร์นี้ทันที</button>
-            <button class="btn-action" style="background:transparent; color:#70757d; margin-top:5px;" onclick="closeOrderModal()">ยกเลิก</button>
+            <h3 style="margin-top:0; font-size:16px;" id="modal-order-title">จัดการออร์เดอร์</h3>
+            <div class="input-box"><label>แก้ไขราคา Stop Loss (SL)</label><input type="number" id="modal-input-sl"></div>
+            <div class="input-box"><label>แก้ไขราคา Take Profit (TP)</label><input type="number" id="modal-input-tp"></div>
+            <button class="btn-action" style="background: #22252a;" onclick="saveModalSettings()">💾 บันทึกการแก้ไข SL/TP</button>
+            <button class="btn-action btn-danger" onclick="promptCloseConfirmation()">❌ ปิดออร์เดอร์นี้ทันที</button>
+            <button class="btn-action" style="background:transparent; color:#70757d; margin-top:5px;" onclick="document.getElementById('order-manage-modal').style.display='none'">ยกเลิก</button>
         </div>
     </div>
 
-    <!-- 🎴 WINDOWS MODAL ยืนยันคำสั่งปิดออร์เดอร์ชัวร์ๆ -->
     <div class="modal-overlay" id="order-confirm-modal" style="background: rgba(0,0,0,0.85);">
         <div class="modal-content" style="text-align: center; border: 1px solid #f6465d;">
-            <span style="font-size: 40px;">⚠️</span>
-            <h3 style="margin-top:10px; color: #f6465d;">ยืนยันคำสั่งปิดออร์เดอร์?</h3>
-            <p style="font-size: 13px; color: #b5b7bc;" id="confirm-modal-pnl-text">ระบบจะทำการคำนวณยอดกำไร/ขาดทุนสุทธิและโอนเงินกลับคืนเข้ากระเป๋าเทรดของคุณทันที</p>
-            
-            <button class="btn-action btn-danger" onclick="executeFinalOrderClose()">✨ ยืนยันปิดสถานะ</button>
-            <button class="btn-action" style="background: #22252a; margin-top:10px;" onclick="document.getElementById('order-confirm-modal').style.display='none'">กลับไปคิดดูใหม่</button>
+            <h3 style="color:#f6465d; margin-top:0;">⚠️ ยืนยันคำสั่งปิดออร์เดอร์?</h3>
+            <p style="font-size:13px; color:#b5b7bc;" id="confirm-modal-pnl-text"></p>
+            <button class="btn-action btn-danger" onclick="executeFinalOrderClose()">✨ ยืนยันปิดสถานะคำสั่ง</button>
+            <button class="btn-action" style="background:#22252a; margin-top:5px;" onclick="document.getElementById('order-confirm-modal').style.display='none'">ย้อนกลับ</button>
         </div>
     </div>
 
-    <!-- แถบเมนูควบคุมด้านล่าง (Bottom App Navigation) -->
-    <div class="bottom-navbar" id="main-app-navigation" style="display: flex;">
+    <!-- แถบเมนูด้านล่างครบ 5 หมวดหลักตามสั่ง -->
+    <div class="bottom-navbar">
         <div class="nav-link active" id="nl-landing" onclick="changeView('landing')"><span>🏠</span>หน้าหลัก</div>
+        <div class="nav-link" id="nl-spot" onclick="changeView('spot')"><span>📦</span>ซื้อสปอต</div>
         <div class="nav-link" id="nl-trade" onclick="changeView('trade')"><span>📈</span>ตลาดเทรด</div>
         <div class="nav-link" id="nl-history" onclick="changeView('history')"><span>📜</span>ประวัติการเทรด</div>
+        <div class="nav-link" id="nl-mining" onclick="changeView('mining')"><span>⛏️</span>ขุด/สมาชิก</div>
     </div>
 
-    <!-- สคริปต์สถาปัตยกรรมระบบภายใน -->
+    <!-- สคริปต์สถาปัตยกรรมจัดการระบบภายใน -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
-        const SYSTEM_DATA = {
-            balanceTrading: 10000.00,
-            balanceAsset: 0.00,
-            tvEngine: null,
+        const CORE_SYSTEM = {
+            balanceTotal: 10000.00,  // ยอดเงินทั้งหมด
+            balanceTrading: 0.00,     // ยอดเงินเทรด
             
-            activeOrders: [],   // ออร์เดอร์ที่กำลังวิ่ง
-            closedOrders: [],   // ประวัติที่ปิดไปแล้ว
-            selectedOrderId: null // ออร์เดอร์ที่กำลังกดเปิดหน้าต่างจัดการอยู่
+            // พอร์ตระบบสปอตเก็บบันทึกเหรียญ
+            spotWallet: {
+                BTC: { name: "Bitcoin", amount: 0, lockedForMining: false, price: 60000 },
+                ETH: { name: "Ethereum", amount: 0, lockedForMining: false, price: 30000 },
+                XAU: { name: "Gold (ทองคำ)", amount: 0, lockedForMining: false, price: 2500 }
+            },
+            
+            // ข้อมูลระดับสมาชิก
+            membershipLevel: 0,
+            requiredAssetToUnlock: 0, 
+            isMiningRunning: false,
+            
+            activeOrders: [],
+            closedOrders: [],
+            selectedOrderId: null,
+            currentSpotTab: 'BUY',
+            
+            activeTxType: 'DEPOSIT'
         };
 
         function changeView(viewId) {
             document.querySelectorAll('.app-page').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             
-            const targetPage = document.getElementById(`view-${viewId}`);
-            if(targetPage) targetPage.classList.add('active');
+            const target = document.getElementById(`view-${viewId}`);
+            if(target) target.classList.add('active');
             if(document.getElementById(`nl-${viewId}`)) document.getElementById(`nl-${viewId}`).classList.add('active');
 
-            if(viewId === 'trade' && !SYSTEM_DATA.tvEngine) {
-                onAssetSelectorChange();
-            }
-            refreshDisplayBalances();
-        }
-
-        function refreshDisplayBalances() {
-            let total = SYSTEM_DATA.balanceTrading + SYSTEM_DATA.balanceAsset;
-            document.getElementById('sum-total').innerText = `$${total.toLocaleString(undefined,{minimumFractionDigits:2})}`;
-            document.getElementById('sum-trade').innerText = `$${SYSTEM_DATA.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
-            document.getElementById('sum-asset').innerText = `$${SYSTEM_DATA.balanceAsset.toLocaleString(undefined,{minimumFractionDigits:2})}`;
-            document.getElementById('history-page-balance').innerText = `$${SYSTEM_DATA.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            if(viewId === 'spot') loadSpotChart();
+            if(viewId === 'trade') loadTradeChart();
+            if(viewId === 'mining') syncMiningPageData();
             
-            renderOrdersLists();
+            refreshGlobalBalances();
         }
 
-        function quickNavToTrade(symbol, name) {
-            changeView('trade');
-            document.getElementById('trade-asset-selector').value = symbol;
-            loadMarketChart(symbol);
+        // คำนวณมูลค่ารวมของพอร์ตสปอตแบบไดนามิก
+        function getSpotTotalValue() {
+            let sum = 0;
+            for(let key in CORE_SYSTEM.spotWallet) {
+                sum += CORE_SYSTEM.spotWallet[key].amount * CORE_SYSTEM.spotWallet[key].price;
+            }
+            return sum;
         }
 
-        function onAssetSelectorChange() {
-            const symbol = document.getElementById('trade-asset-selector').value;
-            loadMarketChart(symbol);
+        function refreshGlobalBalances() {
+            const spotValue = getSpotTotalValue();
+            CORE_SYSTEM.balanceAsset = spotValue;
+            
+            document.getElementById('sum-total').innerText = `$${CORE_SYSTEM.balanceTotal.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('sum-trade').innerText = `$${CORE_SYSTEM.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('sum-asset').innerText = `$${spotValue.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('history-page-balance').innerText = `$${CORE_SYSTEM.balanceTrading.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            
+            // ตรวจสอบเงื่อนไขล็อกระดับสมาชิกอัปเดตแบบรีลไทม์
+            if(CORE_SYSTEM.membershipLevel > 0 && spotValue >= CORE_SYSTEM.requiredAssetToUnlock) {
+                CORE_SYSTEM.requiredAssetToUnlock = 0; // ปลดล็อกแล้วเมื่อสินทรัพย์สปอตถึงตามเงื่อนไข
+            }
+
+            renderSpotHoldingsHTML();
+            renderActiveOrdersHTML();
         }
 
-        function loadMarketChart(symbol) {
-            SYSTEM_DATA.tvEngine = new TradingView.widget({
-                "width": "100%", "height": 280, "symbol": symbol, "interval": "15", "theme": "dark", "style": "1", "locale": "th", "container_id": "live-tradingview-widget", "hide_side_toolbar": true
-            });
+        function renderSpotHoldingsHTML() {
+            const container = document.getElementById('spot-holdings-list');
+            container.innerHTML = "";
+            
+            let hasAsset = false;
+            for(let key in CORE_SYSTEM.spotWallet) {
+                const item = CORE_SYSTEM.spotWallet[key];
+                if(item.amount > 0) {
+                    hasAsset = true;
+                    const value = item.amount * item.price;
+                    const div = document.createElement('div');
+                    div.className = "crypto-row";
+                    div.style.cursor = "default";
+                    div.innerHTML = `
+                        <div class="crypto-info-left">
+                            <div class="coin-icon-img">${key === 'XAU'?'⚜️':'🪙'}</div>
+                            <div class="crypto-names">
+                                <h4>${item.name} (${key})</h4>
+                                <span>จำนวนครอบครอง: ${item.amount.toFixed(4)} ${key}</span>
+                            </div>
+                        </div>
+                        <div class="crypto-price-right">
+                            <span class="row-price">$${value.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                            ${item.lockedForMining ? '<span class="row-badge" style="background:#f6465d;">🔒 ขุดล็อกห้ามขาย</span>' : '<span class="row-badge" style="background:#02c076;">🔓 ปกติพร้อมขาย</span>'}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                }
+            }
+            if(!hasAsset) {
+                container.innerHTML = `<div style="text-align:center; color:#70757d; font-size:12px; padding:20px; background:#121418; border-radius:16px;">ยังไม่มีเหรียญสะสมในพอร์ตสปอตของคุณในขณะนี้</div>`;
+            }
         }
-
-        function goToHome() { changeView('landing'); }
 
         // =========================================================================
-        // 📈 ENGINE ผังงานระบบ "เทรด" (Trading Workflow Core)
+        // 📥 ENGINE ระบบฝากเงิน - ถอนเงิน (เอากลับมาตามสั่ง)
         // =========================================================================
+        function openTxModal(type) {
+            CORE_SYSTEM.activeTxType = type;
+            document.getElementById('tx-modal-title').innerText = type === 'DEPOSIT' ? '📥 ทำรายการฝากเงินเข้าสู่ระบบ' : '📤 ทำรายการถอนเงินออกจากระบบ';
+            document.getElementById('tx-modal-label').innerText = type === 'DEPOSIT' ? 'จำนวนเงินดอลลาร์ที่ต้องการฝากเพิ่มเข้ากระเป๋าหลัก ($)' : 'จำนวนเงินที่ต้องการถอนจากกระเป๋าหลัก ($)';
+            document.getElementById('tx-modal-input').value = "";
+            document.getElementById('tx-modal').style.display = 'flex';
+        }
+        function closeTxModal() { document.getElementById('tx-modal').style.display = 'none'; }
+        
+        function executeTransaction() {
+            const amount = parseFloat(document.getElementById('tx-modal-input').value);
+            if(isNaN(amount) || amount <= 0) return alert("❌ โปรดกรอกจำนวนตัวเลขที่ถูกต้องมากกกว่า 0");
+
+            if(CORE_SYSTEM.activeTxType === 'DEPOSIT') {
+                CORE_SYSTEM.balanceTotal += amount;
+                alert(`📥 ฝากเงินสำเร็จแล้ว ยอดเข้ากระเป๋าหลักเพิ่มขึ้น: +$${amount.toLocaleString()}`);
+            } else {
+                if(CORE_SYSTEM.balanceTotal < amount) return alert("❌ ยอดเงินทั้งหมดของคุณมีไม่เพียงพอสำหรับการถอนออกในจำนวนนี้");
+                CORE_SYSTEM.balanceTotal -= amount;
+                alert(`📤 ถอนเงินสำเร็จแล้ว หักยอดจากกระเป๋าหลัก: -$${amount.toLocaleString()}`);
+            }
+            closeTxModal();
+            refreshGlobalBalances();
+        }
+
+        // =========================================================================
+        // 📦 ENGINE ระบบ "สินทรัพย์" (Spot Buying / Holder Mode)
+        // =========================================================================
+        function loadSpotChart() {
+            const sym = document.getElementById('spot-asset-selector').value;
+            new TradingView.widget({ "width": "100%", "height": 220, "symbol": sym, "interval": "30", "theme": "dark", "style": "2", "locale": "th", "container_id": "spot-tradingview-widget", "hide_side_toolbar": true });
+        }
+        function onSpotAssetChange() { loadSpotChart(); calculateSpotConversion(CORE_SYSTEM.currentSpotTab); }
+        
+        function setSpotMode(mode) {
+            CORE_SYSTEM.currentSpotTab = mode;
+            if(mode === 'BUY') {
+                document.getElementById('btn-spot-tab-buy').className = "btn-action btn-success";
+                document.getElementById('btn-spot-tab-sell').className = "btn-action";
+                document.getElementById('btn-spot-tab-sell').style.background = "#22252a";
+                document.getElementById('spot-form-buy').style.display = 'block';
+                document.getElementById('spot-form-sell').style.display = 'none';
+            } else {
+                document.getElementById('btn-spot-tab-buy').className = "btn-action";
+                document.getElementById('btn-spot-tab-buy').style.background = "#22252a";
+                document.getElementById('btn-spot-tab-sell').className = "btn-action btn-danger";
+                document.getElementById('spot-form-buy').style.display = 'none';
+                document.getElementById('spot-form-sell').style.display = 'block';
+            }
+            calculateSpotConversion(mode);
+        }
+
+        function calculateSpotConversion(mode) {
+            const sel = document.getElementById('spot-asset-selector');
+            const price = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-price'));
+            if(mode === 'BUY') {
+                const cash = parseFloat(document.getElementById('spot-buy-amount').value) || 0;
+                document.getElementById('spot-buy-converted').innerText = (cash / price).toFixed(5);
+            } else {
+                const qty = parseFloat(document.getElementById('spot-sell-quantity').value) || 0;
+                document.getElementById('spot-sell-converted').innerText = `$${(qty * price).toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            }
+        }
+
+        function executeSpotBuy() {
+            const amount = parseFloat(document.getElementById('spot-buy-amount').value);
+            if(isNaN(amount) || amount <= 0) return alert("❌ โปรดกรอกจำนวนเงินดอลลาร์ที่ต้องการซื้อให้ถูกต้อง");
+            
+            // ──► { ตรวจสอบ "ยอดเงินทั้งหมด" }
+            if(CORE_SYSTEM.balanceTotal < amount) {
+                return alert("❌ แจ้งเตือนเงินไม่พอ! ยอดเงินคงเหลือในระบบไม่พอสำหรับซื้อสถานะสปอตนี้");
+            }
+            
+            const sel = document.getElementById('spot-asset-selector');
+            const assetId = sel.options[sel.selectedIndex].getAttribute('data-id');
+            const price = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-price'));
+            
+            // ──► [ หักเงินจาก "ยอดเงินทั้งหมด" ]
+            CORE_SYSTEM.balanceTotal -= amount;
+            const purchasedQty = amount / price;
+            CORE_SYSTEM.spotWallet[assetId].amount += purchasedQty;
+            
+            alert(`✅ ซื้อสปอตสะสมสำเร็จ!\nหักเงินทั้งหมด: $${amount}\nรับเหรียญเพิ่มเข้าสู่กระเป๋าสปอต: ${purchasedQty.toFixed(5)} ${assetId}`);
+            document.getElementById('spot-buy-amount').value = "";
+            calculateSpotConversion('BUY');
+            refreshGlobalBalances();
+        }
+
+        function executeSpotSell() {
+            const sel = document.getElementById('spot-asset-selector');
+            const assetId = sel.options[sel.selectedIndex].getAttribute('data-id');
+            const targetQty = parseFloat(document.getElementById('spot-sell-quantity').value);
+            
+            if(isNaN(targetQty) || targetQty <= 0) return alert("❌ โปรดระบุจำนวนสินทรัพย์ที่จะสั่งขายให้ถูกต้อง");
+            if(CORE_SYSTEM.spotWallet[assetId].amount < targetQty) return alert("❌ คุณมีจำนวนสินทรัพย์สปอตนี้ไม่เพียงพอที่จะสั่งขาย");
+
+            // ──► { ตรวจสอบสถานะการล็อกเหรียญจากระบบขุด / ระดับสมาชิก }
+            if(CORE_SYSTEM.spotWallet[assetId].lockedForMining || CORE_SYSTEM.requiredAssetToUnlock > 0) {
+                return alert("❌ แจ้งเตือนห้ามขาย! สินทรัพย์ของคุณถูกระบบล็อกไว้ชั่วคราวเนื่องจากรันโปรแกรมระบบสมัครสมาชิก/ขุดอยู่!");
+            }
+
+            const price = CORE_SYSTEM.spotWallet[assetId].price;
+            const cashIncome = targetQty * price;
+
+            // ──► [ หักจำนวนสินทรัพย์ออกจากระบบ ] ──► [ ขายเสร็จ = เงินวิ่งเข้าไปอยู่ใน "ยอดเงินเทรด" ]
+            CORE_SYSTEM.spotWallet[assetId].amount -= targetQty;
+            CORE_SYSTEM.balanceTrading += cashIncome;
+
+            alert(`✅ ขายสินทรัพย์สปอตเรียบร้อย!\nหักออกจากพอร์ต: -${targetQty} ${assetId}\nโอนรายรับเงินทุนหมุนเวียนเข้าสู่ "ยอดเงินเทรด" แล้วจำนวน: +$${cashIncome.toLocaleString()}`);
+            document.getElementById('spot-sell-quantity').value = "";
+            calculateSpotConversion('SELL');
+            refreshGlobalBalances();
+        }
+
+        // =========================================================================
+        // 📈 ENGINE ผังงานระบบ "เทรด" (Trading Mode - ฟิวเจอร์ส)
+        // =========================================================================
+        function loadTradeChart() {
+            const sym = document.getElementById('trade-asset-selector').value;
+            new TradingView.widget({ "width": "100%", "height": 220, "symbol": sym, "interval": "15", "theme": "dark", "style": "1", "locale": "th", "container_id": "live-tradingview-widget", "hide_side_toolbar": true });
+        }
+        function onTradeAssetChange() { loadTradeChart(); }
+
         function executeOpenOrder(type) {
-            const selector = document.getElementById('trade-asset-selector');
-            const assetName = selector.options[selector.selectedIndex].getAttribute('data-name');
+            const sel = document.getElementById('trade-asset-selector');
+            const assetName = sel.options[sel.selectedIndex].getAttribute('data-name');
             const vol = parseFloat(document.getElementById('trade-volume').value);
             const sl = document.getElementById('trade-sl').value;
             const tp = document.getElementById('trade-tp').value;
-
-            // สูตรคำนวณหักยอดค้ำประกันชั่วคราว
-            const requiredMargin = vol * 1000; 
-
-            // ตรวจสอบ "ยอดเงินเทรด" ที่มี
-            if(SYSTEM_DATA.balanceTrading < requiredMargin || requiredMargin <= 0) {
-                // (ไม่พอ) ──► แจ้งเตือนเงินไม่พอ
-                return alert(`❌ แจ้งเตือน: ยอดเงินเทรดของคุณมีไม่เพียงพอสำหรับการเปิดสัญญานี้!\nต้องการค้ำประกันขั้นต่ำ: $${requiredMargin.toLocaleString()}`);
+            
+            const marginRequired = vol * 1000;
+            
+            // ──► { ตรวจสอบ "ยอดเงินเทรด"ที่มี }
+            if(CORE_SYSTEM.balanceTrading < marginRequired || marginRequired <= 0) {
+                return alert(`❌ แจ้งเตือนเงินไม่พอ! ยอดเงินเทรดหมุนเวียนหลักของคุณไม่เพียงพอสำหรับการสร้างสัญญาคำสั่งนี้`);
             }
 
-            // (พอ) ──► หักเงินจาก "ยอดเงินเทรด" ──► เปิดออร์เดอร์สำเร็จ
-            SYSTEM_DATA.balanceTrading -= requiredMargin;
+            // ──► หักเงินจาก "ยอดเงินเทรด" ──► เปิดออร์เดอร์สำเร็จ
+            CORE_SYSTEM.balanceTrading -= marginRequired;
             
-            const newOrder = {
-                id: "ORD-" + Math.floor(100000 + Math.random() * 900000),
-                asset: assetName,
-                type: type,
-                volume: vol,
-                margin: requiredMargin,
-                sl: sl ? sl : "ไม่ตั้ง",
-                tp: tp ? tp : "ไม่ตั้ง",
-                pnl: Math.floor(-50 + Math.random() * 150) // จำลองกำไรติดลบสเปรดตอนเปิดออร์เดอร์ครั้งแรก
+            const order = {
+                id: "FUTURE-ORD-" + Math.floor(100000 + Math.random() * 900000),
+                asset: assetName, type: type, volume: vol, margin: marginRequired,
+                sl: sl ? sl : "ไม่ตั้ง", tp: tp ? tp : "ไม่ตั้ง", pnl: Math.floor(-20 + Math.random() * 100)
             };
-
-            SYSTEM_DATA.activeOrders.push(newOrder);
-            alert(`✅ เปิดสถานะออร์เดอร์ ${type} สำเร็จ!\nสินทรัพย์: ${assetName}\nระบบหักเงินประกันออกชั่วคราว: $${requiredMargin}`);
-            
-            // ล้างข้อมูลช่องกรอก
-            document.getElementById('trade-sl').value = "";
-            document.getElementById('trade-tp').value = "";
-            
-            refreshDisplayBalances();
+            CORE_SYSTEM.activeOrders.push(order);
+            alert(`✅ สัญญาอนุพันธ์ ${type} เปิดสำเร็จแล้วตามแผนผังงาน!`);
+            refreshGlobalBalances();
         }
 
-        // =========================================================================
-        // 📜 ENGINE ประวัติการเทรด (Order Management Logic)
-        // =========================================================================
-        function renderOrdersLists() {
-            const activeContainer = document.getElementById('active-orders-list');
-            activeContainer.innerHTML = "";
-
-            if(SYSTEM_DATA.activeOrders.length === 0) {
-                activeContainer.innerHTML = `<div style="text-align:center; color:#70757d; font-size:12px; padding:15px;">ไม่มีออร์เดอร์ที่กำลังเปิดวิ่งอยู่ในปัจจุบัน</div>`;
+        function renderActiveOrdersHTML() {
+            const container = document.getElementById('active-orders-list');
+            container.innerHTML = "";
+            if(CORE_SYSTEM.activeOrders.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#70757d; font-size:12px; padding:15px;">ไม่มีออร์เดอร์เก็งกำไรเปิดวิ่งอยู่ขณะนี้</div>`;
             } else {
-                SYSTEM_DATA.activeOrders.forEach(order => {
+                CORE_SYSTEM.activeOrders.forEach(o => {
                     const div = document.createElement('div');
                     div.className = "order-card";
-                    div.onclick = () => openOrderModal(order.id);
-                    
-                    const pnlClass = order.pnl >= 0 ? "change-green" : "order-tag-sell";
-                    const pnlSign = order.pnl >= 0 ? "+" : "";
-
+                    div.style.cursor = "pointer";
+                    div.onclick = () => openOrderManageModal(o.id);
                     div.innerHTML = `
-                        <div class="order-header">
-                            <div><strong>${order.asset}</strong> <span class="${order.type === 'BUY' ? 'order-tag-buy' : 'order-tag-sell'}">(${order.type})</span></div>
-                            <div class="${pnlClass}" style="font-weight:bold;">${pnlSign}$${order.pnl.toFixed(2)}</div>
+                        <div style="display:flex; justify-content:between; font-size:14px; margin-bottom:5px;">
+                            <div style="flex:1;"><strong>${o.asset}</strong> <span class="${o.type==='BUY'?'change-green':'order-tag-sell'}">(${o.type})</span></div>
+                            <div class="${o.pnl>=0?'change-green':'order-tag-sell'}" style="font-weight:bold;">${o.pnl>=0?'+':''}$${o.pnl}</div>
                         </div>
-                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#b5b7bc;">
-                            <span>Vol: ${order.volume} | Margin: $${order.margin}</span>
-                            <span>SL: ${order.sl} | TP: ${order.tp}</span>
-                        </div>
+                        <div style="font-size:12px; color:#b5b7bc;">Vol: ${o.volume} | เงินค้ำ: $${o.margin} | SL: ${o.sl} | TP: ${o.tp}</div>
                     `;
-                    activeContainer.appendChild(div);
+                    container.appendChild(div);
                 });
             }
 
-            // แสดงรายการประวัติที่ปิดไปแล้วทั้งหมด
-            const closedContainer = document.getElementById('closed-orders-list');
-            closedContainer.innerHTML = "";
-            if(SYSTEM_DATA.closedOrders.length === 0) {
-                closedContainer.innerHTML = `<div style="text-align:center; color:#70757d; font-size:12px; padding:10px;">ไม่มีประวัติการปิดธุรกรรมย้อนหลัง</div>`;
+            const cContainer = document.getElementById('closed-orders-list');
+            cContainer.innerHTML = "";
+            if(CORE_SYSTEM.closedOrders.length === 0) {
+                cContainer.innerHTML = `<div style="text-align:center; color:#70757d; font-size:11px; padding:10px;">ไม่มีข้อมูลประวัติคำสั่งย้อนหลัง</div>`;
             } else {
-                SYSTEM_DATA.closedOrders.forEach(order => {
+                CORE_SYSTEM.closedOrders.forEach(o => {
                     const div = document.createElement('div');
-                    div.style.display = "flex";
-                    div.style.justifyContent = "space-between";
-                    div.style.fontSize = "13px";
-                    div.style.padding = "8px 5px";
-                    div.style.borderBottom = "1px solid #1c1f24";
-                    
-                    const pnlClass = order.finalPnl >= 0 ? "change-green" : "order-tag-sell";
-                    const pnlSign = order.finalPnl >= 0 ? "+" : "";
-
-                    div.innerHTML = `
-                        <div>⚙️ ${order.asset} <span style="font-size:11px; color:#70757d;">(${order.type} Vol:${order.volume})</span></div>
-                        <div class="${pnlClass}">${pnlSign}$${order.finalPnl.toFixed(2)}</div>
-                    `;
-                    closedContainer.appendChild(div);
+                    div.style.display = "flex"; div.style.justifyContent = "space-between"; div.style.fontSize="12px"; div.style.padding="6px 0"; div.style.borderBottom="1px solid #1c1f24";
+                    div.innerHTML = `<div>⚙️ ${o.asset} (${o.type})</div><div class="${o.finalPnl>=0?'change-green':'order-tag-sell'}">${o.finalPnl>=0?'+':''}$${o.finalPnl}</div>`;
+                    cContainer.appendChild(div);
                 });
             }
         }
 
-        function openOrderModal(orderId) {
-            const order = SYSTEM_DATA.activeOrders.find(o => o.id === orderId);
+        function openOrderManageModal(id) {
+            const order = CORE_SYSTEM.activeOrders.find(o => o.id === id);
             if(!order) return;
-
-            SYSTEM_DATA.selectedOrderId = orderId;
-            document.getElementById('modal-order-title').innerText = `⚙️ จัดการออร์เดอร์ [ID: ${order.id}]`;
+            CORE_SYSTEM.selectedOrderId = id;
+            document.getElementById('modal-order-title').innerText = `⚙️ หน้าต่างจัดการออร์เดอร์ [${order.id}]`;
             document.getElementById('modal-input-sl').value = order.sl === "ไม่ตั้ง" ? "" : order.sl;
             document.getElementById('modal-input-tp').value = order.tp === "ไม่ตั้ง" ? "" : order.tp;
-            
             document.getElementById('order-manage-modal').style.display = 'flex';
         }
 
-        function closeOrderModal() {
-            document.getElementById('order-manage-modal').style.display = 'none';
-        }
-
         function saveModalSettings() {
-            const order = SYSTEM_DATA.activeOrders.find(o => o.id === SYSTEM_DATA.selectedOrderId);
-            if(!order) return;
-
-            const sl = document.getElementById('modal-input-sl').value;
-            const tp = document.getElementById('modal-input-tp').value;
-            
-            order.sl = sl ? sl : "ไม่ตั้ง";
-            order.tp = tp ? tp : "ไม่ตั้ง";
-            
-            alert("💾 บันทึกและอัปเดตข้อมูล Stop Loss / Take Profit เรียบร้อย!");
-            closeOrderModal();
-            refreshDisplayBalances();
+            const order = CORE_SYSTEM.activeOrders.find(o => o.id === CORE_SYSTEM.selectedOrderId);
+            if(order) {
+                const sl = document.getElementById('modal-input-sl').value;
+                const tp = document.getElementById('modal-input-tp').value;
+                order.sl = sl ? sl : "ไม่ตั้ง"; order.tp = tp ? tp : "ไม่ตั้ง";
+                alert("💾 บันทึก/แก้ไขข้อมูลการตั้ง SL/TP สำเร็จ");
+            }
+            document.getElementById('order-manage-modal').style.display = 'none';
+            refreshGlobalBalances();
         }
 
         function promptCloseConfirmation() {
-            closeOrderModal();
-            const order = SYSTEM_DATA.activeOrders.find(o => o.id === SYSTEM_DATA.selectedOrderId);
+            document.getElementById('order-manage-modal').style.display = 'none';
+            const order = CORE_SYSTEM.activeOrders.find(o => o.id === CORE_SYSTEM.selectedOrderId);
             if(!order) return;
-            
-            document.getElementById('confirm-modal-pnl-text').innerText = `ออร์เดอร์นี้มีเงินประกันค้ำไว้ $${order.margin} และผลกำไรขณะปิดคือ $${order.pnl.toFixed(2)}`;
+            document.getElementById('confirm-modal-pnl-text').innerText = `คุณกำลังปิดสัญญา ${order.asset} เพื่อคำนวณกำไร/ขาดทุนสะสมจำนวน $${order.pnl.toFixed(2)} คืนเข้าสู่พอร์ตกระเป๋าเงินเทรด`;
             document.getElementById('order-confirm-modal').style.display = 'flex';
         }
 
         function executeFinalOrderClose() {
-            const index = SYSTEM_DATA.activeOrders.findIndex(o => o.id === SYSTEM_DATA.selectedOrderId);
-            if(index === -1) return;
-
-            const order = SYSTEM_DATA.activeOrders[index];
+            const idx = CORE_SYSTEM.activeOrders.findIndex(o => o.id === CORE_SYSTEM.selectedOrderId);
+            if(idx === -1) return;
+            const order = CORE_SYSTEM.activeOrders[idx];
             
-            // คำนวณกำไร/ขาดทุนคืนเข้ากระเป๋าเทรดหลัก: ทุนคืน + กำไร (หรือหักขาดทุน)
-            const settlementAmount = order.margin + order.pnl;
-            SYSTEM_DATA.balanceTrading += settlementAmount;
-
-            // บันทึกย้ายเข้าอารายประวัติการเทรดทั้งหมด
-            SYSTEM_DATA.closedOrders.push({
-                asset: order.asset,
-                type: order.type,
-                volume: order.volume,
-                finalPnl: order.pnl
-            });
-
-            // ลบออกจากออร์เดอร์ที่กำลังเปิดอยู่
-            SYSTEM_DATA.activeOrders.splice(index, 1);
+            // (คำนวณกำไร/ขาดทุนเข้ากระเป๋าเทรดหมุนเวียนหลัก)
+            CORE_SYSTEM.balanceTrading += (order.margin + order.pnl);
+            CORE_SYSTEM.closedOrders.push({ asset: order.asset, type: order.type, finalPnl: order.pnl });
+            CORE_SYSTEM.activeOrders.splice(idx, 1);
             
             document.getElementById('order-confirm-modal').style.display = 'none';
-            alert(`✨ ปิดสถานะเสร็จสิ้น!\nระบบคำนวณเงินคืนรวมกำไร/ขาดทุนสุทธิ: $${settlementAmount.toLocaleString()} กลับเข้าสู่ยอดเงินเทรดแล้ว`);
-            refreshDisplayBalances();
+            alert("✅ สัญญาได้รับการยืนยันและปิดสถานะเสร็จสิ้น!");
+            refreshGlobalBalances();
         }
 
         // =========================================================================
-        // 🔮 ภาพเคลื่อนไหว Orbit ละมุนตาด้วย Canvas 3D
+        // 👑 ENGINE ระบบสมัครสมาชิกและการล็อกสินทรัพย์ (Membership Level Up)
         // =========================================================================
-        function initCryptoAnimation() {
-            const canvas = document.getElementById('cryptoCanvas');
-            const ctx = canvas.getContext('2d');
-            const width = 320, height = 240;
-            canvas.width = width * 2; canvas.height = height * 2;
-            ctx.scale(2, 2);
-
-            const assets = [
-                { name: "BTC", color: "#f3ba2f", size: 11, angle: 0, speed: 0.007, radiusX: 110, radiusY: 35 },
-                { name: "ETH", color: "#627eea", size: 9, angle: 1.2, speed: 0.005, radiusX: 90, radiusY: 28 },
-                { name: "XAU", color: "#ffae00", size: 10, angle: 2.5, speed: 0.006, radiusX: 130, radiusY: 42 },
-                { name: "USDT", color: "#26a17b", size: 8, angle: 4.8, speed: 0.004, radiusX: 100, radiusY: 30 }
-            ];
-            let centerAngle = 0;
-
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-                const cx = width / 2, cy = height / 2 + 10;
-                let glowGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 80);
-                glowGrad.addColorStop(0, 'rgba(255, 138, 0, 0.1)'); glowGrad.addColorStop(1, 'rgba(11, 12, 14, 0)');
-                ctx.fillStyle = glowGrad; ctx.fillRect(0, 0, width, height);
-
-                centerAngle += 0.003;
-                ctx.save(); ctx.translate(cx, cy - 10); ctx.rotate(centerAngle);
-                ctx.strokeStyle = 'rgba(255, 138, 0, 0.2)'; ctx.lineWidth = 1.5;
-                ctx.beginPath(); ctx.arc(0, 0, 25, 0, Math.PI * 2); ctx.stroke();
-                ctx.fillStyle = '#ff8a00'; ctx.font = 'bold 22px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText('𝙁', 0, 0); ctx.restore();
-
-                assets.sort((a, b) => Math.sin(a.angle) - Math.sin(b.angle));
-                assets.forEach(asset => {
-                    asset.angle += asset.speed;
-                    const x = cx + Math.cos(asset.angle) * asset.radiusX;
-                    const y = cy + Math.sin(asset.angle) * asset.radiusY;
-                    const scale = 0.7 + (Math.sin(asset.angle) + 1) * 0.3;
-                    const currentSize = asset.size * scale;
-
-                    ctx.shadowBlur = 10; ctx.shadowColor = asset.color;
-                    ctx.fillStyle = 'rgba(23, 26, 31, 0.9)'; ctx.beginPath(); ctx.arc(x, y, currentSize, 0, Math.PI * 2); ctx.fill();
-                    ctx.strokeStyle = asset.color; ctx.lineWidth = 1.5 * scale; ctx.beginPath(); ctx.arc(x, y, currentSize, 0, Math.PI * 2); ctx.stroke();
-                    ctx.shadowBlur = 0; ctx.fillStyle = '#ffffff'; ctx.font = `bold ${9 * scale}px Geneva, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                    ctx.fillText(asset.name, x, y);
-                });
-                requestAnimationFrame(animate);
+        function syncMiningPageData() {
+            const spotValue = getSpotTotalValue();
+            let text = `Normal Level 0 (อัตราขุดรับ 1% ต่อรอบประจำวัน)`;
+            if(CORE_SYSTEM.membershipLevel === 1) text = `👑 Level 1 (รับปันผลผลตอบแทนขุด 5% ต่อรอบ)`;
+            if(CORE_SYSTEM.membershipLevel === 2) text = `👑 Level 2 (รับปันผลผลตอบแทนขุด 7% ต่อรอบ)`;
+            if(CORE_SYSTEM.membershipLevel === 3) text = `👑 Level 3 (รับปันผลผลตอบแทนขุด 10% ต่อรอบ)`;
+            if(CORE_SYSTEM.membershipLevel === 4) text = `👑 Level 4 (รับปันผลผลตอบแทนขุด 15% ต่อรอบ)`;
+            
+            document.getElementById('mining-status-lv-text').innerText = text;
+            document.getElementById('member-badge-top').innerText = `Member: LV ${CORE_SYSTEM.membershipLevel}`;
+            
+            let alertBox = document.getElementById('lock-status-alert');
+            if(CORE_SYSTEM.requiredAssetToUnlock > 0) {
+                alertBox.innerHTML = `⚠️ <strong>สถานะความปลอดภัย:</strong> ปัจจุบันสินทรัพย์ถูกสั่งล็อกห้ามถอนและห้ามขาย เนื่องจากอยู่ภายใต้เงื่อนไขเลเวลสมาชิก คุณต้องมีมูลค่าสินทรัพย์สปอตสะสมให้ถึง <strong>$${CORE_SYSTEM.requiredAssetToUnlock.toLocaleString()}</strong> เพื่อปลดล็อกสถานะนี้อัตโนมัติ (ปัจจุบันมี: $${spotValue.toLocaleString()})`;
+            } else {
+                alertBox.innerHTML = `✅ <strong>สถานะความปลอดภัย:</strong> สินทรัพย์สปอตทั้งหมดอยู่ในสถานะปกติ ปลดล็อกสมบูรณ์`;
             }
-            animate();
+
+            // รีเฟรชตัวเลือกเหรียญที่จะใช้รันบอตขุด
+            const select = document.getElementById('mining-asset-select');
+            select.innerHTML = "";
+            for(let key in CORE_SYSTEM.spotWallet) {
+                if(CORE_SYSTEM.spotWallet[key].amount > 0) {
+                    const opt = document.createElement('option'); opt.value = key; opt.innerText = `${CORE_SYSTEM.spotWallet[key].name} (${key})`;
+                    select.appendChild(opt);
+                }
+            }
+            onMiningAssetChange();
         }
-        window.addEventListener('DOMContentLoaded', initCryptoAnimation);
-        window.addEventListener('load', refreshDisplayBalances);
+
+        function executeUpgradeMembership() {
+            const targetLv = parseInt(document.getElementById('membership-level-select').value);
+            const spotValue = getSpotTotalValue();
+            
+            let condition = 0; let nextLockTarget = 0;
+            if(targetLv === 1) { condition = 1000; nextLockTarget = 5000; }
+            if(targetLv === 2) { condition = 5000; nextLockTarget = 50000; }
+            if(targetLv === 3) { condition = 50000; nextLockTarget = 750000; }
+            if(targetLv === 4) { condition = 750000; nextLockTarget = 10000000; }
+
+            // ──► { ตรวจสอบเงื่อนไข "ยอดเงินสินทรัพย์" ปัจจุบัน }
+            if(spotValue <= condition) {
+                return alert(`❌ ปฏิเสธสมัครสมาชิกเลเวล ${targetLv}!\nคุณสมบัติไม่ผ่านเนื่องจากเงื่อนไขยอดเงินสินทรัพย์สปอตสะสมปัจจุบันต้องมากกว่า $${condition.toLocaleString()} (ปัจจุบันคุณมีมูลค่ารวมเพียง: $${spotValue.toLocaleString()})`);
+            }
+
+            // ──► [ อนุมัติปรับระดับสมาชิกสำเร็จ ] และล็อกสินทรัพย์
+            CORE_SYSTEM.membershipLevel = targetLv;
+            CORE_SYSTEM.requiredAssetToUnlock = nextLockTarget;
+            
+            alert(`✅ ยินดีด้วย! อนุมัติปรับระดับสมาชิกเลเวล ${targetLv} สำเร็จแล้ว!\nระบบเริ่มกฎการล็อกรักษาความปลอดภัยสินทรัพย์จนกว่าสปอตจะสะสมครบมูลค่า $${nextLockTarget.toLocaleString()}`);
+            syncMiningPageData();
+        }
+
+        // =========================================================================
+        // ⛏️ ENGINE ลูปการทำงานระบบขุดสินทรัพย์ประจำวัน (24-Hour Mining Loop)
+        // =========================================================================
+        function onMiningAssetChange() {
+            const key = document.getElementById('mining-asset-select').value;
+            let percent = "1%";
+            if(CORE_SYSTEM.membershipLevel === 1) percent = "5%";
+            if(CORE_SYSTEM.membershipLevel === 2) percent = "7%";
+            if(CORE_SYSTEM.membershipLevel === 3) percent = "10%";
+            if(CORE_SYSTEM.membershipLevel === 4) percent = "15%";
+            
+            document.getElementById('mining-reward-percent').innerText = `${percent} ต่อรอบลูปวัน`;
+
+            if(!key || !CORE_SYSTEM.spotWallet[key]) {
+                document.getElementById('mining-max-hint').innerText = "สูงสุดที่มีในเหรียญนี้: $0.00";
+                return;
+            }
+            const currentCoinWorth = CORE_SYSTEM.spotWallet[key].amount * CORE_SYSTEM.spotWallet[key].price;
+            document.getElementById('mining-max-hint').innerText = `สูงสุดที่มีในสินทรัพย์นี้: $${currentCoinWorth.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+        }
+
+        function executeStartMiningLoop() {
+            if(CORE_SYSTEM.isMiningRunning) return alert("❌ บอตระบบขุดประจำวันกำลังทำงานอยู่ โปรดรอให้จบรอบวงจรก่อน");
+            
+            const key = document.getElementById('mining-asset-select').value;
+            if(!key) return alert("❌ ขออภัย คุณจำเป็นต้องเดินทางไปซื้อสะสมสินทรัพย์ในหน้าสปอตก่อนจึงจะขุดได้");
+            
+            const inputCash = parseFloat(document.getElementById('mining-input-amount').value);
+            const currentCoinWorth = CORE_SYSTEM.spotWallet[key].amount * CORE_SYSTEM.spotWallet[key].price;
+
+            if(isNaN(inputCash) || inputCash <= 0) return alert("❌ กรุณากรอกจำนวนเงินทุนค้ำประกันที่จะใช้เริ่มเดินระบบขุด");
+            // (ใส่ได้ไม่เกินจำนวนเงินที่แปลงจากสินทรัพย์ที่ซื้อเก็บไว้)
+            if(inputCash > currentCoinWorth) return alert("❌ ขีดจำกัดคำสั่ง! คุณกรอกมูลค่าค้ำประกันเกินมูลค่าของจำนวนสินทรัพย์ที่คุณถือครองสะสมอยู่จริง");
+
+            // เริ่มกระบวนการล็อกลูปประจำวัน
+            CORE_SYSTEM.isMiningRunning = true;
+            CORE_SYSTEM.spotWallet[key].lockedForMining = true;
+            document.getElementById('btn-start-mining').disabled = true;
+            document.getElementById('mining-progress-box').style.display = 'block';
+
+            let timeLeft = 10; // เพื่อความรวดเร็วในการทดสอบและสาธิตการคำนวณ ขอรันรอบลูปจำลองไว้ที่ 10 วินาทีแทน 24 ชั่วโมงจริงครับ
+            document.getElementById('mining-timer-text').innerText = `⏳ กำลังรันลูปขุด (24 ชม. จำลอง)... ${timeLeft} วินาที`;
+            document.getElementById('mining-progress-bar').style.style = "0%";
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                let progressPercent = ((10 - timeLeft) / 10) * 100;
+                document.getElementById('mining-progress-bar').style.width = `${progressPercent}%`;
+                document.getElementById('mining-timer-text').innerText = `⏳ กำลังรันลูปขุด (24 ชม. จำลอง)... ${timeLeft} วินาที`;
+
+                if(timeLeft <= 0) {
+                    clearInterval(interval);
+                    
+                    // { ครบเวลาแล้วคำนวณจ่ายปันผลรางวัล }
+                    let pctMultiplier = 0.01;
+                    if(CORE_SYSTEM.membershipLevel === 1) pctMultiplier = 0.05;
+                    if(CORE_SYSTEM.membershipLevel === 2) pctMultiplier = 0.07;
+                    if(CORE_SYSTEM.membershipLevel === 3) pctMultiplier = 0.10;
+                    if(CORE_SYSTEM.membershipLevel === 4) pctMultiplier = 0.15;
+
+                    const profitInCash = inputCash * pctMultiplier;
+                    const bonusAssetAmount = profitInCash / CORE_SYSTEM.spotWallet[key].price;
+
+                    // โอนบวกเพิ่มเข้าสู่สินทรัพย์ที่ BUY เก็บไว้
+                    CORE_SYSTEM.spotWallet[key].amount += bonusAssetAmount;
+                    
+                    // [ สิ้นสุดรอบ: ระบบรีเซ็ตเป็นสถานะเริ่มต้นใหม่ ]
+                    CORE_SYSTEM.spotWallet[key].lockedForMining = false;
+                    CORE_SYSTEM.isMiningRunning = false;
+                    
+                    document.getElementById('btn-start-mining').disabled = false;
+                    document.getElementById('mining-progress-box').style.display = 'none';
+                    document.getElementById('mining-input-amount').value = "";
+
+                    alert(`⛏️ สิ้นสุดรอบลูปการขุดประจำวันสำเร็จ!\nระบบคำนวณกำไรปันผลโอนคืนเข้าพอร์ตสะสมสปอตเรียบร้อย:\nได้รับโบนัสเพิ่ม: +${bonusAssetAmount.toFixed(5)} ${key} (มูลค่า $${profitInCash})`);
+                    
+                    refreshGlobalBalances();
+                    syncMiningPageData();
+                }
+            }, 1000);
+        }
+
+        // =========================================================================
+        // 🔮 อนิเมชันกราฟิก Canvas วงโคจรพรีเมียม
+        // =========================================================================
+        function initOrbitAnimation() {
+            const canvas = document.getElementById('cryptoCanvas'); if(!canvas) return;
+            const ctx = canvas.getContext('2d'); const width = 320, height = 200;
+            canvas.width = width * 2; canvas.height = height * 2; ctx.scale(2, 2);
+            const assets = [
+                { name: "BTC", color: "#f3ba2f", size: 10, angle: 0, speed: 0.006, radiusX: 100, radiusY: 30 },
+                { name: "ETH", color: "#627eea", size: 9, angle: 2, speed: 0.004, radiusX: 80, radiusY: 24 },
+                { name: "XAU", color: "#ffae00", size: 10, angle: 4, speed: 0.005, radiusX: 120, radiusY: 36 }
+            ];
+            function frame() {
+                ctx.clearRect(0, 0, width, height); const cx = width/2, cy = height/2;
+                let g = ctx.createRadialGradient(cx, cy, 10, cx, cy, 70); g.addColorStop(0, 'rgba(255,138,0,0.06)'); g.addColorStop(1, 'rgba(11,12,14,0)');
+                ctx.fillStyle = g; ctx.fillRect(0, 0, width, height);
+                ctx.fillStyle = '#ff8a00'; ctx.font = 'bold 20px Arial'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('𝙁', cx, cy);
+                assets.sort((a,b) => Math.sin(a.angle) - Math.sin(b.angle));
+                assets.forEach(a => {
+                    a.angle += a.speed; const x = cx + Math.cos(a.angle)*a.radiusX; const y = cy + Math.sin(a.angle)*a.radiusY;
+                    const s = 0.7 + (Math.sin(a.angle)+1)*0.3; ctx.fillStyle = '#171a1f'; ctx.strokeStyle = a.color; ctx.lineWidth = 1.5*s;
+                    ctx.beginPath(); ctx.arc(x, y, a.size*s, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                    ctx.fillStyle = '#ffffff'; ctx.font = `bold ${8*s}px Arial`; ctx.fillText(a.name, x, y);
+                });
+                requestAnimationFrame(frame);
+            } frame();
+        }
+        window.addEventListener('DOMContentLoaded', () => { initOrbitAnimation(); refreshGlobalBalances(); });
     </script>
 </body>
 </html>
