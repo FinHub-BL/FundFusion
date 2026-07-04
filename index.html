@@ -3,497 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FundFusion - Master System</title>
+    <title>FundFusion - Pro Trading Platform</title>
+    <!-- รวมสไตล์ลิ่งระดับพรีเมียม ดาร์กโหมดสไตล์โบรกเกอร์อินเตอร์ -->
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; color: #fff; padding: 20px; margin: 0; padding-bottom: 80px; }
-        .card { background: #202024; padding: 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .btn { background: #00b37e; color: white; border: none; padding: 12px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; box-sizing: border-box; }
-        .btn-danger { background: #f75a68; }
-        .btn-secondary { background: #29292e; color: #a8a8b3; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 5px; color: #a8a8b3; font-size: 14px; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; background: #121214; border: 1px solid #29292e; color: white; border-radius: 5px; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0b0e11; color: #eaecef; padding: 0; margin: 0; padding-bottom: 70px; overflow-x: hidden; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #181a20; padding: 15px 20px; border-bottom: 1px solid #2f3336; position: sticky; top: 0; z-index: 100; }
+        .header h1 { margin: 0; color: #f0b90b; font-size: 20px; font-weight: 600; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
+        .card { background: #181a20; padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #2b3139; }
         
-        /* การคุม Navigation และ การแสดงผลหน้าจอ */
+        /* ปุ่มสไตล์กระดานเทรดระดับสากล */
+        .btn { background: #02c076; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: 600; width: 100%; font-size: 15px; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn-danger { background: #f6465d; }
+        .btn-secondary { background: #2b3139; color: #eaecef; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 8px; color: #848e9c; font-size: 13px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; background: #2b3139; border: 1px solid #474f59; color: white; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .input-group input:focus { border-color: #f0b90b; outline: none; }
+        
+        /* สัดส่วนพอร์ตกระเป๋าเงิน */
+        .balance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+        .balance-item { background: #22262d; padding: 15px; border-radius: 6px; text-align: center; border: 1px solid #2b3139; }
+        .balance-item h4 { margin: 0 0 8px 0; font-size: 12px; color: #848e9c; font-weight: 400; }
+        .balance-item p { margin: 0; font-weight: bold; font-size: 16px; color: #eaecef; }
+
+        /* แถบเมนูทางเลือก (Navbar) ด้านล่าง */
+        .navbar { display: none; justify-content: space-around; background: #181a20; padding: 12px 0; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #2f3336; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); z-index: 1000; }
+        .nav-item { color: #848e9c; text-decoration: none; font-size: 12px; cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .nav-item.active { color: #f0b90b; }
+        .nav-item span { font-size: 18px; margin-bottom: 2px; }
+
+        /* หน้าจอแอป */
         .app-page { display: none; }
         .app-page.active { display: block; }
-        .navbar { display: none; justify-content: space-around; background: #202024; padding: 15px; position: fixed; bottom: 0; left: 0; right: 0; box-shadow: 0 -4px 10px rgba(0,0,0,0.3); }
-        .nav-item { color: #a8a8b3; text-decoration: none; font-weight: bold; font-size: 14px; cursor: pointer; }
-        .nav-item.active { color: #00b37e; }
 
-        /* เมนูสามขีดสไลด์ด้านข้าง (Hamburger Drawer) */
-        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #202024; box-shadow: 4px 0 10px rgba(0,0,0,0.5); transition: 0.3s; z-index: 999; padding: 20px; box-sizing: border-box; }
+        /* หน้าต่าง TradingView Widget */
+        .chart-container { height: 400px; width: 100%; border-radius: 6px; overflow: hidden; margin-bottom: 15px; background: #181a20; border: 1px solid #2b3139; }
+
+        /* เมนูด้านข้าง Sidebar Drawer */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #181a20; box-shadow: 4px 0 15px rgba(0,0,0,0.6); transition: 0.3s; z-index: 999; padding: 20px; box-sizing: border-box; border-right: 1px solid #2f3336; }
         .sidebar.open { left: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 998; }
         .sidebar-overlay.show { display: block; }
-        .menu-link { display: block; padding: 12px; color: #fff; text-decoration: none; border-bottom: 1px solid #29292e; cursor: pointer; }
-        
-        /* ตารางสัดส่วนพอร์ต */
-        .balance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .balance-item { background: #29292e; padding: 12px; border-radius: 8px; text-align: center; }
-        .balance-item h4 { margin: 0 0 5px 0; font-size: 11px; color: #a8a8b3; }
-        .balance-item p { margin: 0; font-weight: bold; font-size: 13px; }
+        .menu-link { display: block; padding: 14px 10px; color: #eaecef; text-decoration: none; border-bottom: 1px solid #2b3139; font-size: 14px; }
+        .menu-link:hover { background: #22262d; color: #f0b90b; }
     </style>
 </head>
 <body>
 
-    <!-- สวิตช์เปิด-ปิดเมนูสามขีดสไลด์ (Hamburger Menu) -->
+    <!-- แถบสไลด์ข้างเมนูสามขีด (Hamburger Menu Grid) -->
     <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeMenu()"></div>
     <div id="sidebar" class="sidebar">
-        <h3 style="color:#00b37e; margin-top:0;">⚙️ เมนูบริการเสริม</h3>
-        <div class="menu-link" onclick="alert('ระบบแก้ไขโปรไฟล์:\nกรุณาติดต่อแอดมินหลังบ้านเพื่อเปลี่ยนรูปและชื่อบัญชี')">👤 แก้ไขโปรไฟล์</div>
-        <div class="menu-link" onclick="alert('ระบบความปลอดภัย:\nฟังก์ชันเปลี่ยนรหัสผ่านใช้งานได้ผ่านอีเมลยืนยันตัวตน')">🔒 ข้อมูลและรหัสผ่าน</div>
-        <div class="menu-link" onclick="alert('ระบบภาษา:\nขณะนี้เปิดบริการเวอร์ชันภาษาไทย (TH) เป็นหลัก')">🌐 ภาษา (TH / EN)</div>
-        <div class="input-group" style="padding: 12px 0;">
-            <label>💲 ตั้งค่าสกุลเงินหลัก</label>
+        <h3 style="color:#f0b90b; margin-top:0; border-bottom: 1px solid #2f3336; padding-bottom: 15px;">⚙️ ศูนย์ควบคุมบัญชี</h3>
+        <div class="menu-link" onclick="alert('ระบบหลังบ้านจริง:\nกรุณารอเชื่อมต่อฐานข้อมูลเพื่อดึงเอกสารยืนยันตัวตน (KYC)')">👤 ยืนยันตัวตนผู้ใช้</div>
+        <div class="menu-link" onclick="alert('ความปลอดภัย:\nเปิดการตั้งค่า 2FA ด้วย Google Authenticator')">🔒 ความปลอดภัยบัญชี</div>
+        <div class="input-group" style="padding: 15px 10px 0 10px;">
+            <label>💲 สกุลเงินแสดงผลในระบบ</label>
             <select id="currency-select" onchange="changeCurrency()">
                 <option value="USD">USD ($)</option>
                 <option value="THB">THB (฿)</option>
             </select>
         </div>
-        <div class="menu-link" onclick="alert('💬 กำลังเชื่อมต่อฝ่ายบริการช่วยเหลือลูกค้าตลอด 24 ชั่วโมง...')">📞 ติดต่อฝ่ายบริการ</div>
-        <div class="menu-link" style="color:#f75a68; margin-top:30px; font-weight:bold;" onclick="logout()">Logout ออกจากระบบ</div>
+        <div class="menu-link" style="color:#f6465d; margin-top:40px; font-weight:600; border-bottom:none;" onclick="logout()">🚪 ออกจากระบบ (Logout)</div>
     </div>
 
-    <!-- ส่วนหัวแอปพลิเคชัน (จะแสดงเมื่อล็อกอินแล้ว) -->
-    <div id="app-header" style="display:none; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <button onclick="openMenu()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">☰</button>
-        <h2 style="margin:0; color:#00b37e; font-size:20px;">FundFusion</h2>
+    <!-- ส่วนหัวหน้าจอสำหรับแอปพลิเคชันหลัก -->
+    <div class="header" id="app-header" style="display:none;">
+        <button onclick="openMenu()" style="background:none; border:none; color:#848e9c; font-size:24px; cursor:pointer;">☰</button>
+        <h1>FundFusion <span style="font-size:12px; color:#848e9c; font-weight:normal;">PRO</span></h1>
         <div style="width:24px;"></div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 1. หน้าแรก (AUTH GATE - LOGIN / REGISTER) -->
-    <!-- ========================================== -->
-    <div id="page-auth" class="app-page active">
-        <!-- ฟอร์มเข้าสู่ระบบ (Login) -->
-        <div id="login-box" class="card">
-            <h2 style="text-align:center; color:#00b37e;">เข้าสู่ระบบ</h2>
-            <div class="input-group">
-                <label>Email หรือ เบอร์โทรศัพท์</label>
-                <input type="text" id="login-input" placeholder="example@email.com">
-            </div>
-            <div class="input-group">
-                <label>รหัสผ่าน</label>
-                <input type="password" id="login-pass" placeholder="••••••••">
-            </div>
-            <button class="btn" onclick="login()">เข้าสู่ระบบ</button>
-            <button class="btn btn-secondary" onclick="toggleAuthForm('register')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</button>
-        </div>
+    <div class="container">
 
-        <!-- ฟอร์มสมัครสมาชิก (Register) -->
-        <div id="register-box" class="card" style="display:none;">
-            <h2 style="text-align:center; color:#45f3ff;">สมัครสมาชิก</h2>
-            <div class="input-group">
-                <label>ชื่อบัญชีผู้ใช้งาน</label>
-                <input type="text" id="reg-name" placeholder="ชื่อ นามสกุล">
-            </div>
-            <div class="input-group">
-                <label>Email หรือ เบอร์โทรศัพท์</label>
-                <input type="text" id="reg-contact" placeholder="example@email.com">
-            </div>
-            <div class="input-group">
-                <label>รหัสผ่าน</label>
-                <input type="password" id="reg-pass" placeholder="••••••••">
-            </div>
-            <button class="btn" style="background:#45f3ff; color:#121214;" onclick="register()">สมัครสมาชิก (สุ่มไอดีระบบอัตโนมัติ)</button>
-            <button class="btn btn-secondary" onclick="toggleAuthForm('login')">กลับไปหน้าเข้าสู่ระบบ</button>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 2. หน้าหลัก (DASHBOARD) -->
-    <!-- ========================================== -->
-    <div id="page-dashboard" class="app-page">
-        <div class="card">
-            <h3>ยินดีต้อนรับ, <span id="user-name">กำลังโหลด...</span></h3>
-            <p>รหัสสมาชิกไอดี 8 หลักของคุณ: <span id="user-id" style="color:#00b37e; font-weight:bold;">********</span></p>
-            <p>ระดับสมาชิกปัจจุบัน: <span id="user-level" style="color:#fba94c; font-weight:bold;">Level 0</span></p>
-            <button class="btn" style="background:#fba94c; color:#121214;" onclick="upgradeLevel()">👑 ตรวจสอบและอัปเกรดระดับสิทธิ์สมาชิก</button>
-        </div>
-
-        <!-- ยอดเงินเริ่มต้นเป็น 0.00 ตามเงื่อนไขพิมพ์เขียว -->
-        <div class="card">
-            <h3>กระเป๋าเงินรวมระบบ FundFusion</h3>
-            <div class="balance-grid">
-                <div class="balance-item" style="border-bottom:3px solid #45f3ff;">
-                    <h4>ยอดเงินทั้งหมด</h4>
-                    <p id="bal-total">0.00</p>
+        <!-- ========================================== -->
+        <!-- 1. หน้าเข้าสู่ระบบและความปลอดภัย (AUTH MASTER) -->
+        <!-- ========================================== -->
+        <div id="page-auth" class="app-page active" style="max-width: 450px; margin: 60px auto;">
+            <div id="login-box" class="card">
+                <h2 style="text-align:center; margin-top:0; color:#f0b90b;">เข้าสู่ระบบสมาชิก</h2>
+                <div class="input-group">
+                    <label>อีเมลหรือหมายเลขโทรศัพท์</label>
+                    <input type="text" id="login-input" placeholder="กรอกบัญชีผู้ใช้">
                 </div>
-                <div class="balance-item" style="border-bottom:3px solid #00b37e;">
-                    <h4>พอร์ตลงทุนเทรด</h4>
-                    <p id="bal-trade">0.00</p>
+                <div class="input-group">
+                    <label>รหัสผ่าน</label>
+                    <input type="password" id="login-pass" placeholder="กรอกรหัสผ่าน">
                 </div>
-                <div class="balance-item" style="border-bottom:3px solid #fba94c;">
-                    <h4>พอร์ตสินทรัพย์ (Spot)</h4>
-                    <p id="bal-asset">0.00</p>
+                <button class="btn" style="background:#f0b90b; color:#121214;" onclick="login()">เข้าสู่ระบบ</button>
+                <button class="btn btn-secondary" style="margin-top:10px;" onclick="toggleAuth('register')">สร้างบัญชีผู้ใช้ใหม่</button>
+            </div>
+
+            <div id="register-box" class="card" style="display:none;">
+                <h2 style="text-align:center; margin-top:0; color:#02c076;">สมัครสมาชิกใหม่</h2>
+                <div class="input-group">
+                    <label>ชื่อ-นามสกุลจริง</label>
+                    <input type="text" id="reg-name" placeholder="ภาษาอังกฤษตามพาสปอร์ต">
+                </div>
+                <div class="input-group">
+                    <label>อีเมลติดต่อ</label>
+                    <input type="email" id="reg-email" placeholder="example@domain.com">
+                </div>
+                <div class="input-group">
+                    <label>ตั้งรหัสผ่านความปลอดภัยสูง</label>
+                    <input type="password" id="reg-pass" placeholder="ผสมตัวเลขและตัวอักษร">
+                </div>
+                <button class="btn" onclick="register()">ลงทะเบียนรับ ID ระบบ</button>
+                <button class="btn btn-secondary" style="margin-top:10px;" onclick="toggleAuth('login')">มีบัญชีแล้ว? เข้าสู่ระบบ</button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 2. หน้าหลักสถิติพอร์ต (DASHBOARD REAL) -->
+        <!-- ========================================== -->
+        <div id="page-dashboard" class="app-page">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h3 style="margin:0 0 5px 0;" id="user-name">Somchai Broker</h3>
+                        <span style="font-size:12px; color:#848e9c;">UID: <span id="user-id" style="color:#eaecef; font-weight:600;">--------</span></span>
+                    </div>
+                    <span id="user-level" style="background:#f0b90b; color:#121214; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:600;">VIP Lv.0</span>
+                </div>
+                <button class="btn btn-secondary" style="margin-top:15px; font-size:13px; padding:8px;" onclick="upgradeLevel()">⚡ ตรวจสอบเงื่อนไขพอร์ตเพื่อขยับขั้นระดับสิทธิ์</button>
+            </div>
+
+            <!-- ยอดเงินเริ่มต้นเคลียร์เป็น 0.00 รอเชื่อมการฝากจริงไร้สแตนอิน -->
+            <div class="card">
+                <h4 style="margin:0 0 10px 0; color:#848e9c; font-weight:normal;">มูลค่าสินทรัพย์รวมสุทธิ</h4>
+                <div class="balance-grid">
+                    <div class="balance-item" style="border-top:3px solid #f0b90b;">
+                        <h4>ยอดเงินทั้งหมด</h4>
+                        <p id="bal-total">0.00</p>
+                    </div>
+                    <div class="balance-item" style="border-top:3px solid #02c076;">
+                        <h4>กระเป๋าเทรดดิง</h4>
+                        <p id="bal-trade">0.00</p>
+                    </div>
+                    <div class="balance-item" style="border-top:3px solid #f6465d;">
+                        <h4>คลังสินค้า (Spot)</h4>
+                        <p id="bal-asset">0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top:0; font-size:16px;">สเตชันฝาก-ถอนเหรียญ (ERC20 Verified Gateway)</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button class="btn" style="background:#02c076;" onclick="depositFunds()">📥 ฝากเงินเข้าระบบ</button>
+                    <button class="btn btn-danger" onclick="withdrawFunds()">📤 ส่งคำสั่งถอนทุน</button>
                 </div>
             </div>
         </div>
 
-        <!-- ธุรกรรมฝาก-ถอน ERC20 -->
-        <div class="card">
-            <h3>ธุรกรรมเครือข่าย ERC20</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <button class="btn" onclick="depositFunds()">ฝากเงิน (Deposit)</button>
-                <button class="btn btn-danger" onclick="withdrawFunds()">ถอนเงิน (Withdraw)</button>
+        <!-- ========================================== -->
+        <!-- 3. โหมดเทรดอนุพันธ์ และ ฝังกราฟแท้จากตลาดโลก (TRADING & CHART) -->
+        <!-- ========================================== -->
+        <div id="page-trade" class="app-page">
+            <!-- ENGINE: การฝังตัวรันกราฟไลฟ์สดของ TradingView ของแท้ระดับสากล -->
+            <div class="chart-container" id="tradingview-widget-wrapper">
+                <div id="tradingview_market_chart" style="height:100%; width:100%;"></div>
+            </div>
+
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3 style="margin:0; font-size:16px;">ส่งสัญญาสั่งซื้อขายเก็งกำไร</h3>
+                    <select id="trade-ticker-select" onchange="switchTradingViewSymbol()" style="background:#2b3139; color:white; border:1px solid #474f59; padding:5px; border-radius:4px;">
+                        <option value="FX_IDC:XAUUSD">ทองคำ (XAU/USD)</option>
+                        <option value="BINANCE:BTCUSDT">Bitcoin (BTC/USDT)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>ระบุ Margin ทุนประกันค้ำสัญญา ($)</label>
+                    <input type="number" id="trade-amount" value="0" min="0">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button class="btn" onclick="openPosition('BUY')">🟢เปิดสัญญขาขึ้น BUY</button>
+                    <button class="btn btn-danger" onclick="openPosition('SELL')">🔴เปิดสัญญาขาลง SELL</button>
+                </div>
+            </div>
+            <div class="card">
+                <h4 style="margin:0 0 10px 0; font-size:14px; color:#848e9c;">บันทึกโพซิชันที่เปิดค้างไว้ในตารางดีล</h4>
+                <div id="order-status" style="font-size:13px; color:#848e9c; text-align:center; padding:10px 0;">ไม่มีตั๋วสัญญาค้างในกระดาน</div>
             </div>
         </div>
+
+        <!-- ========================================== -->
+        <!-- 4. หน้าคลังสินค้าสปอตคลังสะสม (SPOT HOLDER) -->
+        <!-- ========================================== -->
+        <div id="page-assets" class="app-page">
+            <div class="card">
+                <h3 style="margin-top:0; font-size:16px;">คลังจัดการซื้อจัดเก็บเหรียญเพื่อสะสมความมั่งคั่ง</h3>
+                <div class="input-group">
+                    <label>เลือกสินทรัพย์ที่จะเข้าช้อนซื้อ</label>
+                    <select id="spot-asset">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="GOLD">Gold (XAU)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>ระบุยอดเงินที่หักจัดซื้อ ($)</label>
+                    <input type="number" id="spot-val" value="0">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button class="btn" style="background:#f0b90b; color:#121214;" onclick="executeSpot('BUY')">จัดซื้อเข้าพอร์ต Spot</button>
+                    <button class="btn btn-danger" onclick="executeSpot('SELL')">เทขายแลกเปลี่ยนเป็นทุนเทรด</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 5. หน้าลูปเครื่องขุดความปลอดภัย (MINING SERVER) -->
+        <!-- ========================================== -->
+        <div id="page-mining" class="app-page">
+            <div class="card">
+                <h3 style="margin-top:0; font-size:16px;">สัญญาลูปฟังก์ชันขุดสินทรัพย์และแจกโบนัสระบบ</h3>
+                <p style="font-size:14px; color:#848e9c;">สิทธิ์ปันผลของคุณปัจจุบัน: <span id="mining-rate" style="color:#02c076; font-weight:bold;">1% ต่อวัน</span></p>
+                <div class="input-group">
+                    <label>กรอกจำนวนทุนที่จะสั่งล็อกเพื่อค้ำประกันลูปขุด</label>
+                    <input type="number" id="mining-amount" value="0">
+                </div>
+                <div id="mining-timer" style="background:#22262d; padding:12px; border-radius:4px; text-align:center; margin-bottom:15px; color:#f0b90b; font-size:14px;">สเตตัส: แท่นขุดสแตนด์บายรับคำสั่ง</div>
+                <button class="btn" id="btn-mining" onclick="startMiningEngine()">🔥 ยืนยันคำสั่งสตาร์ทลูปการขุด</button>
+            </div>
+        </div>
+
     </div>
 
-    <!-- ========================================== -->
-    <!-- 2.2 โหมดเทรดอนุพันธ์ (TRADING MODE) -->
-    <!-- ========================================== -->
-    <div id="page-trade" class="app-page">
-        <div class="card">
-            <h3>📈 หน้าเทรดเก็งกำไรความเสี่ยงสูง</h3>
-            <div class="input-group">
-                <label>เลือกรายการสินทรัพย์</label>
-                <select id="trade-coin">
-                    <option value="GOLD">ทองคำ (GOLD)</option>
-                    <option value="BTC">Bitcoin (BTC)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>จำนวนเงินทุนที่จะลง (หักจากยอดเงินเทรด)</label>
-                <input type="number" id="trade-amount" value="0">
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <button class="btn" onclick="placeOrder('BUY')">BUY</button>
-                <button class="btn btn-danger" onclick="placeOrder('SELL')">SELL</button>
-            </div>
-        </div>
-        <div class="card">
-            <h4>⏳ จัดการออร์เดอร์ที่กำลังวิ่งอยู่</h4>
-            <div id="order-status" style="font-size:14px; color:#a8a8b3;">ไม่มีออร์เดอร์ที่ค้างอยู่</div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 2.4 หน้าคลังสินทรัพย์ (SPOT HOLDER MODE) -->
-    <!-- ========================================== -->
-    <div id="page-assets" class="app-page">
-        <div class="card">
-            <h3>🪙 โหมดซื้อเหรียญ/ทองคำเก็บสะสม (Spot)</h3>
-            <div class="input-group">
-                <label>เลือกสินทรัพย์เพื่อเข้าหน้ากราฟ</label>
-                <select id="spot-coin">
-                    <option value="BTC">Bitcoin (BTC)</option>
-                    <option value="GOLD">ทองคำ (GOLD)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>ระบุจำนวนเงินสด ($)</label>
-                <input type="number" id="spot-val" value="0">
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button class="btn" style="background:#45f3ff; color:#121214;" onclick="spotTrade('BUY')">BUY (ซื้อสะสม)</button>
-                <button class="btn btn-danger" onclick="spotTrade('SELL')">SELL (ขายออกพอร์ตเทรด)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 3.2 ระบบบริการขุดสินทรัพย์ประจำวัน (MINING LOOP) -->
-    <!-- ========================================== -->
-    <div id="page-mining" class="app-page">
-        <div class="card">
-            <h3>⛏️ ลูปขุดสินทรัพย์ดิจิทัล 24 ชั่วโมง</h3>
-            <p>อัตราโบนัสรายวันของคุณ: <span id="mining-rate" style="color:#00b37e; font-weight:bold;">1%</span></p>
-            <div class="input-group">
-                <label>ระบุจำนวนเงินสดที่จะขุด (ห้ามเกินยอดสินทรัพย์สะสม)</label>
-                <input type="number" id="mining-amount" value="0">
-            </div>
-            <p id="mining-timer" style="color:#fba94c; font-size:14px;">สถานะ: พร้อมขุดสินทรัพย์</p>
-            <button class="btn" id="btn-mining-act" onclick="executeMiningLoop()">กดเริ่มขุดสินทรัพย์</button>
-        </div>
-    </div>
-
-    <!-- แถบเมนูนำทางหลักด้านล่าง (Bottom Navbar) -->
+    <!-- แถบเมนูนำทางหลักสไตล์แอปพลิเคชันการลงทุนชั้นนำ (Bottom Navigation) -->
     <div class="navbar" id="app-navbar">
-        <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard')">หน้าหลัก</div>
-        <div class="nav-item" id="nav-trade" onclick="navigate('trade')">เทรด</div>
-        <div class="nav-item" id="nav-assets" onclick="navigate('assets')">สินทรัพย์</div>
-        <div class="nav-item" id="nav-mining" onclick="navigate('mining')">บริการขุด</div>
+        <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard')"><span>🏠</span>หน้าหลัก</div>
+        <div class="nav-item" id="nav-trade" onclick="navigate('trade')"><span>📈</span>กระดานเทรด</div>
+        <div class="nav-item" id="nav-assets" onclick="navigate('assets')"><span>🪙</span>คลังสินค้า</div>
+        <div class="nav-item" id="nav-mining" onclick="navigate('mining')"><span>⛏️</span>ลูปขุดเงิน</div>
     </div>
 
-<script>
-    // สเตทสถาปัตยกรรมข้อมูลหลัก (ผูกมัดตามพิมพ์เขียวอย่างเป็นระบบ)
-    const STATE = {
-        isLoggedIn: false,
-        currency: "USD",
-        rateTHB: 36.50,
-        
-        // ข้อมูลบัญชีผู้ใช้งาน
-        accountName: "",
-        userId: "",
-        level: 0,
-        isLocked: false, 
-
-        // เริ่มต้นกระเป๋าเป็น 0.00 ทั้งหมดไร้เงินทุนผีหลอก
-        walletDeposit: 0.00,
-        walletTrading: 0.00,
-        walletAsset: 0.00,
-
-        activeOrder: null
-    };
-
-    // -------------------------------------------------------------------------
-    // ฟังก์ชันเมนูนำทางและการสไลด์เข้า-ออก (Hamburger & Navigation Control)
-    // -------------------------------------------------------------------------
-    function openMenu() {
-        document.getElementById('sidebar').classList.add('open');
-        document.getElementById('sidebar-overlay').classList.add('show');
-    }
-    function closeMenu() {
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('sidebar-overlay').classList.remove('show');
-    }
-    function toggleAuthForm(form) {
-        if(form === 'register') {
-            document.getElementById('login-box').style.display = 'none';
-            document.getElementById('register-box').style.display = 'block';
-        } else {
-            document.getElementById('login-box').style.display = 'block';
-            document.getElementById('register-box').style.display = 'none';
-        }
-    }
-    function navigate(page) {
-        document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(`page-${page}`).classList.add('active');
-        document.getElementById(`nav-${page}`).classList.add('active');
-        updateUI();
-    }
-
-    // -------------------------------------------------------------------------
-    // ผังงานตรรกะระบบเข้าสู่ระบบและการสมัครสมาชิก (Auth Gate Machine)
-    // -------------------------------------------------------------------------
-    function register() {
-        const name = document.getElementById('reg-name').value;
-        const contact = document.getElementById('reg-contact').value;
-        const pass = document.getElementById('reg-pass').value;
-
-        if(!name || !contact || !pass) {
-            alert("❌ กรุณากรอกข้อมูลให้ครบถ้วนทุกช่องคำสั่ง");
-            return;
-        }
-
-        // ระบบเจนไอดีอัตโนมัติ: สุ่มตัวเลข 8 หลัก (Unique User ID) ตามพิมพ์เขียวข้อ 1.2
-        STATE.userId = Math.floor(10000000 + Math.random() * 90000000).toString();
-        STATE.accountName = name;
-        
-        alert(`🎉 สมัครสมาชิกสำเร็จ!\nรหัสสมาชิกไอดี 8 หลักของคุณคือ: ${STATE.userId}\nระบบกำลังพากลับไปหน้าเข้าสู่ระบบอัตโนมัติ`);
-        toggleAuthForm('login');
-    }
-
-    function login() {
-        const input = document.getElementById('login-input').value;
-        const pass = document.getElementById('login-pass').value;
-
-        if(!input || !pass) {
-            alert("❌ กรุณากรอกบัญชีและรหัสผ่าน");
-            return;
-        }
-
-        // หากยังไม่ได้กดสุ่มไอดีจากการสมัครสมาชิก ให้สุ่มค่าเริ่มต้นให้
-        if(!STATE.userId) {
-            STATE.userId = "87410293";
-            STATE.accountName = "สมชาย ฟินฮับ";
-        }
-
-        STATE.isLoggedIn = true;
-        document.getElementById('page-auth').classList.remove('active');
-        document.getElementById('app-header').style.display = 'flex';
-        document.getElementById('app-navbar').style.display = 'flex';
-        
-        navigate('dashboard');
-    }
-
-    function logout() {
-        closeMenu();
-        STATE.isLoggedIn = false;
-        document.getElementById('app-header').style.display = 'none';
-        document.getElementById('app-navbar').style.display = 'none';
-        document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-auth').classList.add('active');
-        alert("🔒 ออกจากระบบและทำลายการเชื่อมต่อเซสชันเรียบร้อย");
-    }
-
-    // -------------------------------------------------------------------------
-    // กลไกการคำนวณและธุรกรรมบัญชี (Core Wallet Balance Calculation)
-    // -------------------------------------------------------------------------
-    function updateUI() {
-        // สูตรคำนวณ: ยอดเงินทั้งหมด = ยอดเงินเทรด + ยอดเงินสินทรัพย์ + เงินที่ฝากเข้ามาล่าสุด
-        let total = STATE.walletTrading + STATE.walletAsset + STATE.walletDeposit;
-        let trading = STATE.walletTrading;
-        let asset = STATE.walletAsset;
-
-        let sign = "$";
-        if(STATE.currency === 'THB') {
-            total *= STATE.rateTHB;
-            trading *= STATE.rateTHB;
-            asset *= STATE.rateTHB;
-            sign = "฿";
-        }
-
-        document.getElementById('bal-total').innerText = `${sign}${total.toFixed(2)}`;
-        document.getElementById('bal-trade').innerText = `${sign}${trading.toFixed(2)}`;
-        document.getElementById('bal-asset').innerText = `${sign}${asset.toFixed(2)}`;
-        
-        document.getElementById('user-name').innerText = STATE.accountName;
-        document.getElementById('user-id').innerText = STATE.userId;
-        document.getElementById('user-level').innerText = `Level ${STATE.level}`;
-    }
-
-    function changeCurrency() {
-        STATE.currency = document.getElementById('currency-select').value;
-        updateUI();
-    }
-
-    function depositFunds() {
-        const amount = parseFloat(prompt("📥 จำลองการฝากเงินผ่านเครือข่าย ERC20\nกรุณาระบุจำนวนเงินที่โอนสำเร็จ ($):", "1000"));
-        if(isNaN(amount) || amount <= 0) return;
-        
-        // เงินสดวิ่งเข้ากระเป๋าหลัก ยอดไปรวมและแสดงผลที่ "ยอดเงินทั้งหมด"
-        STATE.walletDeposit += amount;
-        updateUI();
-        alert(`✅ การโอนเหรียญสำเร็จ! ระบบเติมเงินจำนวน $${amount} เข้าสู่พอร์ตหลักสำเร็จ`);
-    }
-
-    function withdrawFunds() {
-        // ตรวจสอบวงเงินที่มีสิทธิ์ถอนได้ (ถอนได้เสรีเฉพาะในพอร์ตเทรดตามพิมพ์เขียว)
-        if(STATE.walletTrading <= 0) {
-            alert("❌ แจ้งเตือนถอนไม่ได้: วงเงินคงเหลือในพอร์ตลงทุนเทรดเสรีของคุณเป็น 0.00");
-            return;
-        }
-        const val = STATE.walletTrading;
-        STATE.walletTrading = 0;
-        updateUI();
-        alert(`📤 ถอนเงินสำเร็จ! ตัดยอดเงินจำนวน $${val} ออกจากแอปพลิเคชันเพื่อโอนไปยังกระเป๋าปลายทางแล้ว`);
-    }
-
-    // -------------------------------------------------------------------------
-    // ระบบเทรด และ ซื้อคลังสินทรัพย์สะสม (Trade & Spot Engine)
-    // -------------------------------------------------------------------------
-    function placeOrder(type) {
-        const amt = parseFloat(document.getElementById('trade-amount').value);
-        if(STATE.walletTrading < amt || amt <= 0) {
-            alert("❌ แจ้งเตือนเงินไม่พอ! ยอดเงินคงเหลือในกระเป๋าลงทุนเทรดของคุณมีไม่เพียงพอกับสัดส่วนมาร์จิ้นนี้");
-            return;
-        }
-        STATE.walletTrading -= amt;
-        STATE.activeOrder = { type: type, amount: amt };
-        document.getElementById('order-status').innerHTML = `🟢 สัญญา ${type} กำลังรันค้างอยู่ ($${amt}) | <button onclick="closeOrder()" style="color:#f75a68; background:none; border:none; cursor:pointer; font-weight:bold;">[กดปิดออร์เดอร์เพื่อล็อกกำไร]</button>`;
-        updateUI();
-    }
-
-    function closeOrder() {
-        if(!STATE.activeOrder) return;
-        const profit = STATE.activeOrder.amount * 1.1; // คืนทุนบวกกำไรจำลอง 10%
-        STATE.walletTrading += profit;
-        STATE.activeOrder = null;
-        document.getElementById('order-status').innerText = "ไม่มีออร์เดอร์ที่ค้างอยู่";
-        updateUI();
-        alert("✨ ยืนยันการปิดออร์เดอร์! นำส่งกำไรและทุนคืนกลับเข้าสู่ 'ยอดเงินเทรด' สำเร็จ");
-    }
-
-    function spotTrade(action) {
-        const val = parseFloat(document.getElementById('spot-val').value);
-        if(action === 'BUY') {
-            let totalAvailable = STATE.walletTrading + STATE.walletAsset + STATE.walletDeposit;
-            if(totalAvailable < val || val <= 0) {
-                alert("❌ แจ้งเตือนเงินไม่พอจ่ายกระเป๋าหลัก!");
-                return;
-            }
-            STATE.walletDeposit -= val;
-            STATE.walletAsset += val;
-            alert("🛒 ดึงยอดเงินจากกระเป๋าหลักเข้ามาผูกเก็บสะสมในคลังสินทรัพย์ Spot เรียบร้อย");
-        } else {
-            // ตรวจสอบสถานะการล็อกเหรียญจากระบบขุดตามผังงาน 2.4
-            if(STATE.isLocked) {
-                alert("🔒 แจ้งเตือนห้ามขาย! สินทรัพย์ชิ้นนี้ติดสัญญาล็อกความปลอดภัยเพื่อรับสิทธิ์ VIP ประจำวัน");
-                return;
-            }
-            if(STATE.walletAsset < val || val <= 0) {
-                alert("❌ จำนวนสินทรัพย์ในคลังมีไม่เพียงพอต่อการส่งคำสั่งขาย");
-                return;
-            }
-            STATE.walletAsset -= val;
-            STATE.walletTrading += val; // ขายเสร็จเงินวิ่งเข้ายอดเงินเทรดตามพิมพ์เขียว
-            alert("💰 ขายสินทรัพย์สำเร็จ! ยอดเงินวิ่งย้ายสเตทเม้นท์ไปสแตนด์บายที่ 'ยอดเงินเทรด' เรียบร้อย");
-        }
-        updateUI();
-    }
-
-    // -------------------------------------------------------------------------
-    // ตรรกะคุมระดับเวลล์และลูปขุด 24 ชั่วโมง (Membership Up & Mining Loop)
-    // -------------------------------------------------------------------------
-    function upgradeLevel() {
-        const asset = STATE.walletAsset;
-        let newLevel = 0;
-        if(asset >= 750000) newLevel = 4;
-        else if(asset >= 50000) newLevel = 3;
-        else if(asset >= 5000) newLevel = 2;
-        else if(asset >= 1000) newLevel = 1;
-
-        if(newLevel > STATE.level) {
-            STATE.level = newLevel;
-            STATE.isLocked = true; // สั่งล็อกยอดสินทรัพย์ทันทีห้ามดึงออกไปขายตามผังงานข้อ 3.1
+    <!-- โหลดสคริปต์แกนกลางของ TradingView เพื่อเชื่อมโยงฐานข้อมูลกราฟสากล -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // โครงสร้างเมโมรีโมเดลหน้าบ้าน (โครงสร้างเตรียมต่อยอดเชื่อมฐานข้อมูล API แพลตฟอร์มจริง)
+        const MASTER_STATE = {
+            isLoggedIn: false,
+            currency: "USD",
+            thbRate: 36.50,
             
-            let percent = "1%";
-            if(newLevel === 1) percent = "5%";
-            if(newLevel === 2) percent = "7%";
-            if(newLevel === 3) percent = "10%";
-            if(newLevel === 4) percent = "15%";
+            accountName: "",
+            uid: "",
+            vipLevel: 0,
+            isAssetLocked: false,
 
-            document.getElementById('mining-rate').innerText = percent;
-            alert(`👑 อนุมัติปรับระดับระดับสมาชิกสำเร็จเป็น Level ${newLevel}! พอร์ตสินทรัพย์ของคุณเปิดระบบล็อกสินทรัพย์เพื่อค้ำประกันวงเงินขุดเรียบร้อย`);
-        } else {
-            alert("❌ ปฏิเสธการสมัครสมัครเลเวล: มูลค่าเงินทุนในพอร์ตสินทรัพย์ (Spot) ของคุณต่ำกว่าเกณฑ์ขั้นต่ำ");
-        }
-        updateUI();
-    }
+            // เงินทุนเริ่มต้นเป็น 0.00 ตามเกณฑ์โบรกเกอร์จริงทุกประการ
+            balanceDeposit: 0.00,
+            balanceTrading: 0.00,
+            balanceAsset: 0.00,
 
-    function executeMiningLoop() {
-        const amt = parseFloat(document.getElementById('mining-amount').value);
-        if(STATE.walletAsset < amt || amt <= 0) {
-            alert("❌ ไม่สามารถดำเนินการขุดได้: จำนวนเงินที่ใส่เกินพอร์ตสินทรัพย์ที่มีอยู่");
-            return;
-        }
+            activeOrder: null,
+            tvWidget: null
+        };
 
-        let rate = 0.01;
-        if(STATE.level === 1) rate = 0.05;
-        if(STATE.level === 2) rate = 0.07;
-        if(STATE.level === 3) rate = 0.10;
-        if(STATE.level === 4) rate = 0.15;
-
-        const btn = document.getElementById('btn-mining-act');
-        const timer = document.getElementById('mining-timer');
-        
-        btn.disabled = true;
-        btn.style.background = "#7c7c8a";
-        
-        let counter = 10; // ย่อสเกลจาก 24 ชั่วโมงเหลือ 10 วินาทีเพื่อความรวดเร็วในการทดสอบระบบบนมือถือ
-        const loop = setInterval(() => {
-            counter--;
-            timer.innerText = `⏳ ตัวนับถอยหลังลูปขุดรอบวันทำงาน: เหลือเวลาอีก ${counter} วินาที...`;
-            
-            if(counter <= 0) {
-                clearInterval(loop);
-                const bonusReward = amt * rate;
-                STATE.walletAsset += bonusReward; // ระบบโอนบวกเพิ่มเข้าสู่สินทรัพย์ตามผังงาน 3.2
-                
-                // คืนสถานะเริ่มต้น
-                timer.innerText = "สถานะ: สิ้นสุดรอบการขุดประจำวัน ปล่อยสิทธิ์เรียบร้อย";
-                btn.disabled = false;
-                btn.style.background = "#00b37e";
-                
-                updateUI();
-                alert(`⛏️ ขุดสำเร็จประจำรอบ! ได้รับปันผลรับเงินโบนัสจำนวน $${bonusReward.toFixed(2)} โอนเข้าคลังเรียบร้อย`);
+        // ฟังก์ชันควบคุมดีไซน์เปิดปิดเมนูและนำทาง
+        function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('show'); }
+        function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); }
+        function toggleAuth(type) {
+            if(type === 'register') {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('register-box').style.display = 'block';
+            } else {
+                document.getElementById('login-box').style.display = 'block';
+                document.getElementById('register-box').style.display = 'none';
             }
-        }, 1000);
-    }
-</script>
+        }
+
+        function navigate(pageId) {
+            document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.getElementById(`nav-${pageId}`).classList.add('active');
+            
+            // เรียกฟังก์ชันฝังกราฟเมื่อกดเข้าหน้าเทรดครั้งแรกเพื่อป้องกันความหน่วง
+            if(pageId === 'trade' && !MASTER_STATE.tvWidget) {
+                initTradingViewWidget("FX_IDC:XAUUSD");
+            }
+            renderStats();
+        }
+
+        // ฟังก์ชันฝังกราฟเทคนิคอลแท้ของ TradingView
+        function initTradingViewWidget(symbolName) {
+            MASTER_STATE.tvWidget = new TradingView.widget({
+                "width": "100%",
+                "height": 400,
+                "symbol": symbolName,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "th",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_market_chart"
+            });
+        }
+
+        function switchTradingViewSymbol() {
+            const sym = document.getElementById('trade-ticker-select').value;
+            initTradingViewWidget(sym);
+        }
+
+        // -------------------------------------------------------------------------
+        // ระบบจำลองกระบวนการทำงานของฟังก์ชันออเทนทิเคชัน (Auth System Interface)
+        // -------------------------------------------------------------------------
+        function register() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+
+            if(!name || !email || !pass) { return alert("⚠️ ปฏิเสธคำสั่ง: โปรดกรอกข้อมูลให้ครบถ้วนในช่องลงทะเบียน"); }
+            
+            // เจนรหัสสมาชิก 8 หลักสุ่มตามพิมพ์เขียวอย่างเที่ยงตรง
+            MASTER_STATE.uid = Math.floor(10000000 + Math.random() * 90000000).toString();
+            MASTER_STATE.accountName = name;
+            
+            alert(`📝 ลงทะเบียนข้อมูลสำเร็จ!\nไอดีลูกค้า (UID) ของคุณคือ: ${MASTER_STATE.uid}\nระบบกำลังส่งคุณกลับหน้าล็อกอิน`);
+            toggleAuth('login');
+        }
+
+        function login() {
+            if(!MASTER_STATE.uid) {
+                MASTER_STATE.uid = "29481045";
+                MASTER_STATE.accountName = "Somchai FinTech";
+            }
+            MASTER_STATE.isLoggedIn = true;
+            document.getElementById('page-auth').classList.remove('active');
+            document.getElementById('app-header').style.display = 'flex';
+            document.getElementById('app-navbar').style.display = 'flex';
+            navigate('dashboard');
+        }
+
+        function logout() {
+            closeMenu();
+            MASTER_STATE.isLoggedIn = false;
+            document.getElementById('app-header').style.display = 'none';
+            document.getElementById('app-navbar').style.display = 'none';
+            document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-auth').classList.add('active');
+        }
+
+        // -------------------------------------------------------------------------
+        // ตรรกะกระเป๋าเงินและสูตรทางการเงินทั้งหมด (Wallet Math Logic)
+        // -------------------------------------------------------------------------
+        function renderStats() {
+            // สูตรประมวลเงินรวม: ยอดเงินทั้งหมด = กระเป๋าเทรด + กระเป๋าสินทรัพย์ + ยอดเงินฝากคงค้างหลัก
+            let grandTotal = MASTER_STATE.balanceTrading + MASTER_STATE.balanceAsset + MASTER_STATE.balanceDeposit;
+            let tradingVal = MASTER_STATE.balanceTrading;
+            let assetVal = MASTER_STATE.balanceAsset;
+
+            let currencySign = "$";
+            if(MASTER_STATE.currency === 'THB') {
+                grandTotal *= MASTER_STATE.thbRate;
+                tradingVal *= MASTER_STATE.thbRate;
+                assetVal *= MASTER_STATE.thbRate;
+                currencySign = "฿";
+            }
+
+            document.getElementById('bal-total').innerText = `${currencySign}${grandTotal.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('bal-trade').innerText = `${currencySign}${tradingVal.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('bal-asset').innerText = `${currencySign}${assetVal.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            
+            document.getElementById('user-name').innerText = MASTER_STATE.accountName;
+            document.getElementById('user-id').innerText = MASTER_STATE.uid;
+            document.getElementById('user-level').innerText = `VIP Lv.${MASTER_STATE.vipLevel}`;
+        }
+
+        function changeCurrency() {
+            MASTER_STATE.currency = document.getElementById('currency-select').value;
+            renderStats();
+        }
+
+        function depositFunds() {
+            const dep = parseFloat(prompt("💳 เกรตเวย์รับฝากเงินจำลอง (ERC20 Contract Network)\nกรุณากรอกระบุจำนวนเหรียญเงินดอลลาร์คริปโทฯ ($) ที่โอนเข้ามาจริง:", "5000"));
+            if(isNaN(dep) || dep <= 0) return;
+            MASTER_STATE.balanceDeposit += dep;
+            renderStats();
+            alert(`📥 ตรวจพบยอดเงินโอนเข้าบัญชีเรียบร้อย! เครดิตเงินทุนจำนวน $${dep} ถูกบันทึกเข้าพอร์ตกลางแล้ว`);
+        }
+
+        function withdrawFunds() {
+            if(MASTER_STATE.balanceTrading <= 0) {
+                return alert("❌ ปฏิเสธธุรกรรม: ยอดถอนเงินสดทำได้เฉพาะในสัดส่วนพอร์ตกระเป๋าเทรดดิ้งที่ปลอดความเสี่ยงและมีมูลค่ามากกว่าศูนย์เท่านั้น");
+            }
+            const out = MASTER_STATE.balanceTrading;
+            MASTER_STATE.balanceTrading = 0;
+            renderStats();
+            alert(`📤 อนุมัติการถอนทุนสำเร็จ! ระบบตัดจ่ายยอดเงินสดจำนวน $${out} ออกสู่กระเป๋าบล็อกเชนปลายทางแล้ว`);
+        }
+
+        // -------------------------------------------------------------------------
+        // โหมดอนุพันธ์ & การจัดการซื้อสินทรัพย์ (Trading Mechanics)
+        // -------------------------------------------------------------------------
+        function openPosition(type) {
+            const cost = parseFloat(document.getElementById('trade-amount').value);
+            if(MASTER_STATE.balanceTrading < cost || cost <= 0) {
+                return alert("❌ ไม่สามารถเปิดสัญญาได้: ยอดเงินในกระเป๋าเทรดดิงของคุณมีสัดส่วนค้ำประกันไม่เพียงพอ");
+            }
+            MASTER_STATE.balanceTrading -= cost;
+            MASTER_STATE.activeOrder = { type: type, cost: cost };
+            document.getElementById('order-status').innerHTML = `
+                <div style="background:#22262d; padding:10px; border-radius:4px; text-align:left; border:1px solid #474f59;">
+                    <strong>🎯 สัญญา ${type} วิ่งอยู่นิ่งเป็นตั๋วจริง ($${cost})</strong><br>
+                    <button class="btn btn-danger" style="padding:4px 8px; font-size:12px; margin-top:8px; width:auto;" onclick="takeProfitClose()">❌ กดปุ่มปิดสัญญานี้เพื่อรับกำไร</button>
+                </div>
+            `;
+            renderStats();
+        }
+
+        function takeProfitClose() {
+            if(!MASTER_STATE.activeOrder) return;
+            // คำนวณจำลองสเกลกำไรผันผวน 15% คืนพอร์ตเทรด
+            const finalCash = MASTER_STATE.activeOrder.cost * 1.15;
+            MASTER_STATE.balanceTrading += finalCash;
+            MASTER_STATE.activeOrder = null;
+            document.getElementById('order-status').innerText = "ไม่มีตั๋วสัญญาค้างในกระดาน";
+            renderStats();
+            alert("✨ ปิดสัญญาล็อกบัญชีสำเร็จ! ระบบโอนเงินทุนบวกโบนัสปันผลกลับคืนเข้าพอร์ตกระเป๋าเทรดเรียบร้อย");
+        }
+
+        function executeSpot(action) {
+            const cashVal = parseFloat(document.getElementById('spot-val').value);
+            if(action === 'BUY') {
+                let totalCapital = MASTER_STATE.balanceTrading + MASTER_STATE.balanceAsset + MASTER_STATE.balanceDeposit;
+                if(totalCapital < cashVal || cashVal <= 0) { return alert("❌ ยอดกระเป๋าหลักโอนจ่ายมีไม่พอช้อนซื้อ"); }
+                MASTER_STATE.balanceDeposit -= cashVal;
+                MASTER_STATE.balanceAsset += cashVal;
+                alert("🛒 สั่งจัดซื้อสินทรัพย์เข้าพอร์ตคลัง Spot สำเร็จเสร็จสิ้น");
+            } else {
+                if(MASTER_STATE.isAssetLocked) { return alert("🔒 ล็อกคำสั่ง: สินทรัพย์ติดสัญญาห้ามทำธุรกรรมเนื่องจากผูกเข้าลูปบริการระบบขุด"); }
+                if(MASTER_STATE.balanceAsset < cashVal || cashVal <= 0) { return alert("❌ ยอดเงินในคลังสปอตของคุณมีไม่พอจ่ายคำสั่งนี้"); }
+                MASTER_STATE.balanceAsset -= cashVal;
+                MASTER_STATE.balanceTrading += cashVal; // ขายสปอตแล้ววิ่งเข้าเงินทุนเทรดเพื่อหมุนเวียนสัญญาสากล
+                alert("💰 ขายคืนสินทรัพย์เสร็จสิ้น! วงเงินสดไหลกลับเข้าไปแสตนด์บายที่กระเป๋าพอร์ตเทรดเรียบร้อย");
+            }
+            renderStats();
+        }
+
+        // -------------------------------------------------------------------------
+        // ลูปขุด และการพิจารณาระดับสมาชิก (VIP Level & Mining Loop Engine)
+        // -------------------------------------------------------------------------
+        function upgradeLevel() {
+            const vault = MASTER_STATE.balanceAsset;
+            let currentVip = 0;
+            if(vault >= 750000) currentVip = 4;
+            else if(vault >= 50000) currentVip = 3;
+            else if(vault >= 5000) currentVip = 2;
+            else if(vault >= 1000) currentVip = 1;
+
+            if(currentVip > MASTER_STATE.vipLevel) {
+                MASTER_STATE.vipLevel = currentVip;
+                MASTER_STATE.isAssetLocked = true; // ล็อกทันทีเพื่อเสถียรภาพระบบความปลอดภัยระดับสากล
+                
+                let rateLabel = "1%";
+                if(currentVip === 1) rateLabel = "5%";
+                if(currentVip === 2) rateLabel = "7%";
+                if(currentVip === 3) rateLabel = "10%";
+                if(currentVip === 4) rateLabel = "15%";
+
+                document.getElementById('mining-rate').innerText = `${rateLabel} ต่อวัน`;
+                alert(`👑 ยินดีด้วย! บัญชีของคุณได้รับการเลื่อนขั้นเป็น VIP เลเวล ${currentVip} เรียบร้อยแล้ว ระบบเปิดฟังก์ชันล็อกสินทรัพย์ค้ำประกันคลังเรียบร้อย`);
+            } else {
+                alert("❌ เงื่อนไขไม่ผ่าน: มูลค่าสะสมสุทธิในพอร์ตคลังสินค้า (Spot Wallet) ของคุณยังไม่ถึงเกณฑ์สเปกสัญญาระดับถัดไป");
+            }
+            renderStats();
+        }
+
+        function startMiningEngine() {
+            const stakeAmt = parseFloat(document.getElementById('mining-amount').value);
+            if(MASTER_STATE.balanceAsset < stakeAmt || stakeAmt <= 0) {
+                return alert("❌ ไม่สามารถเริ่มสั่งขุดได้: จำนวนเงินทุนเกินมูลค่าพอร์ตสปอตคลังสินค้าที่คุณถือครอง");
+            }
+
+            let mult = 0.01;
+            if(MASTER_STATE.vipLevel === 1) mult = 0.05;
+            if(MASTER_STATE.vipLevel === 2) mult = 0.07;
+            if(MASTER_STATE.vipLevel === 3) mult = 0.10;
+            if(MASTER_STATE.vipLevel === 4) mult = 0.15;
+
+            const targetBtn = document.getElementById('btn-mining');
+            const targetTimer = document.getElementById('mining-timer');
+            
+            targetBtn.disabled = true;
+            targetBtn.style.background = "#474f59";
+            
+            let timeSec = 10; // บีบอัดสเกลลูปเวลาเพื่อใช้ตรวจสอบและตรวจงานผ่านมือถือจริงทันที
+            const engineLoop = setInterval(() => {
+                timeSec--;
+                targetTimer.innerText = `⏳ เครื่องขุดกำลังรันโบนัสเซิร์ฟเวอร์สากล: อีก ${timeSec} วินาทีสรุปรายงานผล...`;
+                
+                if(timeSec <= 0) {
+                    clearInterval(engineLoop);
+                    const rewardYield = stakeAmt * mult;
+                    MASTER_STATE.balanceAsset += rewardYield; // เงินโบนัสจ่ายปันผลเข้าสู่ยอดกระเป๋าสินทรัพย์จริงสอดคล้องพิมพ์เขียว
+                    
+                    targetTimer.innerText = "สเตตัส: สิ้นสุดรอบการขุดประจำวัน ปล่อยสิทธิ์เรียบร้อย";
+                    targetBtn.disabled = false;
+                    targetBtn.style.background = "#02c076";
+                    
+                    renderStats();
+                    alert(`⛏️ ลูปขุดทำงานเสร็จสิ้นสมบูรณ์! ได้รับปันผลโบนัสสัญญารวม $${rewardYield.toFixed(2)} โอนเข้าคลังหลักเรียบร้อย`);
+                }
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
