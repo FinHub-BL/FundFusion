@@ -3,532 +3,836 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FundFusion - Grand Blueprint Edition</title>
+    <title>FundFusion - The Ultimate Blueprint System</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    
     <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts: Orbitron for Numbers, Prompt for Thai -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #060913; color: #F3F4F6; }
-        .premium-gradient { background: linear-gradient(135deg, #0f1424 0%, #060913 100%); }
+        :root {
+            --theme-color: #3b82f6; /* Default Blue */
+            --theme-glow: rgba(59, 130, 246, 0.5);
+            --bg-main: #03050a;
+            --bg-card: #0a0e17;
+        }
+
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background-color: var(--bg-main); 
+            color: #F3F4F6; 
+            overflow-x: hidden;
+        }
+
+        .font-num { font-family: 'Orbitron', sans-serif; }
+
+        /* Premium Glass & Backgrounds */
+        .glass-panel {
+            background: rgba(10, 14, 23, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Dynamic Neon Glow System */
+        .neon-glow {
+            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 10px var(--theme-glow);
+            border-color: var(--theme-color) !important;
+        }
         
-        /* สไตล์สีสันหน้ากราฟและเอฟเฟกต์เรืองแสงตามธีม */
-        .glow-blue { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
-        .glow-emerald { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); }
-        .glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.5); }
+        .neon-text {
+            text-shadow: 0 0 10px var(--theme-glow);
+            color: var(--theme-color);
+        }
+
+        .neon-border { border: 1px solid var(--theme-color); }
         
-        .chart-line-anim { stroke-dasharray: 6; animation: graphMove 40s linear infinite; }
-        @keyframes graphMove { to { stroke-dashoffset: -1000; } }
+        /* Advanced Graph Animations */
+        .live-chart-line {
+            fill: none;
+            stroke: var(--theme-color);
+            stroke-width: 3;
+            filter: drop-shadow(0 0 8px var(--theme-color));
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth movement */
+        }
+
+        .chart-gradient-fill {
+            transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .live-indicator::before {
+            content: '';
+            position: absolute;
+            left: -4px; top: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%;
+            background-color: var(--theme-color);
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        /* Terminal & Mining Effects */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scan-effect::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, transparent, var(--theme-glow), transparent);
+            opacity: 0.1;
+            animation: scanline 3s linear infinite;
+            pointer-events: none;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #03050a; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--theme-color); }
     </style>
 </head>
-<body>
+<body class="bg-grid-pattern min-h-screen">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect, useMemo, useRef } = React;
 
+        // ฐานข้อมูลสินทรัพย์ (Master Asset Data)
         const INITIAL_ASSETS = [
-            { id: 'btc', name: 'Bitcoin', symbol: 'BTC', price: 65000, change: 2.4, type: 'crypto' },
-            { id: 'eth', name: 'Ethereum', symbol: 'ETH', price: 3500, change: -1.2, type: 'crypto' },
-            { id: 'gold', name: 'Gold Ounce', symbol: 'XAU', price: 2350, change: 0.8, type: 'commodity' },
+            { id: 'btc', name: 'Bitcoin', symbol: 'BTC', basePrice: 65000, type: 'crypto' },
+            { id: 'eth', name: 'Ethereum', symbol: 'ETH', basePrice: 3500, type: 'crypto' },
+            { id: 'sol', name: 'Solana', symbol: 'SOL', basePrice: 145, type: 'crypto' },
+            { id: 'gold', name: 'Gold Ounce', symbol: 'XAU', basePrice: 2350, type: 'commodity' },
         ];
 
+        // ธีมสีทั้งหมดของระบบ
+        const THEMES = {
+            blue: { hex: '#3b82f6', glow: 'rgba(59, 130, 246, 0.5)', name: 'Neon Blue' },
+            emerald: { hex: '#10b981', glow: 'rgba(16, 185, 129, 0.5)', name: 'Emerald Green' },
+            gold: { hex: '#f59e0b', glow: 'rgba(245, 158, 11, 0.5)', name: 'Royal Gold' },
+            purple: { hex: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)', name: 'Cyber Purple' },
+            crimson: { hex: '#ef4444', glow: 'rgba(239, 68, 68, 0.5)', name: 'Crimson Red' }
+        };
+
         function App() {
-            // ระบบผู้ใช้ & การนำทาง
+            // ==========================================
+            // STATE MANAGEMENT (ระบบจัดการสถานะทั้งหมด)
+            // ==========================================
             const [user, setUser] = useState(null); 
             const [currentPage, setCurrentPage] = useState('auth'); 
-            const [hamburgerOpen, setHamburgerOpen] = useState(false);
-            const [currency, setCurrency] = useState('USD'); 
-            const [language, setLanguage] = useState('TH');
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [activeTheme, setActiveTheme] = useState('blue');
             
-            // ฟังก์ชันเลือกสไตล์สีสันหน้ากราฟ (Theme Color Function)
-            const [chartColorTheme, setChartColorTheme] = useState('blue'); // 'blue' | 'emerald' | 'gold'
-
-            // ระบบกระเป๋าเงิน (Real Money Financial Blueprints)
+            // ตลาด Live Data
+            const [marketPrices, setMarketPrices] = useState({});
+            const [chartData, setChartData] = useState(Array(20).fill(100)); // ข้อมูลกราฟ 20 จุด
+            
+            // กระเป๋าเงินและสินทรัพย์
             const [wallet, setWallet] = useState({
-                deposited: 1500, 
-                tradeBalance: 500,
-                assetsHoldings: { btc: 0.05, eth: 0.5, gold: 1 } 
+                deposited: 5000, 
+                tradeBalance: 1500,
+                assetsHoldings: { btc: 0.1, eth: 2, gold: 0 },
+                history: []
             });
 
-            // ระบบประวัติและออร์เดอร์การเทรด
-            const [orders, setOrders] = useState([
-                { id: 1, asset: INITIAL_ASSETS[0], type: 'BUY', volume: 200, status: 'RUNNING' }
-            ]);
+            // ตั๋วออร์เดอร์
+            const [orders, setOrders] = useState([]);
             const [selectedAsset, setSelectedAsset] = useState(INITIAL_ASSETS[0]);
             
-            // ระบบ Membership & Mining Loops
+            // ระบบ Membership & ขุดเหรียญ
             const [membershipLevel, setMembershipLevel] = useState(1); 
-            const [miningPool, setMiningPool] = useState({ assetId: '', amount: 0, timeLeft: 0, isMining: false });
+            const [miningPool, setMiningPool] = useState({ active: false, assetId: '', progress: 0, hashes: 0 });
 
-            // ระบบลงทะเบียนและเข้าสู่ระบบ
+            // UI States
             const [authMode, setAuthMode] = useState('login'); 
-            const [regForm, setRegForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
-            const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+            const [depositModal, setDepositModal] = useState(false);
+            const [withdrawModal, setWithdrawModal] = useState(false);
+            const [txAmount, setTxAmount] = useState('');
 
-            // คำนวณอัตราแลกเปลี่ยนสกุลเงิน
-            const rate = currency === 'THB' ? 36.5 : 1;
-            const curSign = currency === 'THB' ? '฿' : '$';
-            const formatMoney = (val) => (val * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            // คำนวณมูลค่าสินทรัพย์และยอดรวมพอร์ตทั้งหมด
-            const totalAssetValue = useMemo(() => {
-                return Object.keys(wallet.assetsHoldings).reduce((sum, key) => {
-                    const asset = INITIAL_ASSETS.find(a => a.id === key);
-                    return sum + (wallet.assetsHoldings[key] * (asset ? asset.price : 0));
-                }, 0);
-            }, [wallet.assetsHoldings]);
-
-            const totalBalance = useMemo(() => {
-                return wallet.tradeBalance + totalAssetValue + wallet.deposited;
-            }, [wallet.tradeBalance, totalAssetValue, wallet.deposited]);
-
-            // ระบบล็อกเหรียญอัตโนมัติตามระดับเลเวล (Asset Lock Logic)
-            const isAssetLocked = useMemo(() => {
-                if (membershipLevel === 0) return false;
-                if (membershipLevel === 1 && totalAssetValue < 5000) return true;
-                if (membershipLevel === 2 && totalAssetValue < 50000) return true;
-                if (membershipLevel === 3 && totalAssetValue < 750000) return true;
-                if (membershipLevel === 4 && totalAssetValue < 10000000) return true;
-                return false; 
-            }, [membershipLevel, totalAssetValue]);
-
-            // ลูปทำงานระบบขุดเหรียญ 24 ชั่วโมงจำลอง
+            // ==========================================
+            // EFFECTS & ENGINE LOOPS (ลูปการทำงานเบื้องหลัง)
+            // ==========================================
+            
+            // 1. อัปเดตไอคอน Lucide ทุกครั้งที่เรนเดอร์
             useEffect(() => {
-                let timer;
-                if (miningPool.isMining && miningPool.timeLeft > 0) {
-                    timer = setInterval(() => {
+                if (window.lucide) window.lucide.createIcons();
+            });
+
+            // 2. เปลี่ยนตัวแปร CSS ของระบบตามธีมที่เลือก
+            useEffect(() => {
+                const root = document.documentElement;
+                root.style.setProperty('--theme-color', THEMES[activeTheme].hex);
+                root.style.setProperty('--theme-glow', THEMES[activeTheme].glow);
+            }, [activeTheme]);
+
+            // 3. Engine สร้างความผันผวนของราคาสินทรัพย์จำลองแบบ Real-time
+            useEffect(() => {
+                const priceInterval = setInterval(() => {
+                    const newPrices = {};
+                    INITIAL_ASSETS.forEach(asset => {
+                        const current = marketPrices[asset.id] || asset.basePrice;
+                        const volatility = current * 0.001; // ผันผวน 0.1% ต่อวิ
+                        const change = (Math.random() - 0.5) * volatility;
+                        newPrices[asset.id] = current + change;
+                    });
+                    setMarketPrices(newPrices);
+                }, 1000);
+                return () => clearInterval(priceInterval);
+            }, [marketPrices]);
+
+            // 4. Engine สร้างจุดกราฟ (Live Graph Generator)
+            useEffect(() => {
+                const chartInterval = setInterval(() => {
+                    setChartData(prev => {
+                        const lastPoint = prev[prev.length - 1];
+                        const randomMove = (Math.random() - 0.5) * 5;
+                        const newPoint = lastPoint + randomMove;
+                        // เลื่อนอาเรย์ไปทางซ้าย และเพิ่มจุดใหม่
+                        return [...prev.slice(1), newPoint];
+                    });
+                }, 1500); // ขยับกราฟทุกๆ 1.5 วินาที
+                return () => clearInterval(chartInterval);
+            }, []);
+
+            // 5. Engine ระบบขุดเหรียญ 24 ชั่วโมง
+            useEffect(() => {
+                let miningTimer;
+                if (miningPool.active) {
+                    miningTimer = setInterval(() => {
                         setMiningPool(prev => {
-                            if (prev.timeLeft <= 1) {
-                                clearInterval(timer);
-                                const basePct = 0.01;
-                                const bonusPct = membershipLevel === 1 ? 0.05 : membershipLevel === 2 ? 0.07 : membershipLevel === 3 ? 0.10 : membershipLevel === 4 ? 0.15 : 0;
-                                const totalPct = basePct + bonusPct;
-                                const rewardInCrypto = (prev.amount * totalPct) / INITIAL_ASSETS.find(a => a.id === prev.assetId).price;
+                            if (prev.progress >= 100) {
+                                // ขุดเสร็จสิ้น ให้รางวัล
+                                const rewardMap = { 1: 0.05, 2: 0.1, 3: 0.2, 4: 0.5 };
+                                const rewardUSD = (rewardMap[membershipLevel] || 0.01) * 100;
+                                const assetPrice = marketPrices[prev.assetId] || INITIAL_ASSETS.find(a=>a.id===prev.assetId).basePrice;
+                                const rewardCrypto = rewardUSD / assetPrice;
                                 
                                 setWallet(w => ({
                                     ...w,
-                                    assetsHoldings: { ...w.assetsHoldings, [prev.assetId]: w.assetsHoldings[prev.assetId] + rewardInCrypto }
+                                    assetsHoldings: { ...w.assetsHoldings, [prev.assetId]: (w.assetsHoldings[prev.assetId] || 0) + rewardCrypto },
+                                    history: [{ id: Date.now(), type: 'MINING_REWARD', amount: rewardUSD, date: new Date().toLocaleString() }, ...w.history]
                                 }));
-                                alert(`[พิมพ์เขียวระบบขุด] บันทึกสำเร็จ! ผลตอบแทนถูกเพิ่มเข้าสู่กระเป๋าเรียบร้อย`);
-                                return { assetId: '', amount: 0, timeLeft: 0, isMining: false };
+                                alert(`🎉 ขุดสำเร็จ! ได้รับ ${prev.assetId.toUpperCase()} มูลค่าประมาณ $${rewardUSD}`);
+                                return { active: false, assetId: '', progress: 0, hashes: 0 };
                             }
-                            return { ...prev, timeLeft: prev.timeLeft - 1 };
+                            return { 
+                                ...prev, 
+                                progress: prev.progress + (Math.random() * 5), 
+                                hashes: prev.hashes + Math.floor(Math.random() * 500) 
+                            };
                         });
                     }, 1000);
                 }
-                return () => clearInterval(timer);
-            }, [miningPool.isMining, membershipLevel]);
+                return () => clearInterval(miningTimer);
+            }, [miningPool.active, membershipLevel, marketPrices]);
 
-            // การจัดการฟอร์มเข้าใช้งาน
-            const handleRegister = (e) => {
-                e.preventDefault();
-                if(regForm.password !== regForm.confirmPassword) return alert("รหัสผ่านไม่ตรงกัน");
-                const uniqueId = Math.floor(10000000 + Math.random() * 90000000);
-                setUser({ name: regForm.name, email: regForm.email, uid: uniqueId });
-                setCurrentPage('dashboard');
+            // ==========================================
+            // HELPER FUNCTIONS (ฟังก์ชันคำนวณและช่วยเหลือ)
+            // ==========================================
+            const formatMoney = (val) => val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const formatCrypto = (val) => val.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+
+            const currentSelectedPrice = marketPrices[selectedAsset.id] || selectedAsset.basePrice;
+
+            // คำนวณมูลค่าพอร์ตทั้งหมด
+            const totalAssetValue = useMemo(() => {
+                return Object.keys(wallet.assetsHoldings).reduce((sum, key) => {
+                    const price = marketPrices[key] || INITIAL_ASSETS.find(a => a.id === key).basePrice;
+                    return sum + (wallet.assetsHoldings[key] * price);
+                }, 0);
+            }, [wallet.assetsHoldings, marketPrices]);
+
+            const totalNetWorth = wallet.deposited + wallet.tradeBalance + totalAssetValue;
+
+            // ตรรกะระบบล็อกพอร์ต (Asset Lock Conditions)
+            const lockConditions = [
+                { level: 1, min: 5000 },
+                { level: 2, min: 50000 },
+                { level: 3, min: 750000 },
+                { level: 4, min: 10000000 }
+            ];
+            const isAssetLocked = useMemo(() => {
+                if (membershipLevel === 0) return false;
+                const req = lockConditions.find(c => c.level === membershipLevel)?.min || 0;
+                return totalNetWorth < req;
+            }, [membershipLevel, totalNetWorth]);
+
+            // ฟังก์ชันวาดเส้นกราฟ SVG
+            const generateSvgPath = () => {
+                const max = Math.max(...chartData) + 2;
+                const min = Math.min(...chartData) - 2;
+                const range = max - min || 1;
+                
+                const points = chartData.map((val, i) => {
+                    const x = (i / (chartData.length - 1)) * 100;
+                    const y = 100 - ((val - min) / range) * 100;
+                    return `${x},${y}`;
+                });
+                
+                const linePath = `M ${points.join(' L ')}`;
+                const fillPath = `${linePath} L 100,100 L 0,100 Z`;
+                
+                return { linePath, fillPath, max, min };
             };
 
-            const handleLogin = (e) => {
-                e.preventDefault();
-                const uniqueId = Math.floor(10000000 + Math.random() * 90000000);
-                setUser({ name: loginForm.email.split('@')[0], email: loginForm.email, uid: uniqueId });
-                setCurrentPage('dashboard');
+            const svgData = generateSvgPath();
+
+            // การจัดการฟอร์มและระบบเงิน
+            const handleTransaction = (type) => {
+                const amt = parseFloat(txAmount);
+                if (isNaN(amt) || amt <= 0) return alert("กรุณาระบุจำนวนเงินที่ถูกต้อง");
+
+                if (type === 'DEPOSIT') {
+                    setWallet(w => ({
+                        ...w,
+                        deposited: w.deposited + amt,
+                        history: [{ id: Date.now(), type: 'DEPOSIT', amount: amt, date: new Date().toLocaleString() }, ...w.history]
+                    }));
+                    setDepositModal(false);
+                    alert(`✅ นำฝากเงินเข้าระบบเรียบร้อย: $${formatMoney(amt)}`);
+                } else {
+                    if (w.deposited < amt) return alert("❌ ยอดเงินฝากหลักมีไม่พอให้ถอน");
+                    setWallet(w => ({
+                        ...w,
+                        deposited: w.deposited - amt,
+                        history: [{ id: Date.now(), type: 'WITHDRAW', amount: amt, date: new Date().toLocaleString() }, ...w.history]
+                    }));
+                    setWithdrawModal(false);
+                    alert(`📤 ถอนเงินออกจากระบบเรียบร้อย: $${formatMoney(amt)}`);
+                }
+                setTxAmount('');
             };
 
-            // ดึงค่าโครงสีสำหรับนำมาใช้พ่นสีกราฟเวกเตอร์
-            const getThemeHex = () => {
-                if (chartColorTheme === 'emerald') return '#10b981';
-                if (chartColorTheme === 'gold') return '#f59e0b';
-                return '#3b82f6';
-            };
-
+            // ==========================================
+            // RENDER UI (ส่วนหน้าตาแอปพลิเคชัน)
+            // ==========================================
             return (
-                <div className="min-h-screen bg-[#060913] text-gray-100 flex flex-col justify-between relative overflow-x-hidden">
+                <div className="flex flex-col h-screen max-w-lg mx-auto bg-[#03050a] relative shadow-2xl border-x border-gray-800/50">
                     
-                    {/* TOP NAVIGATION BAR */}
+                    {/* --- HEADER NAVIGATION --- */}
                     {currentPage !== 'auth' && (
-                        <div className="bg-[#0f1424] border-b border-gray-800 p-4 flex justify-between items-center sticky top-0 z-40 shadow-md">
-                            <button onClick={() => setHamburgerOpen(true)} className="p-2 hover:bg-gray-800 rounded-lg text-blue-500">
-                                <i data-lucide="menu"></i>
+                        <header className="glass-panel sticky top-0 z-40 p-4 flex justify-between items-center border-b border-white/10">
+                            <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition neon-border">
+                                <i data-lucide="menu" className="w-5 h-5 neon-text"></i>
                             </button>
-                            <h1 className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">FUNDFUSION BLUEPRINT</h1>
-                            <div className="flex items-center gap-2 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-full text-xs font-semibold text-amber-400 glow-gold">
-                                <i data-lucide="shield" className="w-3.5 h-3.5"></i> LV.{membershipLevel}
+                            <div className="text-center">
+                                <h1 className="text-xl font-bold tracking-widest neon-text" style={{textShadow: `0 0 15px ${THEMES[activeTheme].glow}`}}>
+                                    FUNDFUSION
+                                </h1>
+                                <p className="text-[10px] text-gray-400 font-num tracking-widest">BLUEPRINT V.MAX</p>
                             </div>
-                        </div>
+                            <div className="flex items-center gap-1.5 glass-panel px-3 py-1.5 rounded-full border border-white/10 shadow-lg">
+                                <i data-lucide="shield-check" className="w-4 h-4 neon-text"></i>
+                                <span className="text-xs font-bold font-num neon-text">LV.{membershipLevel}</span>
+                            </div>
+                        </header>
                     )}
 
-                    {/* HAMBURGER SIDEBAR */}
-                    {hamburgerOpen && (
-                        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex">
-                            <div className="w-80 premium-gradient h-full p-6 flex flex-col justify-between border-r border-gray-800">
+                    {/* --- SIDEBAR MENU --- */}
+                    {sidebarOpen && (
+                        <div className="fixed inset-0 z-50 flex">
+                            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSidebarOpen(false)}></div>
+                            <div className="w-80 glass-panel h-full border-r border-white/10 p-6 flex flex-col justify-between relative shadow-2xl transform transition-transform">
                                 <div>
-                                    <div className="flex justify-between items-center mb-8">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500 flex items-center justify-center text-blue-400 font-bold glow-blue">
-                                                {user?.name?.[0].toUpperCase() || 'U'}
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-14 h-14 rounded-full border-2 neon-border flex items-center justify-center bg-black/50 overflow-hidden shadow-lg neon-glow">
+                                                <i data-lucide="user" className="w-6 h-6 neon-text"></i>
                                             </div>
                                             <div>
-                                                <h4 className="font-bold text-sm text-white">{user?.name || 'User'}</h4>
-                                                <p className="text-xs text-gray-400">ID: {user?.uid || '00000000'}</p>
+                                                <h4 className="font-bold text-lg text-white">{user?.name || 'Administrator'}</h4>
+                                                <p className="text-xs text-gray-400 font-num">UID: {user?.uid || '89304918'}</p>
                                             </div>
                                         </div>
-                                        <button onClick={() => setHamburgerOpen(false)} className="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
                                     </div>
 
-                                    {/* ควบคุมระบบภาพรวมภายในแถบเมนูข้าง */}
-                                    <div className="space-y-4">
-                                        <div className="p-3 bg-gray-950 rounded-xl border border-gray-800 space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 block">ระดับสมาชิกบัญชี (VIP Blueprint)</label>
-                                            <select value={membershipLevel} onChange={(e) => setMembershipLevel(Number(e.target.value))} className="w-full bg-gray-900 text-white text-xs rounded p-2 border border-gray-700 outline-none">
-                                                <option value={0}>Level 0 (ไม่ล็อก)</option>
-                                                <option value={1}>Level 1 (ล็อกพอร์ตขั้นต่ำ $5,000)</option>
-                                                <option value={2}>Level 2 (ล็อกพอร์ตขั้นต่ำ $50,000)</option>
-                                                <option value={3}>Level 3 (ล็อกพอร์ตขั้นต่ำ $750,000)</option>
-                                                <option value={4}>Level 4 (ล็อกพอร์ตขั้นต่ำ $10,000000)</option>
+                                    <div className="space-y-6">
+                                        {/* Membership Control */}
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-400 tracking-wider flex items-center gap-2">
+                                                <i data-lucide="award" className="w-4 h-4"></i> ระบบระดับบัญชี (VIP Status)
+                                            </label>
+                                            <select 
+                                                value={membershipLevel} 
+                                                onChange={(e) => setMembershipLevel(Number(e.target.value))} 
+                                                className="w-full bg-black/50 text-sm text-white rounded-xl p-3 border border-white/10 outline-none focus:border-[var(--theme-color)] transition"
+                                            >
+                                                <option value={0}>Level 0 - อิสระ (ไม่ล็อกพอร์ต)</option>
+                                                <option value={1}>Level 1 - ล็อกขั้นต่ำ $5,000</option>
+                                                <option value={2}>Level 2 - ล็อกขั้นต่ำ $50,000</option>
+                                                <option value={3}>Level 3 - ล็อกขั้นต่ำ $750,000</option>
+                                                <option value={4}>Level 4 - ล็อกขั้นต่ำ $10M+</option>
                                             </select>
                                         </div>
 
-                                        <div className="p-3 bg-gray-950 rounded-xl border border-gray-800 space-y-3">
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-gray-400 flex items-center gap-1.5"><i data-lucide="languages" className="w-3.5 h-3.5"></i> ภาษา</span>
-                                                <select value={language} onChange={(e) => setLanguage(e.target.value)} className="bg-gray-800 text-white rounded px-2 py-0.5 border border-gray-700">
-                                                    <option value="TH">TH</option>
-                                                    <option value="EN">EN</option>
-                                                </select>
+                                        {/* Theme Selector */}
+                                        <div className="space-y-3 pt-4 border-t border-white/10">
+                                            <label className="text-xs font-bold text-gray-400 tracking-wider flex items-center gap-2">
+                                                <i data-lucide="palette" className="w-4 h-4"></i> เลือกสีสันระบบ (Theme Engine)
+                                            </label>
+                                            <div className="grid grid-cols-5 gap-2">
+                                                {Object.entries(THEMES).map(([key, theme]) => (
+                                                    <button 
+                                                        key={key} 
+                                                        onClick={() => setActiveTheme(key)}
+                                                        title={theme.name}
+                                                        className={`h-10 rounded-xl border-2 transition-all duration-300 ${activeTheme === key ? 'scale-110 shadow-lg' : 'border-transparent hover:scale-105'}`}
+                                                        style={{ backgroundColor: theme.hex, borderColor: activeTheme === key ? '#fff' : 'transparent', boxShadow: activeTheme === key ? `0 0 15px ${theme.glow}` : 'none' }}
+                                                    ></button>
+                                                ))}
                                             </div>
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-gray-400 flex items-center gap-1.5"><i data-lucide="coins" className="w-3.5 h-3.5"></i> สกุลเงิน</span>
-                                                <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="bg-gray-800 text-white rounded px-2 py-0.5 border border-gray-700">
-                                                    <option value="USD">USD ($)</option>
-                                                    <option value="THB">THB (฿)</option>
-                                                </select>
-                                            </div>
+                                            <p className="text-center text-xs text-gray-500 mt-2">Active: {THEMES[activeTheme].name}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <button onClick={() => { setUser(null); setCurrentPage('auth'); setHamburgerOpen(false); }} className="w-full flex items-center justify-center gap-2 bg-red-950/40 hover:bg-red-900/60 text-red-400 py-3 rounded-xl border border-red-900/40 font-medium text-sm">
-                                    <i data-lucide="log-out" className="w-4 h-4"></i> ออกจากระบบ
+
+                                <button onClick={() => { setUser(null); setCurrentPage('auth'); setSidebarOpen(false); }} className="flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 py-4 rounded-2xl border border-red-500/30 transition w-full font-bold">
+                                    <i data-lucide="power" className="w-5 h-5"></i> ตัดการเชื่อมต่อระบบ
                                 </button>
                             </div>
                         </div>
                     )}
 
-                    {/* MAIN APPLICATION FRAME */}
-                    <main className="flex-1 p-4 max-w-md w-full mx-auto pb-24">
-
-                        {/* AUTHENTICATION SECTION */}
+                    {/* --- MAIN CONTENT AREA --- */}
+                    <main className="flex-1 overflow-y-auto p-4 pb-28">
+                        
+                        {/* 0. AUTHENTICATION */}
                         {currentPage === 'auth' && (
-                            <div className="pt-12">
-                                <div className="text-center mb-10">
-                                    <div className="w-16 h-16 bg-blue-600/10 border border-blue-500/30 rounded-3xl flex items-center justify-center mx-auto mb-4 glow-blue">
-                                        <i data-lucide="component" className="text-blue-500 w-8 h-8"></i>
-                                    </div>
-                                    <h2 className="text-3xl font-extrabold tracking-tight text-white mb-2">FundFusion</h2>
-                                    <p className="text-xs text-gray-400">ระบบสถาปัตยกรรมพิมพ์เขียวบริหารจัดการพอร์ตสมบูรณ์แบบ</p>
+                            <div className="flex flex-col items-center justify-center min-h-[80vh]">
+                                <div className="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 neon-glow relative">
+                                    <i data-lucide="hexagon" className="w-12 h-12 neon-text absolute animate-spin" style={{animationDuration: '10s'}}></i>
+                                    <i data-lucide="zap" className="w-8 h-8 text-white z-10"></i>
                                 </div>
+                                <h1 className="text-4xl font-black mb-2 text-white tracking-widest text-center">FUND<span className="neon-text">FUSION</span></h1>
+                                <p className="text-gray-400 mb-10 font-num tracking-widest text-xs">V.MAX - ENTERPRISE BLUEPRINT</p>
 
-                                {authMode === 'login' ? (
-                                    <form onSubmit={handleLogin} className="bg-[#0f1424] border border-gray-800 rounded-3xl p-6 space-y-4 shadow-xl">
-                                        <h3 className="text-lg font-bold text-white">เข้าสู่ระบบการจัดการ</h3>
-                                        <input type="text" required value={loginForm.email} onChange={(e) => setLoginForm({...loginForm, email: e.target.value})} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none focus:border-blue-500" placeholder="Email หรือ เบอร์โทรศัพท์" />
-                                        <input type="password" required value={loginForm.password} onChange={(e) => setLoginForm({...loginForm, password: e.target.value})} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none focus:border-blue-500" placeholder="รหัสผ่าน" />
-                                        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl text-sm transition glow-blue">เข้าใช้งานระบบ</button>
-                                        <p className="text-xs text-center text-gray-400">ยังไม่มีบัญชีในระบบ? <button type="button" onClick={() => setAuthMode('register')} className="text-blue-400 font-semibold underline">ลงทะเบียน</button></p>
+                                <div className="w-full glass-panel p-6 rounded-3xl neon-border shadow-2xl relative overflow-hidden">
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--theme-color)] to-transparent opacity-50"></div>
+                                    
+                                    <form onSubmit={(e) => { e.preventDefault(); setUser({name: 'Master User', uid: '984532'}); setCurrentPage('dashboard'); }} className="space-y-4 relative z-10">
+                                        <div>
+                                            <label className="text-xs text-gray-400 mb-1 block">รหัสประจำตัว (ID / Email)</label>
+                                            <input type="text" required defaultValue="admin@fusion.com" className="w-full bg-black/50 border border-white/10 rounded-xl p-3.5 text-white outline-none focus:border-[var(--theme-color)] transition" />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs text-gray-400 mb-1 block">รหัสผ่านระบบ (Password)</label>
+                                            <input type="password" required defaultValue="password" className="w-full bg-black/50 border border-white/10 rounded-xl p-3.5 text-white outline-none focus:border-[var(--theme-color)] transition" />
+                                        </div>
+                                        <button type="submit" className="w-full py-4 rounded-xl font-bold text-white tracking-wider mt-4 transition-all hover:scale-[1.02] neon-glow" style={{backgroundColor: THEMES[activeTheme].hex}}>
+                                            INITIATE SYSTEM
+                                        </button>
                                     </form>
-                                ) : (
-                                    <form onSubmit={handleRegister} className="bg-[#0f1424] border border-gray-800 rounded-3xl p-6 space-y-4 shadow-xl">
-                                        <h3 className="text-lg font-bold text-white">ลงทะเบียนระบบพิมพ์เขียว</h3>
-                                        <input type="text" required placeholder="ชื่อบัญชีผู้ใช้" value={regForm.name} onChange={(e) => setRegForm({...regForm, name: e.target.value})} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none" />
-                                        <input type="text" required placeholder="Email หรือ เบอร์โทร" value={regForm.email} onChange={(e) => setRegForm({...regForm, email: e.target.value})} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none" />
-                                        <input type="password" required placeholder="ตั้งรหัสผ่าน" value={regForm.password} onChange={(e) => setRegForm({...regForm, password: e.target.value})} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none" />
-                                        <input type="password" required placeholder="ยืนยันรหัสผ่านอีกครั้ง" value={regForm.confirmPassword} onChange={(e) => setRegForm({...regForm, confirmPassword: e.target.value})} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none" />
-                                        <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl text-sm transition glow-emerald">ยืนยันสมัครสมาชิก</button>
-                                        <p className="text-xs text-center text-gray-400">มีบัญชีแล้ว? <button type="button" onClick={() => setAuthMode('login')} className="text-blue-400 font-semibold underline">กลับไปเข้าสู่ระบบ</button></p>
-                                    </form>
-                                )}
+                                </div>
                             </div>
                         )}
 
-                        {/* DASHBOARD OVERVIEW */}
+                        {/* 1. DASHBOARD (ภาพรวม + ระบบฝากถอนจริง) */}
                         {currentPage === 'dashboard' && (
-                            <div className="space-y-5">
-                                <div className="premium-gradient border border-gray-800 rounded-3xl p-6 relative overflow-hidden shadow-2xl glow-blue">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div>
-                                            <p className="text-xs font-semibold text-gray-400 mb-1 uppercase tracking-wider">สินทรัพย์รวมสุทธิ (Total Portfolio Value)</p>
-                                            <h2 className="text-3xl font-black text-white">{curSign}{formatMoney(totalBalance)}</h2>
+                            <div className="space-y-6 animate-fade-in">
+                                {/* Total Net Worth Card */}
+                                <div className="glass-panel p-6 rounded-3xl relative overflow-hidden neon-border shadow-2xl">
+                                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-[var(--theme-color)] rounded-full blur-[80px] opacity-30"></div>
+                                    
+                                    <p className="text-xs text-gray-400 tracking-widest mb-2 flex items-center gap-2">
+                                        <i data-lucide="globe" className="w-4 h-4 neon-text animate-pulse"></i> มูลค่าสินทรัพย์รวมสุทธิ
+                                    </p>
+                                    <h2 className="text-4xl font-black text-white font-num tracking-tight mb-6">
+                                        $<span className="neon-text">{formatMoney(totalNetWorth)}</span>
+                                    </h2>
+                                    
+                                    <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
+                                        <div className="bg-black/30 p-3 rounded-2xl border border-white/5">
+                                            <span className="text-[10px] text-gray-500 block mb-1">ฝากหลัก (Main)</span>
+                                            <span className="font-bold text-sm text-gray-200 font-num">${formatMoney(wallet.deposited)}</span>
                                         </div>
-                                        <div className="bg-gray-800 px-2.5 py-1 rounded-xl text-[10px] text-gray-400 font-mono">LIVE ENGINE</div>
-                                    </div>
-                                    <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-800/80 text-center">
-                                        <div>
-                                            <span className="text-[10px] text-gray-400 block mb-0.5">ยอดฝากหลัก</span>
-                                            <span className="font-bold text-sm text-gray-200">{curSign}{formatMoney(wallet.deposited)}</span>
+                                        <div className="bg-black/30 p-3 rounded-2xl border border-white/5">
+                                            <span className="text-[10px] text-gray-500 block mb-1">เทรด (Margin)</span>
+                                            <span className="font-bold text-sm font-num neon-text">${formatMoney(wallet.tradeBalance)}</span>
                                         </div>
-                                        <div>
-                                            <span className="text-[10px] text-gray-400 block mb-0.5">เงินในพอร์ตเทรด</span>
-                                            <span className="font-bold text-sm text-blue-400">{curSign}{formatMoney(wallet.tradeBalance)}</span>
-                                        </div>
-                                        <div>
-                                            <span className="text-[10px] text-gray-400 block mb-0.5">มูลค่าถือครอง</span>
-                                            <span className="font-bold text-sm text-amber-400">{curSign}{formatMoney(totalAssetValue)}</span>
+                                        <div className="bg-black/30 p-3 rounded-2xl border border-white/5">
+                                            <span className="text-[10px] text-gray-500 block mb-1">ถือครอง (Spot)</span>
+                                            <span className="font-bold text-sm text-white font-num">${formatMoney(totalAssetValue)}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* ฟังก์ชันการทำธุรกรรม (เงินจริง) */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    <button onClick={() => {
-                                        setWallet(w => ({ ...w, deposited: w.deposited + 1000 }));
-                                        alert("ฝากเงินเข้าระบบเรียบร้อยจำนวน $1,000 ผ่านเกตเวย์ด่วน เครือข่าย TRC20/ERC20");
-                                    }} className="bg-gray-900/60 border border-gray-800 p-4 rounded-2xl flex flex-col items-center gap-2 hover:border-blue-500 transition">
-                                        <i data-lucide="arrow-down-to-line" className="text-blue-400 w-5 h-5"></i>
-                                        <span className="text-xs font-bold">ฝากเงินเข้าระบบ</span>
+                                {/* Transaction Buttons */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button onClick={() => setDepositModal(true)} className="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 transition neon-border group">
+                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition">
+                                            <i data-lucide="arrow-down-to-line" className="w-5 h-5 neon-text"></i>
+                                        </div>
+                                        <span className="text-sm font-bold tracking-wider">ฝากเงินสด</span>
                                     </button>
-                                    <button onClick={() => {
-                                        if (wallet.deposited < 500) return alert("ยอดเงินฝากหมุนเวียนหลักมีไม่เพียงพอสำหรับการทำรายการถอนขั้นต่ำ");
-                                        setWallet(w => ({ ...w, deposited: w.deposited - 500 }));
-                                        alert("ทำรายการถอนเงินเรียบร้อย เงินกำลังถูกโอนไปยังที่อยู่กระเป๋าเป้าหมาย");
-                                    }} className="bg-gray-900/60 border border-gray-800 p-4 rounded-2xl flex flex-col items-center gap-2 hover:border-red-500 transition">
-                                        <i data-lucide="arrow-up-from-line" className="text-red-400 w-5 h-5"></i>
-                                        <span className="text-xs font-bold">ถอนเงินออก</span>
+                                    <button onClick={() => setWithdrawModal(true)} className="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 transition border border-white/10 hover:border-red-500/50 group">
+                                        <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition">
+                                            <i data-lucide="arrow-up-from-line" className="w-5 h-5 text-red-400"></i>
+                                        </div>
+                                        <span className="text-sm font-bold tracking-wider">ถอนเงินสด</span>
                                     </button>
                                 </div>
 
-                                {/* แสดงรายการสินทรัพย์ที่ถือครองอย่างละเอียด */}
-                                <div className="bg-[#0f1424] border border-gray-800 rounded-2xl p-4 space-y-3">
-                                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">บัญชีแจกแจงการถือครองสินทรัพย์</h4>
-                                    {INITIAL_ASSETS.map(asset => {
-                                        const amount = wallet.assetsHoldings[asset.id] || 0;
-                                        const value = amount * asset.price;
-                                        return (
-                                            <div key={asset.id} className="flex justify-between items-center bg-black/30 p-3 rounded-xl border border-gray-800/60">
-                                                <div>
-                                                    <span className="font-bold text-sm text-white">{asset.name} ({asset.symbol})</span>
-                                                    <span className="block text-xs text-gray-400">จำนวน: {amount.toFixed(4)} {asset.symbol}</span>
+                                {/* Transaction History */}
+                                <div className="glass-panel p-5 rounded-3xl">
+                                    <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+                                        <i data-lucide="list" className="w-4 h-4 neon-text"></i> ประวัติธุรกรรมล่าสุด
+                                    </h3>
+                                    <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
+                                        {wallet.history.length === 0 ? (
+                                            <p className="text-center text-xs text-gray-500 py-4">ยังไม่มีประวัติการทำรายการ</p>
+                                        ) : (
+                                            wallet.history.map((tx, idx) => (
+                                                <div key={tx.id} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.type === 'DEPOSIT' || tx.type === 'MINING_REWARD' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                                                            <i data-lucide={tx.type === 'WITHDRAW' ? 'arrow-up-right' : 'arrow-down-left'} className="w-4 h-4"></i>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-xs font-bold text-white">{tx.type}</p>
+                                                            <p className="text-[9px] text-gray-500">{tx.date}</p>
+                                                        </div>
+                                                    </div>
+                                                    <span className={`font-bold font-num text-sm ${tx.type === 'DEPOSIT' || tx.type === 'MINING_REWARD' ? 'text-green-400' : 'text-red-400'}`}>
+                                                        {tx.type === 'WITHDRAW' ? '-' : '+'}${formatMoney(tx.amount)}
+                                                    </span>
                                                 </div>
-                                                <span className="font-mono text-sm font-bold text-amber-400">{curSign}{formatMoney(value)}</span>
-                                            </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 2. TRADING DESK (หน้าเทรดพร้อมกราฟขยับได้สมจริงเรืองแสง) */}
+                        {currentPage === 'trade' && (
+                            <div className="space-y-4 animate-fade-in">
+                                
+                                {/* Asset Selector Grid */}
+                                <div className="grid grid-cols-4 gap-2">
+                                    {INITIAL_ASSETS.map(asset => {
+                                        const price = marketPrices[asset.id] || asset.basePrice;
+                                        const isSelected = selectedAsset.id === asset.id;
+                                        return (
+                                            <button 
+                                                key={asset.id} 
+                                                onClick={() => setSelectedAsset(asset)}
+                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center transition-all ${isSelected ? 'glass-panel neon-border neon-glow scale-105 z-10' : 'bg-black/40 border-white/5 hover:border-white/20'}`}
+                                            >
+                                                <span className="text-[10px] font-bold text-gray-400">{asset.symbol}</span>
+                                                <span className={`text-xs font-num mt-1 ${isSelected ? 'neon-text' : 'text-white'}`}>
+                                                    ${price > 1000 ? (price/1000).toFixed(1)+'k' : price.toFixed(1)}
+                                                </span>
+                                            </button>
                                         );
                                     })}
                                 </div>
-                            </div>
-                        )}
 
-                        {/* TRADING MODE + FUNCTION COLOR CHART */}
-                        {currentPage === 'trade' && (
-                            <div className="space-y-4 animate-fade-in">
-                                {/* เลือกประเภทสินทรัพย์ที่จะเทรด */}
-                                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-3">
-                                    <div className="grid grid-cols-3 gap-2">
-                                        {INITIAL_ASSETS.map(asset => (
-                                            <button key={asset.id} onClick={() => setSelectedAsset(asset)} className={`p-3 rounded-xl border text-left transition ${selectedAsset.id === asset.id ? 'bg-blue-950/30 border-blue-500 shadow-sm' : 'bg-black/30 border-gray-800'}`}>
-                                                <span className="text-[10px] text-gray-400 block">{asset.symbol}/USDT</span>
-                                                <span className="text-xs font-bold text-white">${asset.price.toLocaleString()}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* แผงควบคุมระบบฟังก์ชันสีสันหน้ากราฟ (Chart Color Palette Module) */}
-                                <div className="bg-gray-900 border border-gray-800 p-3 rounded-xl flex items-center justify-between">
-                                    <span className="text-xs font-bold text-gray-400 flex items-center gap-1.5">
-                                        <i data-lucide="palette" className="w-3.5 h-3.5 text-blue-400"></i> ปรับสไตล์สีสันพรีเมียมหน้ากราฟ:
-                                    </span>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => setChartColorTheme('blue')} className={`w-6 h-6 rounded-full bg-blue-500 border-2 ${chartColorTheme === 'blue' ? 'border-white scale-110 shadow-md' : 'border-transparent'}`}></button>
-                                        <button onClick={() => setChartColorTheme('emerald')} className={`w-6 h-6 rounded-full bg-emerald-500 border-2 ${chartColorTheme === 'emerald' ? 'border-white scale-110 shadow-md' : 'border-transparent'}`}></button>
-                                        <button onClick={() => setChartColorTheme('gold')} className={`w-6 h-6 rounded-full bg-amber-500 border-2 ${chartColorTheme === 'gold' ? 'border-white scale-110 shadow-md' : 'border-transparent'}`}></button>
-                                    </div>
-                                </div>
-
-                                {/* หน้าจอกราฟและเส้นเทรนด์พรีเมียมเรืองแสงตามฟังก์ชันสีที่เลือก */}
-                                <div className={`bg-[#0f1424] border border-gray-800 rounded-3xl p-5 space-y-4 shadow-xl relative transition-all duration-300 ${chartColorTheme === 'blue' ? 'glow-blue' : chartColorTheme === 'emerald' ? 'glow-emerald' : 'glow-gold'}`}>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`w-2.5 h-2.5 rounded-full animate-pulse ${chartColorTheme === 'blue' ? 'bg-blue-500' : chartColorTheme === 'emerald' ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
-                                            <h4 className="font-bold text-sm text-white">{selectedAsset.name} พิมพ์เขียวกราฟเรียลไทม์</h4>
+                                {/* PREMIUM LIVE CHART WINDOW */}
+                                <div className="glass-panel rounded-3xl p-5 shadow-2xl relative overflow-hidden neon-border">
+                                    <div className="scan-effect"></div> {/* Scanline Animation */}
+                                    
+                                    <div className="flex justify-between items-start mb-4 relative z-10">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <div className="relative w-2 h-2">
+                                                    <div className="absolute inset-0 bg-red-500 rounded-full animate-ping"></div>
+                                                    <div className="relative w-2 h-2 bg-red-500 rounded-full"></div>
+                                                </div>
+                                                <span className="text-[10px] text-red-400 font-bold tracking-widest">LIVE TRADING</span>
+                                            </div>
+                                            <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                                                {selectedAsset.symbol}/USD
+                                            </h2>
                                         </div>
-                                        <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${selectedAsset.change >= 0 ? 'text-emerald-400 bg-emerald-950/50' : 'text-red-400 bg-red-950/50'}`}>{selectedAsset.change}%</span>
+                                        <div className="text-right">
+                                            <p className="text-xs text-gray-400 mb-1">Current Price</p>
+                                            <p className="text-xl font-bold font-num neon-text tracking-wider">
+                                                ${formatMoney(currentSelectedPrice)}
+                                            </p>
+                                        </div>
                                     </div>
 
-                                    {/* SVG LIVE PREMIUM GRAPH */}
-                                    <div className="h-44 bg-[#060913] rounded-2xl border border-gray-800/80 relative overflow-hidden flex items-center justify-center">
-                                        <svg className="w-full h-full absolute inset-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                    {/* The Dynamic SVG Chart */}
+                                    <div className="h-56 w-full bg-black/50 rounded-2xl border border-white/5 relative overflow-hidden mb-5">
+                                        {/* Grid Background */}
+                                        <div className="absolute inset-0" style={{
+                                            backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
+                                            backgroundSize: '20px 20px'
+                                        }}></div>
+
+                                        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
                                             <defs>
-                                                <linearGradient id="dynamicGradient" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor={getThemeHex()} stopOpacity="0.4"></stop>
-                                                    <stop offset="100%" stopColor={getThemeHex()} stopOpacity="0"></stop>
+                                                <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor={THEMES[activeTheme].hex} stopOpacity="0.6"/>
+                                                    <stop offset="100%" stopColor={THEMES[activeTheme].hex} stopOpacity="0.0"/>
                                                 </linearGradient>
                                             </defs>
-                                            {/* พื้นที่เงาสีไล่ระดับใต้เส้นกราฟ */}
-                                            <path d="M 0 85 Q 20 30, 40 65 T 75 35 T 100 50 L 100 100 L 0 100 Z" fill="url(#dynamicGradient)"></path>
-                                            {/* เส้นหลักกราฟวิ่งเคลื่อนไหวเรืองแสง */}
-                                            <path d="M 0 85 Q 20 30, 40 65 T 75 35 T 100 50" fill="none" stroke={getThemeHex()} strokeWidth="3" className="chart-line-anim"></path>
+                                            {/* Gradient Fill under the line */}
+                                            <path d={svgData.fillPath} fill="url(#chartGlow)" className="chart-gradient-fill"></path>
+                                            {/* The moving line */}
+                                            <path d={svgData.linePath} className="live-chart-line"></path>
                                         </svg>
-                                        <div className="absolute top-2 left-3 text-[9px] text-gray-600 font-mono">จุดสูงสุด: ${(selectedAsset.price * 1.03).toFixed(2)}</div>
-                                        <div className="absolute bottom-2 left-3 text-[9px] text-gray-600 font-mono">จุดต่ำสุด: ${(selectedAsset.price * 0.97).toFixed(2)}</div>
-                                    </div>
-                                    
-                                    {/* ฟอร์มเปิดตั๋วออร์เดอร์ */}
-                                    <div className="grid grid-cols-2 gap-3 text-xs">
-                                        <div>
-                                            <label className="text-gray-400 block mb-1">จำนวนเงินที่จะออกไม้ ($)</label>
-                                            <input type="number" defaultValue="200" id="tradeAmountField" className="w-full bg-[#060913] border border-gray-800 rounded-lg p-2.5 text-white outline-none focus:border-blue-500" />
-                                        </div>
-                                        <div>
-                                            <label className="text-gray-400 block mb-1">ตั้งจุดทำกำไรอัตโนมัติ (TP)</label>
-                                            <input type="number" placeholder="ไม่บังคับตั้งค่า" className="w-full bg-[#060913] border border-gray-800 rounded-lg p-2.5 text-white outline-none" />
+                                        
+                                        {/* Crosshairs & Tags */}
+                                        <div className="absolute top-2 left-2 bg-black/80 px-2 py-1 rounded text-[9px] font-num text-gray-400 border border-white/10">HIGH: ${svgData.max.toFixed(2)}</div>
+                                        <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-[9px] font-num text-gray-400 border border-white/10">LOW: ${svgData.min.toFixed(2)}</div>
+                                        
+                                        {/* Live Indicator Dot at the end of the line */}
+                                        <div className="absolute w-2 h-2 rounded-full z-10 shadow-[0_0_10px_var(--theme-glow)] live-indicator" 
+                                             style={{
+                                                 backgroundColor: THEMES[activeTheme].hex,
+                                                 right: '0', 
+                                                 top: `${100 - ((chartData[chartData.length-1] - svgData.min) / (svgData.max - svgData.min) * 100)}%`,
+                                                 transform: 'translate(50%, -50%)',
+                                                 transition: 'top 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                                             }}>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3 pt-2">
-                                        <button onClick={() => {
-                                            const amt = parseFloat(document.getElementById('tradeAmountField').value || 0);
-                                            if(wallet.tradeBalance < amt) return alert("ยอดวงเงินสำหรับใช้เทรดมีไม่เพียงพอสำหรับการออกตั๋วไม้นี้");
-                                            setWallet(w => ({ ...w, tradeBalance: w.tradeBalance - amt }));
-                                            setOrders([...orders, { id: Date.now(), asset: selectedAsset, type: 'BUY', volume: amt, status: 'RUNNING' }]);
-                                            alert("จับคู่คำสั่งเปิดสัญญา BUY มาร์จิ้นเรียบร้อย!");
-                                        }} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm transition glow-emerald">เปิดคำสั่ง BUY</button>
+                                    {/* Trading Controls */}
+                                    <div className="space-y-4 relative z-10">
+                                        <div className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                                            <span className="text-xs text-gray-400">Available Margin:</span>
+                                            <span className="font-bold text-sm font-num text-white">${formatMoney(wallet.tradeBalance)}</span>
+                                        </div>
                                         
-                                        <button onClick={() => {
-                                            const amt = parseFloat(document.getElementById('tradeAmountField').value || 0);
-                                            if(wallet.tradeBalance < amt) return alert("ยอดวงเงินสำหรับใช้เทรดมีไม่เพียงพอสำหรับการออกตั๋วไม้นี้");
-                                            setWallet(w => ({ ...w, tradeBalance: w.tradeBalance - amt }));
-                                            setOrders([...orders, { id: Date.now(), asset: selectedAsset, type: 'SELL', volume: amt, status: 'RUNNING' }]);
-                                            alert("จับคู่คำสั่งเปิดสัญญา SELL มาร์จิ้นเรียบร้อย!");
-                                        }} className="bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl text-sm transition">เปิดคำสั่ง SELL</button>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <button onClick={() => {
+                                                if(wallet.tradeBalance < 100) return alert("Margin ไม่พอ (ขั้นต่ำ $100)");
+                                                setWallet(w => ({ ...w, tradeBalance: w.tradeBalance - 100 }));
+                                                setOrders([{ id: Date.now(), asset: selectedAsset.symbol, type: 'BUY', entry: currentSelectedPrice, margin: 100 }, ...orders]);
+                                                alert("เปิด Long Position (BUY) สำเร็จ");
+                                            }} className="bg-green-500 hover:bg-green-400 text-white py-4 rounded-2xl font-bold tracking-wider shadow-[0_0_20px_rgba(34,197,94,0.3)] transition transform hover:-translate-y-1">
+                                                BUY (LONG)
+                                            </button>
+                                            <button onClick={() => {
+                                                if(wallet.tradeBalance < 100) return alert("Margin ไม่พอ (ขั้นต่ำ $100)");
+                                                setWallet(w => ({ ...w, tradeBalance: w.tradeBalance - 100 }));
+                                                setOrders([{ id: Date.now(), asset: selectedAsset.symbol, type: 'SELL', entry: currentSelectedPrice, margin: 100 }, ...orders]);
+                                                alert("เปิด Short Position (SELL) สำเร็จ");
+                                            }} className="bg-red-500 hover:bg-red-400 text-white py-4 rounded-2xl font-bold tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] transition transform hover:-translate-y-1">
+                                                SELL (SHORT)
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* ORDER MANAGEMENT HISTORY */}
+                        {/* 3. ORDER BOOK (ตั๋วออร์เดอร์ที่เปิดอยู่) */}
                         {currentPage === 'orders' && (
-                            <div className="space-y-4">
-                                <h3 className="font-bold text-sm text-white">ตั๋วสัญญาซื้อขายที่กำลังเปิดทำงาน (Running Margin Status)</h3>
-                                {orders.filter(o => o.status === 'RUNNING').length === 0 ? (
-                                    <p className="text-xs text-gray-500 text-center py-6">ไม่มีออร์เดอร์ที่ค้างอยู่ในระบบขณะนี้</p>
+                            <div className="space-y-4 animate-fade-in">
+                                <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-6">
+                                    <i data-lucide="briefcase" className="neon-text"></i> Running Positions
+                                </h2>
+                                
+                                {orders.length === 0 ? (
+                                    <div className="glass-panel p-10 rounded-3xl text-center border-dashed border-2 border-white/10">
+                                        <i data-lucide="inbox" className="w-12 h-12 text-gray-600 mx-auto mb-4"></i>
+                                        <p className="text-gray-400">ยังไม่มี Positions ที่กำลังทำงาน</p>
+                                    </div>
                                 ) : (
-                                    orders.filter(o => o.status === 'RUNNING').map(order => (
-                                        <div key={order.id} className="bg-[#0f1424] border border-gray-800 rounded-2xl p-4 flex justify-between items-center shadow-lg">
-                                            <div>
-                                                <span className={`text-[10px] px-2 py-0.5 rounded font-bold mr-2 ${order.type === 'BUY' ? 'bg-emerald-950 text-emerald-400' : 'bg-red-950 text-red-400'}`}>{order.type}</span>
-                                                <span className="font-bold text-white text-sm">{order.asset.name}</span>
-                                                <span className="block text-xs text-gray-400 mt-1">มูลค่าออร์เดอร์: ${order.volume}</span>
-                                            </div>
-                                            <button onClick={() => {
-                                                if(confirm("คุณต้องการปิดสัญญาตั๋วนี้เพื่อคำนวณกำไร/ขาดทุนเข้ากระเป๋าเทรดหลักหรือไม่?")) {
-                                                    setWallet(w => ({ ...w, tradeBalance: w.tradeBalance + (order.volume * 1.04) }));
-                                                    setOrders(orders.map(o => o.id === order.id ? { ...o, status: 'CLOSED' } : o));
-                                                    alert("ปิดออร์เดอร์และตัดยอดเข้ากระเป๋าเงินเทรดเรียบร้อย");
-                                                }
-                                            }} className="bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 px-3 py-2 rounded-xl border border-gray-700 transition">ปิดสัญญานี้</button>
-                                        </div>
-                                    ))
+                                    <div className="space-y-4">
+                                        {orders.map(order => {
+                                            const currentP = marketPrices[INITIAL_ASSETS.find(a=>a.symbol===order.asset).id] || order.entry;
+                                            const diff = order.type === 'BUY' ? (currentP - order.entry) : (order.entry - currentP);
+                                            const pnlPct = (diff / order.entry) * 100 * 10; // Leverage x10 จำลอง
+                                            const pnlAmount = order.margin * (pnlPct / 100);
+                                            const isProfit = pnlAmount >= 0;
+
+                                            return (
+                                                <div key={order.id} className="glass-panel p-5 rounded-2xl border-l-4 shadow-lg relative overflow-hidden" style={{borderLeftColor: order.type === 'BUY' ? '#22c55e' : '#ef4444'}}>
+                                                    <div className="flex justify-between items-start mb-3">
+                                                        <div>
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${order.type==='BUY' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                                                                    {order.type} 10x
+                                                                </span>
+                                                                <span className="font-bold text-white text-lg">{order.asset}/USD</span>
+                                                            </div>
+                                                            <p className="text-xs text-gray-400 font-num">Entry: ${formatCrypto(order.entry)}</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-[10px] text-gray-400 mb-1">Unrealized PNL</p>
+                                                            <p className={`font-bold font-num text-lg ${isProfit ? 'text-green-400' : 'text-red-400'}`}>
+                                                                {isProfit ? '+' : ''}${pnlAmount.toFixed(2)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <button onClick={() => {
+                                                        const totalReturn = order.margin + pnlAmount;
+                                                        setWallet(w => ({ ...w, tradeBalance: w.tradeBalance + totalReturn }));
+                                                        setOrders(orders.filter(o => o.id !== order.id));
+                                                        alert(`ปิดออร์เดอร์เรียบร้อย\nคืนทุน+กำไร/ขาดทุน: $${totalReturn.toFixed(2)} เข้ากระเป๋า Margin`);
+                                                    }} className="w-full py-3 mt-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition border border-white/10">
+                                                        CLOSE POSITION
+                                                    </button>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
                                 )}
                             </div>
                         )}
 
-                        {/* ASSET SPOT ACCUMULATION & FREEZE LOCK DETECTOR */}
+                        {/* 4. ASSETS VAULT & LOCK SYSTEM (ห้องนิรภัย & ระบบล็อก) */}
                         {currentPage === 'assets' && (
-                            <div className="space-y-4">
-                                <div className="bg-[#0f1424] border border-gray-800 rounded-3xl p-5 space-y-4">
-                                    <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-                                        <h3 className="font-bold text-sm text-white">ซื้อสะสมสินทรัพย์ (Spot Vault Platform)</h3>
-                                        {isAssetLocked && (
-                                            <span className="text-[10px] bg-red-950 text-red-400 border border-red-900/50 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
-                                                <i data-lucide="lock" className="w-2.5 h-2.5"></i> ตรวจพบสถานะล็อก
+                            <div className="space-y-6 animate-fade-in">
+                                
+                                {/* Status Box */}
+                                <div className={`glass-panel p-6 rounded-3xl relative overflow-hidden border ${isAssetLocked ? 'border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'neon-border neon-glow'}`}>
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                                            <i data-lucide="safe" className={isAssetLocked ? 'text-red-400' : 'neon-text'}></i> Spot Vault
+                                        </h2>
+                                        {isAssetLocked ? (
+                                            <span className="bg-red-500/20 text-red-400 text-[10px] px-3 py-1 rounded-full font-bold flex items-center gap-1 border border-red-500/30 animate-pulse">
+                                                <i data-lucide="lock" className="w-3 h-3"></i> ASSETS LOCKED
+                                            </span>
+                                        ) : (
+                                            <span className="bg-green-500/20 text-green-400 text-[10px] px-3 py-1 rounded-full font-bold flex items-center gap-1 border border-green-500/30">
+                                                <i data-lucide="unlock" className="w-3 h-3"></i> UNLOCKED
                                             </span>
                                         )}
                                     </div>
-                                    
-                                    <div>
-                                        <label className="text-xs text-gray-400 block mb-1">เลือกสินทรัพย์ปลายทาง</label>
-                                        <select onChange={(e) => setSelectedAsset(INITIAL_ASSETS.find(a => a.id === e.target.value))} className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none">
-                                            {INITIAL_ASSETS.map(a => <option key={a.id} value={a.id}>{a.name} ({a.symbol})</option>)}
-                                        </select>
-                                    </div>
 
-                                    <div>
-                                        <label className="text-xs text-gray-400 block mb-1">ระบุจำนวนเงินลงทุนในการแลกซื้อ ($)</label>
-                                        <input type="number" id="spotBuyAmountInput" placeholder="จำนวนเงินทุนหน่วยดอลลาร์" className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-sm text-white outline-none" />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-3 pt-2">
-                                        <button onClick={() => {
-                                            const amt = parseFloat(document.getElementById('spotBuyAmountInput').value || 0);
-                                            if (wallet.deposited < amt) return alert("ยอดวงเงินเงินฝากหลักในกระเป๋าไม่เพียงพอสำหรับการแลกซื้อสินทรัพย์");
-                                            setWallet(w => ({
-                                                ...w,
-                                                deposited: w.deposited - amt,
-                                                assetsHoldings: { ...w.assetsHoldings, [selectedAsset.id]: (w.assetsHoldings[selectedAsset.id] || 0) + (amt / selectedAsset.price) }
-                                            }));
-                                            alert("ทำรายการซื้อสะสมเข้าพอร์ตห้องนิรภัยสำเร็จ!");
-                                        }} className="bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl text-xs font-bold transition glow-blue">ซื้อสะสม (BUY SPOT)</button>
+                                    {/* Lock Explanation Logic */}
+                                    <div className="bg-black/50 p-4 rounded-2xl border border-white/5 mb-4">
+                                        <p className="text-xs text-gray-300 leading-relaxed mb-3">
+                                            <span className="font-bold text-white">Security Protocol:</span> ระดับบัญชีของคุณคือ Level {membershipLevel}. 
+                                            {membershipLevel > 0 ? ` เงื่อนไขการปลดล็อกพอร์ตคือต้องมีมูลค่าสินทรัพย์รวม (Total Net Worth) มากกว่า $${formatMoney(lockConditions.find(c=>c.level===membershipLevel)?.min || 0)}` : ' บัญชีระดับอิสระ ไม่มีเงื่อนไขการล็อก'}
+                                        </p>
                                         
-                                        <button onClick={() => {
-                                            // ส่วนควบคุมความปลอดภัยห้ามถอนขายเหรียญตามพิมพ์เขียวคำสั่งผู้ใช้
-                                            if (isAssetLocked) {
-                                                return alert("🚨 แจ้งเตือนห้ามขายจากระบบรักษาความปลอดภัย: บัญชีคุณติดสถานะล็อกเหรียญชั่วคราวเนื่องจากคุณสมบัติระดับเลเวล (Membership Level) ไม่ผ่านเกณฑ์มูลค่าพอร์ตขั้นต่ำ กรุณาฝากเงินเพิ่มเพื่อปลดล็อกตามเงื่อนไขของสัญญาผูกมัดก่อนทำรายการ");
-                                            }
-                                            const assetHoldingAmount = wallet.assetsHoldings[selectedAsset.id] || 0;
-                                            if(assetHoldingAmount <= 0) return alert("คุณไม่มีจำนวนสินทรัพย์นี้เหลือให้เคลียร์ขายในระบบ");
-                                            const cashValue = assetHoldingAmount * selectedAsset.price;
-                                            
-                                            setWallet(w => ({
-                                                ...w,
-                                                assetsHoldings: { ...w.assetsHoldings, [selectedAsset.id]: 0 },
-                                                tradeBalance: w.tradeBalance + cashValue
-                                            }));
-                                            alert("ชำระขายคืนสินทรัพย์ทั้งหมดในพอร์ตกลับเข้าสู่กระเป๋าเทรดหลักเรียบร้อย!");
-                                        }} className="bg-red-950/50 hover:bg-red-950 border border-red-900/60 text-red-400 py-3 rounded-xl text-xs font-bold transition">ขายทั้งหมด (SELL ALL)</button>
+                                        {membershipLevel > 0 && (
+                                            <div>
+                                                <div className="flex justify-between text-[10px] text-gray-400 mb-1">
+                                                    <span>Progress: ${formatMoney(totalNetWorth)}</span>
+                                                    <span>Target: ${formatMoney(lockConditions.find(c=>c.level===membershipLevel)?.min || 0)}</span>
+                                                </div>
+                                                <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-gradient-to-r from-red-500 to-yellow-500 transition-all duration-1000" 
+                                                         style={{width: `${Math.min((totalNetWorth / (lockConditions.find(c=>c.level===membershipLevel)?.min || 1)) * 100, 100)}%`}}></div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Holding List */}
+                                    <div className="space-y-3">
+                                        {INITIAL_ASSETS.map(asset => {
+                                            const amt = wallet.assetsHoldings[asset.id] || 0;
+                                            if(amt <= 0) return null;
+                                            const value = amt * (marketPrices[asset.id] || asset.basePrice);
+                                            return (
+                                                <div key={asset.id} className="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
+                                                    <div>
+                                                        <p className="font-bold text-white">{asset.name}</p>
+                                                        <p className="text-xs text-gray-400 font-num">{formatCrypto(amt)} {asset.symbol}</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="font-bold font-num neon-text">${formatMoney(value)}</p>
+                                                        <button onClick={() => {
+                                                            if (isAssetLocked) {
+                                                                return alert(`🚨 แจ้งเตือนความปลอดภัย\n\nพอร์ตของคุณติดเงื่อนไข Level ${membershipLevel}\nต้องมีเงินรวม $${formatMoney(lockConditions.find(c=>c.level===membershipLevel)?.min || 0)} ถึงจะขายเหรียญได้\nกรุณาฝากเงินเพิ่มเพื่อปลดล็อก!`);
+                                                            }
+                                                            setWallet(w => ({
+                                                                ...w,
+                                                                assetsHoldings: { ...w.assetsHoldings, [asset.id]: 0 },
+                                                                deposited: w.deposited + value
+                                                            }));
+                                                            alert(`ขาย ${asset.symbol} ทั้งหมดสำเร็จ\nเงิน $${formatMoney(value)} ถูกโอนเข้ากระเป๋าหลัก`);
+                                                        }} className="text-[10px] bg-red-500/20 hover:bg-red-500 text-white px-3 py-1 rounded mt-1 transition">SELL ALL</button>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* 24H MINING ENGINE LOOP */}
+                        {/* 5. MINING TERMINAL (ระบบขุด 24 ชม.) */}
                         {currentPage === 'mining' && (
-                            <div className="space-y-4">
-                                <div className="bg-[#0f1424] border border-gray-800 rounded-3xl p-6 text-center space-y-4 shadow-xl">
-                                    <div className="mx-auto w-12 h-12 bg-indigo-600/10 border border-indigo-500/30 rounded-2xl flex items-center justify-center text-indigo-400">
-                                        <i data-lucide="cpu" className="w-6 h-6 animate-spin"></i>
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-base text-white">เครื่องขุดคลาวด์คอมพิวติ้งอัตโนมัติ</h3>
-                                        <p className="text-xs text-gray-400 mt-1">รับผลตอบแทนปันผลเพิ่มสินทรัพย์รายวันตามสัญญาลูป 24 ชั่วโมง</p>
+                            <div className="space-y-6 animate-fade-in">
+                                <div className="glass-panel p-6 rounded-3xl neon-border shadow-[0_0_40px_var(--theme-glow)] relative overflow-hidden">
+                                    {/* Background Terminal Effect */}
+                                    <div className="absolute inset-0 opacity-10" style={{
+                                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--theme-color) 2px, var(--theme-color) 4px)'
+                                    }}></div>
+                                    
+                                    <div className="text-center relative z-10 mb-8">
+                                        <div className="w-20 h-20 mx-auto rounded-full border-4 border-white/10 flex items-center justify-center mb-4 relative" style={{borderColor: miningPool.active ? THEMES[activeTheme].hex : ''}}>
+                                            {miningPool.active && <div className="absolute inset-0 rounded-full animate-ping opacity-50" style={{backgroundColor: THEMES[activeTheme].hex}}></div>}
+                                            <i data-lucide="cpu" className={`w-10 h-10 ${miningPool.active ? 'neon-text animate-pulse' : 'text-gray-600'}`}></i>
+                                        </div>
+                                        <h2 className="text-2xl font-black text-white tracking-widest">CLOUD MINING</h2>
+                                        <p className="text-xs text-gray-400 mt-1 font-num">SHA-256 ALGORITHM ENGINE</p>
                                     </div>
 
-                                    {miningPool.isMining ? (
-                                        <div className="bg-black/40 p-4 rounded-2xl border border-gray-800">
-                                            <span className="text-[10px] text-gray-500 block mb-1 uppercase tracking-widest">เวลาที่กำลังนับถอยหลังหลอมรวมธาตุ</span>
-                                            <h2 className="text-3xl font-mono text-blue-400 font-bold animate-pulse">00:00:0{miningPool.timeLeft}</h2>
+                                    {miningPool.active ? (
+                                        <div className="space-y-6 relative z-10">
+                                            <div className="bg-black/80 p-4 rounded-xl border border-white/10 font-num text-xs space-y-2">
+                                                <div className="flex justify-between text-green-400"><span>[SYS] Hashing Rate:</span> <span>{formatMoney(miningPool.hashes)} TH/s</span></div>
+                                                <div className="flex justify-between text-blue-400"><span>[SYS] Target Asset:</span> <span className="uppercase">{miningPool.assetId}</span></div>
+                                                <div className="flex justify-between text-yellow-400"><span>[SYS] Network Diff:</span> <span>High</span></div>
+                                            </div>
+                                            
+                                            <div>
+                                                <div className="flex justify-between text-xs text-white mb-2 font-bold">
+                                                    <span>COMPLETING BLOCK...</span>
+                                                    <span>{miningPool.progress.toFixed(1)}%</span>
+                                                </div>
+                                                <div className="h-4 w-full bg-black rounded-full overflow-hidden border border-white/20 p-0.5">
+                                                    <div className="h-full rounded-full transition-all duration-300 relative overflow-hidden" 
+                                                         style={{width: `${miningPool.progress}%`, backgroundColor: THEMES[activeTheme].hex}}>
+                                                        <div className="absolute inset-0 bg-white/30 animate-pulse"></div>     
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button onClick={() => setMiningPool({active: false, assetId: '', progress: 0, hashes: 0})} className="w-full py-4 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-xl font-bold tracking-widest transition">
+                                                EMERGENCY STOP
+                                            </button>
                                         </div>
                                     ) : (
-                                        <div className="space-y-3 pt-2">
-                                            <select id="miningAssetChoice" className="w-full bg-[#060913] border border-gray-800 rounded-xl p-3 text-xs text-white">
-                                                {INITIAL_ASSETS.map(a => <option key={a.id} value={a.id}>ฟาร์มเหรียญ {a.name} ({a.symbol})</option>)}
+                                        <div className="space-y-4 relative z-10">
+                                            <label className="text-xs text-gray-400 font-bold tracking-wider">เลือกเหรียญที่จะทำการขุด</label>
+                                            <select id="selectMine" className="w-full bg-black/60 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-[var(--theme-color)] transition">
+                                                {INITIAL_ASSETS.map(a => <option key={a.id} value={a.id}>{a.name} ({a.symbol})</option>)}
                                             </select>
+                                            
                                             <button onClick={() => {
-                                                const selectedId = document.getElementById('miningAssetChoice').value;
-                                                setMiningPool({
-                                                    assetId: selectedId,
-                                                    amount: 1000, 
-                                                    timeLeft: 5, 
-                                                    isMining: true
-                                                });
-                                            }} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-bold text-xs transition glow-blue">
-                                                สั่งเปิดสวิตช์เริ่มเดินเครื่องกำลังขุด
+                                                const sel = document.getElementById('selectMine').value;
+                                                setMiningPool({ active: true, assetId: sel, progress: 0, hashes: 0 });
+                                            }} className="w-full py-5 rounded-2xl font-black text-white tracking-widest text-lg shadow-2xl transition hover:scale-[1.02] neon-glow relative overflow-hidden group" style={{backgroundColor: THEMES[activeTheme].hex}}>
+                                                <span className="relative z-10">INITIALIZE ENGINE</span>
+                                                <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition duration-500"></div>
                                             </button>
                                         </div>
                                     )}
@@ -537,22 +841,73 @@
                         )}
                     </main>
 
-                    {/* BOTTOM TAB BAR NAVIGATION */}
+                    {/* --- BOTTOM NAVIGATION BAR --- */}
                     {currentPage !== 'auth' && (
-                        <nav className="fixed bottom-0 left-0 right-0 bg-[#0f1424]/95 border-t border-gray-800 max-w-md mx-auto rounded-t-3xl shadow-xl flex justify-around p-3 z-40 backdrop-blur-md">
-                            {[
-                                { id: 'dashboard', icon: 'wallet', label: 'แดชบอร์ด' },
-                                { id: 'trade', icon: 'trending-up', label: 'หน้าจอเทรด' },
-                                { id: 'orders', icon: 'history', label: 'ตั๋วสัญญา' },
-                                { id: 'assets', icon: 'gem', label: 'คลังสินทรัพย์' },
-                                { id: 'mining', icon: 'cpu', label: 'คลาวด์ขุด' },
-                            ].map((tab) => (
-                                <button key={tab.id} onClick={() => { setCurrentPage(tab.id); setHamburgerOpen(false); }} className={`flex flex-col items-center gap-1 transition ${currentPage === tab.id ? 'text-blue-500 scale-105' : 'text-gray-400 hover:text-gray-200'}`}>
-                                    <i data-lucide={tab.icon} className="w-5 h-5"></i>
-                                    <span className="text-[10px] font-medium">{tab.label}</span>
-                                </button>
-                            ))}
+                        <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-lg glass-panel border-t border-white/10 rounded-t-3xl pb-safe z-50">
+                            <div className="flex justify-around items-center p-2 pb-6 pt-4">
+                                {[
+                                    { id: 'dashboard', icon: 'layout-dashboard', label: 'Home' },
+                                    { id: 'trade', icon: 'candlestick-chart', label: 'Trade' },
+                                    { id: 'orders', icon: 'gavel', label: 'Orders' },
+                                    { id: 'assets', icon: 'vault', label: 'Vault' },
+                                    { id: 'mining', icon: 'server', label: 'Mine' },
+                                ].map((tab) => {
+                                    const isActive = currentPage === tab.id;
+                                    return (
+                                        <button 
+                                            key={tab.id} 
+                                            onClick={() => setCurrentPage(tab.id)} 
+                                            className="flex flex-col items-center gap-1.5 relative w-16"
+                                        >
+                                            <div className={`p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-white/10 shadow-lg scale-110 neon-border' : 'hover:bg-white/5'}`}>
+                                                <i data-lucide={tab.icon} className={`w-5 h-5 ${isActive ? 'neon-text' : 'text-gray-500'}`}></i>
+                                            </div>
+                                            <span className={`text-[9px] font-bold tracking-wider transition-colors ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                                                {tab.label}
+                                            </span>
+                                            {/* Active Dot Indicator */}
+                                            {isActive && <div className="absolute -bottom-2 w-1 h-1 rounded-full neon-glow" style={{backgroundColor: THEMES[activeTheme].hex}}></div>}
+                                        </button>
+                                    )
+                                })}
+                            </div>
                         </nav>
+                    )}
+
+                    {/* --- DEPOSIT MODAL --- */}
+                    {depositModal && (
+                        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+                            <div className="glass-panel w-full max-w-sm rounded-3xl p-6 border border-white/10 shadow-2xl transform scale-100 animate-fade-in relative">
+                                <button onClick={() => setDepositModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><i data-lucide="x"></i></button>
+                                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="arrow-down-to-line" className="text-green-400"></i> ระบบฝากเงิน</h3>
+                                <p className="text-xs text-gray-400 mb-6">กรอกจำนวนเงิน (USD) ที่ต้องการนำเข้าสู่ระบบเพื่อเทรดหรือซื้อสินทรัพย์</p>
+                                
+                                <input type="number" value={txAmount} onChange={e => setTxAmount(e.target.value)} placeholder="0.00" className="w-full bg-black/50 border border-white/10 rounded-2xl p-5 text-3xl font-num text-white text-center outline-none mb-6 focus:border-green-500 transition" />
+                                
+                                <button onClick={() => handleTransaction('DEPOSIT')} className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 rounded-xl transition shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                                    ยืนยันทำรายการฝาก
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* --- WITHDRAW MODAL --- */}
+                    {withdrawModal && (
+                        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+                            <div className="glass-panel w-full max-w-sm rounded-3xl p-6 border border-white/10 shadow-2xl transform scale-100 animate-fade-in relative">
+                                <button onClick={() => setWithdrawModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><i data-lucide="x"></i></button>
+                                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="arrow-up-from-line" className="text-red-400"></i> ระบบถอนเงิน</h3>
+                                <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-4">
+                                    <p className="text-[10px] text-red-300">ยอดเงินคงเหลือที่ถอนได้: <span className="font-bold">${formatMoney(wallet.deposited)}</span></p>
+                                </div>
+                                
+                                <input type="number" value={txAmount} onChange={e => setTxAmount(e.target.value)} placeholder="0.00" className="w-full bg-black/50 border border-white/10 rounded-2xl p-5 text-3xl font-num text-white text-center outline-none mb-6 focus:border-red-500 transition" />
+                                
+                                <button onClick={() => handleTransaction('WITHDRAW')} className="w-full bg-red-500 hover:bg-red-400 text-white font-bold py-4 rounded-xl transition shadow-[0_0_15px_rgba(239,68,68,0.4)]">
+                                    ยืนยันทำรายการถอน
+                                </button>
+                            </div>
+                        </div>
                     )}
                 </div>
             );
@@ -560,8 +915,6 @@
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
-        // โหลดไอคอนและรีเฟรชเมื่อแอปทำงาน
-        setTimeout(() => { lucide.createIcons(); }, 500);
     </script>
 </body>
 </html>
